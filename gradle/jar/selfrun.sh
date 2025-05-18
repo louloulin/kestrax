@@ -12,8 +12,8 @@ fi
 # Check java version
 JAVA_FULLVERSION=$(java -fullversion 2>&1)
 case "$JAVA_FULLVERSION" in
-    [a-z]*\ full\ version\ \"\(1|9|10|11|12|13|14|15|16|17|18|19|20\)\..*\")
-        echo "[ERROR] Kestra require at least Java 21." 1>&2
+    [a-z]*\ full\ version\ \"\(1|9|10|11|12|13|14|15|16|17|18|19|20|21|22\)\..*\")
+        echo "[ERROR] Kestra require at least Java 23." 1>&2
         exit 1
         ;;
 esac

@@ -64,10 +64,16 @@ IF NOT ERRORLEVEL 1 (set java_version=19)
 ECHO %java_fullversion% | find " full version ""20" > NUL
 IF NOT ERRORLEVEL 1 (set java_version=20)
 
+ECHO %java_fullversion% | find " full version ""21" > NUL
+IF NOT ERRORLEVEL 1 (set java_version=21)
+
+ECHO %java_fullversion% | find " full version ""22" > NUL
+IF NOT ERRORLEVEL 1 (set java_version=22)
+
 IF NOT DEFINED java_version (set java_version=0)
 
 IF %java_version% NEQ 0 (
-    ECHO [ERROR] Kestra require at least Java 21.. 1>&2
+    ECHO [ERROR] Kestra require at least Java 23. 1>&2
     EXIT 1
 )
 
