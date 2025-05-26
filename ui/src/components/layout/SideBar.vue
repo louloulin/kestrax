@@ -215,13 +215,13 @@
 
                 span.img {
                     height: 100%;
-                    background: url(../../assets/logo.svg) 0 0 no-repeat;
+                    background: url(../../assets/dataflare-logo.svg) 0 0 no-repeat;
                     background-size: 179px 55px;
                     display: block;
                     transition: 0.2s all;
 
                     html.dark & {
-                        background-image: url(../../assets/logo-white.svg);
+                        background-image: url(../../assets/dataflare-logo-white.svg);
                     }
                 }
             }

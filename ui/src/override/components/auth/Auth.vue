@@ -4,17 +4,17 @@
         :popper-offset="20"
         :show-arrow="false"
         :suffix-icon="ChevronRight"
-        :placeholder="$t('kestra')"
+        :placeholder="$t('dataflare')"
         popper-class="user-select border border-0"
     >
         <template #prefix>
-            <img src="../../../assets/ks-logo-small.svg" width="40" alt="Kestra">
+            <img src="../../../assets/dataflare-logo-small.svg" width="40" alt="DataFlare">
         </template>
         <template #header>
             <el-option :value="{}" class=" list-unstyled">
                 <div class="menu-item">
-                    <img src="../../../assets/ks-logo-small.svg" width="40" alt="Kestra">
-                    {{ $t("kestra") }}
+                    <img src="../../../assets/dataflare-logo-small.svg" width="40" alt="DataFlare">
+                    {{ $t("dataflare") }}
                 </div>
             </el-option>
         </template>

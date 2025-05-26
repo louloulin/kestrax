@@ -16,7 +16,7 @@
                 <div class="section-content">
                     <img
                         :src="logo"
-                        alt="Kestra"
+                        alt="DataFlare"
                         class="section-1-img img-fluid"
                         width="180px"
                     >
@@ -63,7 +63,7 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import OnboardingBottom from "./OnboardingBottom.vue";
-    import kestraWelcome from "../../assets/onboarding/kestra_welcome.svg";
+    import dataflareWelcome from "../../assets/onboarding/dataflare_welcome.svg";
     import TopNavBar from "../../components/layout/TopNavBar.vue";
     import RouteContext from "../../mixins/routeContext";
     import RestoreUrl from "../../mixins/restoreUrl";
@@ -89,7 +89,7 @@
             ...mapState("auth", ["user"]),
             logo() {
                 // get theme
-                return (localStorage.getItem("theme") || "light") === "light" ? kestraWelcome : kestraWelcome;
+                return (localStorage.getItem("theme") || "light") === "light" ? dataflareWelcome : dataflareWelcome;
             },
             routeInfo() {
                 return {
