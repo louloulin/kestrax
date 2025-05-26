@@ -500,7 +500,7 @@ tasks.register('runStandalone', JavaExec) {
     classpath = project(":cli").sourceSets.main.runtimeClasspath
     mainClass = mainClassName
     environment 'MICRONAUT_ENVIRONMENTS', 'standalone,override'
-    args 'server', 'standalone', '--plugins', 'local/plugins'
+    args 'server', 'standalone', '--plugins', '/Users/louloulin/.kestra/plugins'
 }
 
 /**********************************************************************************************************************\

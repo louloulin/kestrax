@@ -4,13 +4,11 @@
         <errors v-if="error" :code="error" />
         <slot v-else />
     </main>
-    <context-info-bar v-if="configs" />
 </template>
 
 <script setup>
     import LeftMenu from "override/components/LeftMenu.vue";
     import Errors from "../errors/Errors.vue";
-    import ContextInfoBar from "../ContextInfoBar.vue";
     import {useStore} from "vuex";
     import {computed, onMounted} from "vue";
 

@@ -628,7 +628,7 @@
       "title": "仪表板",
       "today": "今天",
       "wel_text": "欢迎！",
-      "welcome": "欢迎使用 Kestra",
+      "welcome": "欢迎使用 DataFlare",
       "yesterday": "昨天"
     },
     "hostname": "主机名",
@@ -1314,7 +1314,7 @@
         "title": "教程"
       }
     },
-    "welcome aboard": "🚀 欢迎使用 Kestra!",
+    "welcome aboard": "🚀 欢迎使用 Dataflare!",
     "welcome aboard content": "使用我们的引导游览来创建你的第一个流程，并查看蓝图以找到更多示例。",
     "welcome button create": "创建我的第一个流程",
     "welcome display require": "运行你的 <strong>第一个流程</strong> 以开始",
