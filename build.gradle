@@ -499,7 +499,7 @@ tasks.register('runStandalone', JavaExec) {
     description = "Run Kestra as server local"
     classpath = project(":cli").sourceSets.main.runtimeClasspath
     mainClass = mainClassName
-    environment 'MICRONAUT_ENVIRONMENTS', 'override'
+    environment 'MICRONAUT_ENVIRONMENTS', 'standalone,override'
     args 'server', 'standalone', '--plugins', 'local/plugins'
 }
 
