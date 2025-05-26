@@ -1,8 +1,5 @@
 <template>
     <div class="d-flex" v-if="!configs.isBasicAuthEnabled">
-        <el-text>
-            <span v-html="$t('data_not_protected')" />
-        </el-text>
         <el-button class="ms-auto" @click="promptForCredentials">
             <b>{{ $t('activate_basic_auth') }}</b>
         </el-button>
