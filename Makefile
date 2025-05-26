@@ -39,7 +39,7 @@ build: clean
 	./gradlew build
 
 buildSkipTests: clean
-	./gradlew build -x test -x integrationTest -x testCodeCoverageReport --refresh-dependencies
+	./gradlew build -x test
 
 test: clean
 	./gradlew test
