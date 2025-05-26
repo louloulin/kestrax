@@ -61,19 +61,19 @@
                         ],
                         button: {
                             text: "Talk to us",
-                            href: "https://kestra.io/demo?utm_source=app$&utm_campaign=enterprise&utm_content=stats"
+                            href: "https://dataflare.io/demo?utm_source=app$&utm_campaign=enterprise&utm_content=stats"
                         }
                     },
                     {
-                        name: "Kestra Cloud",
+                        name: "DataFlare Cloud",
                         features: [
                             "Fully-managed version of the Enterprise Edition",
                             "All Enterprise-grade features with convenience of the cloud",
-                            "Infrastructure hosted and managed by the Kestra team with SLA guarantees and custom support."
+                            "Infrastructure hosted and managed by the DataFlare team with SLA guarantees and custom support."
                         ],
                         button: {
                             text: "Sign up for a private Alpha",
-                            href: "https://kestra.io/cloud?utm_source=app&utm_campaign=cloud&utm_content=stats"
+                            href: "https://dataflare.io/cloud?utm_source=app&utm_campaign=cloud&utm_content=stats"
                         }
                     }
                 ]

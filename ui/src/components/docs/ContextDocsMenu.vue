@@ -47,14 +47,14 @@
     const menuOpen = ref(false);
 
     const SECTIONS = {
-        "Get Started with Kestra": [
+        "Get Started with DataFlare": [
             "Getting Started",
             "Tutorial",
             "Architecture",
             "Installation Guide",
             "User Interface"
         ],
-        "Build with Kestra": [
+        "Build with DataFlare": [
             "Concepts",
             "Workflow Components",
             "Expressions",
@@ -62,12 +62,12 @@
             "Plugin Developer Guide",
             "How-to Guides"
         ],
-        "Scale with Kestra": [
+        "Scale with DataFlare": [
             "Enterprise Edition",
             "Task Runners",
             "Best Practices"
         ],
-        "Manage Kestra": [
+        "Manage DataFlare": [
             "Administrator Guide",
             "Configuration Guide",
             "Migration Guide",

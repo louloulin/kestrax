@@ -21,7 +21,7 @@
                         <img
                             v-if="tour.isFirst"
                             :src="Animation"
-                            alt="Kestra"
+                            alt="DataFlare"
                             class="animation"
                         >
                         <div

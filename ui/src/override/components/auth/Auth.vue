@@ -25,7 +25,7 @@
             </RouterLink>
         </el-option>
         <el-option label="slack" value="slack">
-            <a href="https://kestra.io/slack" target="_blank" class="menu-item">
+            <a href="https://dataflare.io/slack" target="_blank" class="menu-item">
                 <Slack class="menu-icon" />
                 {{ $t("join_slack") }}
             </a>

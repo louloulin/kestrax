@@ -15,7 +15,7 @@
     const props = defineProps<Props>();
 
     const icon = computed<string>(() => {
-        const SVG = props.folder ? ICONS.FOLDER : getIcon(props.name).name === "file" ? ICONS.KESTRA : getIcon(props.name).svg;
+        const SVG = props.folder ? ICONS.FOLDER : getIcon(props.name).name === "file" ? ICONS.DATAFLARE : getIcon(props.name).svg;
         return `data:image/svg+xml;base64,${btoa(SVG)}`;
     });
 </script>

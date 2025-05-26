@@ -162,7 +162,7 @@
                     <label
                         v-if="typeof(inputsValues[input.id]) === 'string' && inputsValues[input.id].startsWith('kestra:///')"
                         :for="input.id+'-file'"
-                    >Kestra Internal Storage File</label>
+                    >DataFlare Internal Storage File</label>
                 </div>
             </div>
             <div

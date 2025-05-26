@@ -263,25 +263,25 @@
     "deleted_label": "Supprimé",
     "demos": {
       "IAM": {
-        "message": "L'édition Kestra Enterprise dispose de capacités IAM intégrées avec une authentification unique (SSO), une synchronisation de répertoire SCIM et un contrôle d'accès basé sur les rôles (RBAC), s'intégrant avec plusieurs fournisseurs d'identité et vous permettant d'attribuer des permissions détaillées aux utilisateurs et aux comptes de service.",
+        "message": "L'édition DataFlare Enterprise dispose de capacités IAM intégrées avec une authentification unique (SSO), une synchronisation de répertoire SCIM et un contrôle d'accès basé sur les rôles (RBAC), s'intégrant avec plusieurs fournisseurs d'identité et vous permettant d'attribuer des permissions détaillées aux utilisateurs et aux comptes de service.",
         "title": "Gérer les utilisateurs via IAM avec SSO, SCIM et RBAC"
       },
       "apps": {
-        "message": "Les applications dans Kestra Enterprise Edition vous permettent de créer des interfaces utilisateur personnalisées qui interagissent avec les workflows Kestra depuis l'extérieur de la plateforme. Cette fonctionnalité vous permet d'utiliser vos workflows comme un backend pour des applications personnalisées, permettant aux utilisateurs non techniques de soumettre des données via des formulaires ou de reprendre des workflows PAUSED en attente d'approbation.",
-        "title": "Créez des applications personnalisées avec Kestra"
+        "message": "Les applications dans DataFlare Enterprise Edition vous permettent de créer des interfaces utilisateur personnalisées qui interagissent avec les workflows DataFlare depuis l'extérieur de la plateforme. Cette fonctionnalité vous permet d'utiliser vos workflows comme un backend pour des applications personnalisées, permettant aux utilisateurs non techniques de soumettre des données via des formulaires ou de reprendre des workflows PAUSED en attente d'approbation.",
+        "title": "Créez des applications personnalisées avec DataFlare"
       },
       "audit-logs": {
-        "message": "L'édition Kestra Enterprise enregistre chaque activité avec des enregistrements robustes et immuables, ce qui facilite le suivi des modifications, le maintien de la conformité et la résolution des problèmes.",
+        "message": "L'édition DataFlare Enterprise enregistre chaque activité avec des enregistrements robustes et immuables, ce qui facilite le suivi des modifications, le maintien de la conformité et la résolution des problèmes.",
         "title": "Suivre les modifications avec les Audit Logs"
       },
       "blueprints": {
-        "message": "Dans l'édition Kestra Enterprise, vous pouvez créer des Blueprints personnalisés uniquement disponibles pour votre organisation. Vous pouvez les utiliser comme modèles de bonnes pratiques pour partager, centraliser et documenter les workflows couramment utilisés dans votre équipe.",
+        "message": "Dans l'édition DataFlare Enterprise, vous pouvez créer des Blueprints personnalisés uniquement disponibles pour votre organisation. Vous pouvez les utiliser comme modèles de bonnes pratiques pour partager, centraliser et documenter les workflows couramment utilisés dans votre équipe.",
         "title": "Ajouter des Blueprints Personnalisés"
       },
       "enterprise_edition": "Édition Enterprise",
       "get_a_demo_button": "Obtenir une démo",
       "instance": {
-        "message": "L'édition Enterprise de Kestra fournit un tableau de bord opérationnel pour vous aider à observer la santé de votre plateforme et à suivre les métriques de disponibilité de tous les services tels que, entre autres, les Workers, les Schedulers et les Executors. Depuis la même page, vous pouvez également créer des annonces pour informer vos utilisateurs des interruptions planifiées, et vous pouvez entrer en mode maintenance, ce qui met temporairement tous les services et les exécutions de workflow dans un état PAUSED pour effectuer une mise à niveau.",
+        "message": "L'édition Enterprise de DataFlare fournit un tableau de bord opérationnel pour vous aider à observer la santé de votre plateforme et à suivre les métriques de disponibilité de tous les services tels que, entre autres, les Workers, les Schedulers et les Executors. Depuis la même page, vous pouvez également créer des annonces pour informer vos utilisateurs des interruptions planifiées, et vous pouvez entrer en mode maintenance, ce qui met temporairement tous les services et les exécutions de workflow dans un état PAUSED pour effectuer une mise à niveau.",
         "title": "Gérer l'infrastructure sur votre instance"
       },
       "namespace": {
