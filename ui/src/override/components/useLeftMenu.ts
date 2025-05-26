@@ -13,9 +13,7 @@ import ShieldAccountVariantOutline from "vue-material-design-icons/ShieldAccount
 import ViewDashboardVariantOutline from "vue-material-design-icons/ViewDashboardVariantOutline.vue";
 import Connection from "vue-material-design-icons/Connection.vue";
 import DotsSquare from "vue-material-design-icons/DotsSquare.vue";
-import FormatListGroupPlus from "vue-material-design-icons/FormatListGroupPlus.vue";
 import DatabaseOutline from "vue-material-design-icons/DatabaseOutline.vue";
-import ShieldKeyOutline from "vue-material-design-icons/ShieldKeyOutline.vue";
 
 export function useLeftMenu() {
     const {t} = useI18n({useScope: "global"});
@@ -61,18 +59,7 @@ export function useLeftMenu() {
                 },
                 exact: false,
             },
-            {
-                href: {name: "apps/list"},
-                routes: routeStartWith("apps"),
-                title: t("apps"),
-                icon: {
-                    element: shallowRef(FormatListGroupPlus),
-                    class: "menu-icon",
-                },
-                attributes: {
-                    locked: true,
-                },
-            },
+
             {
                 href: {name: "templates/list"},
                 routes: routeStartWith("templates"),
@@ -130,18 +117,6 @@ export function useLeftMenu() {
                 },
             },
             {
-                href: {name: "secrets/list"},
-                routes: routeStartWith("secrets"),
-                title: t("secret.names"),
-                icon: {
-                    element: shallowRef(ShieldKeyOutline),
-                    class: "menu-icon",
-                },
-                attributes: {
-                    locked: true,
-                },
-            },
-            {
                 routes: routeStartWith("blueprints"),
                 title: t("blueprints.title"),
                 icon: {
@@ -185,41 +160,9 @@ export function useLeftMenu() {
                 },
                 child: [
                     {
-                        href: {name: "admin/iam"},
-                        routes: routeStartWith("admin/iam"),
-                        title: t("iam"),
-                        attributes: {
-                            locked: true,
-                        },
-                    },
-                    {
-                        href: {name: "admin/auditlogs/list"},
-                        routes: routeStartWith("admin/auditlogs"),
-                        title: t("auditlogs"),
-                        attributes: {
-                            locked: true,
-                        },
-                    },
-                    {
                         href: {name: "admin/triggers"},
                         routes: routeStartWith("admin/triggers"),
                         title: t("triggers"),
-                    },
-                    {
-                        href: {name: "admin/instance"},
-                        routes: routeStartWith("admin/instance"),
-                        title: t("instance"),
-                        attributes: {
-                            locked: true,
-                        },
-                    },
-                    {
-                        href: {name: "admin/tenants/list"},
-                        routes: routeStartWith("admin/tenants"),
-                        title: t("tenant.names"),
-                        attributes: {
-                            locked: true,
-                        },
                     },
                     {
                         href: {name: "admin/stats"},
