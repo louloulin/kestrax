@@ -577,769 +577,647 @@ public class EventCharacteristicsAnalyzer {
 
 ## 🎯 最优方案选择与设计
 
+### 现有分布式架构深度分析
+
+#### DataFlare当前分布式能力评估
+
+基于对现有代码的深入分析，DataFlare已具备以下分布式基础设施：
+
+**1. 分布式Worker管理**
+```java
+// 现有Worker集群管理
+public class Worker implements Service {
+    // 支持Worker组和多线程处理
+    private final String workerGroup;
+    private final int numThreads;
+
+    // 分布式任务接收和处理
+    public void receive(String consumerGroup, Class<?> queueType,
+                       Consumer<Either<WorkerJob, DeserializationException>> consumer) {
+        // 支持消费者组的分布式任务分发
+    }
+
+    // 集群事件处理
+    private void clusterEventQueue(Either<ClusterEvent, DeserializationException> either) {
+        switch (clusterEvent.eventType()) {
+            case MAINTENANCE_ENTER -> {
+                this.executionKilledQueue.pause();
+                this.workerJobQueue.pause();
+                this.setState(ServiceState.MAINTENANCE);
+            }
+            case MAINTENANCE_EXIT -> {
+                this.executionKilledQueue.resume();
+                this.workerJobQueue.resume();
+                this.setState(ServiceState.RUNNING);
+            }
+        }
+    }
+}
+```
+
+**2. 服务发现和生命周期管理**
+```java
+// 现有服务生命周期协调
+public class ServiceLivenessManager extends AbstractServiceLivenessCoordinator {
+    // 心跳机制和故障检测
+    private final Duration heartbeatInterval;
+    private final Duration timeout;
+
+    // 服务状态管理
+    protected void handleAllNonRespondingServices(final Instant now) {
+        // 检测和处理无响应服务
+        // 重新提交任务到健康节点
+    }
+
+    // 集群状态协调
+    protected void handleAllWorkersForUncleanShutdown(final Instant now) {
+        // 处理Worker异常关闭
+        // 任务重新分配和故障转移
+    }
+}
+```
+
+**3. 分布式调度和协调**
+```java
+// 现有调度器分布式支持
+public class AbstractScheduler implements Service {
+    // 分布式触发器评估
+    public List<FlowWithTriggers> computeSchedulable(
+            List<Flow> flows,
+            List<Trigger> triggers,
+            ScheduleContext scheduleContext) {
+        // 支持分布式触发器协调
+        // 避免重复执行和竞争条件
+    }
+}
+```
+
+#### 现有架构的分布式优势
+1. **成熟的Worker集群管理**: 支持Worker组、故障转移、维护模式
+2. **完善的服务发现**: 心跳机制、状态管理、自动故障检测
+3. **分布式任务队列**: 消费者组模式、任务分发、负载均衡
+4. **集群协调机制**: 分布式锁、状态同步、一致性保证
+
+#### 现有架构的局限性
+1. **事件处理延迟高**: 基于数据库的队列机制导致25-500ms延迟
+2. **单机性能瓶颈**: 序列化开销和GC压力限制单节点性能
+3. **扩展性受限**: 数据库I/O成为分布式扩展的瓶颈
+4. **复杂事件处理能力不足**: 缺乏流式处理和复杂事件关联
+
 ### 综合评估结果
 
-基于多维度对比分析和风险评估，**推荐采用LMAX Disruptor方案**作为DataFlare事件驱动架构的优化方案。
+基于对现有分布式架构的深入分析和多维度对比，**推荐采用混合架构方案**作为DataFlare事件驱动架构的最优升级路径。
 
-#### 选择理由
-1. **性能收益最大**: 延迟降低250-500倍，吞吐量提升25-100倍
-2. **实施风险可控**: 技术成熟，集成复杂度适中
-3. **维护成本较低**: 纯Java技术栈，团队学习成本可控
-4. **生态兼容性好**: 与现有Spring/Micronaut框架良好集成
-5. **渐进式迁移**: 可以逐步替换现有事件处理组件
+#### 重新评估的选择理由
 
-### 详细技术架构设计
+**为什么选择混合架构而非单一Disruptor方案？**
 
-#### 核心组件架构
+1. **充分利用现有分布式基础**: DataFlare已具备成熟的分布式Worker管理和服务协调能力
+2. **最大化未来收益**: 结合Disruptor的极致单机性能和Akka的分布式扩展能力
+3. **支持复杂数据处理**: Akka Actor模型天然支持复杂的状态管理和事件关联
+4. **渐进式演进路径**: 可以逐步迁移，降低风险，最大化投资回报
+
+#### 混合架构的未来收益分析
+
+**1. 低延时数据处理收益**
+- **Disruptor处理高频事件**: 微秒级延迟，100,000+ events/sec吞吐量
+- **适用场景**: 任务状态变更、Worker心跳、指标收集
+- **收益**: 系统响应性提升500倍，用户体验质的飞跃
+
+**2. 复杂数据处理收益**
+- **Akka Actor处理复杂业务**: 状态管理、事件关联、工作流协调
+- **适用场景**: Flow触发、子流程执行、复杂调度逻辑
+- **收益**: 支持更复杂的业务场景，提升平台竞争力
+
+**3. 分布式支持收益**
+- **无缝集成现有分布式架构**: 保持Worker集群、服务发现等优势
+- **Akka Cluster扩展**: 支持跨数据中心部署、动态扩缩容
+- **收益**: 支持企业级大规模部署，市场覆盖面扩大
+
+#### 技术方案重新设计
+
+### 混合架构详细设计
+
+#### 智能事件路由架构
 ```java
-// 统一事件管理器
+// 混合事件管理器 - 核心路由组件
 @Singleton
-public class DataFlareEventManager {
+public class HybridEventManager {
 
     private final DataFlareDisruptorEventManager disruptorManager;
+    private final AkkaActorEventManager actorManager;
     private final LegacyEventManager legacyManager;
-    private final EventMigrationController migrationController;
-
-    @Value("${dataflare.events.migration.mode:HYBRID}")
-    private MigrationMode migrationMode;
+    private final IntelligentEventRouter eventRouter;
+    private final DistributedWorkerManager workerManager;
 
     public void publishEvent(Object eventObject, String tenantId, EventType eventType) {
-        switch (migrationMode) {
-            case LEGACY:
-                legacyManager.publishEvent(eventObject, tenantId, eventType);
-                break;
+        // 智能路由决策
+        EventRoutingDecision decision = eventRouter.routeEvent(eventObject, tenantId, eventType);
+
+        switch (decision.getTargetEngine()) {
             case DISRUPTOR:
+                // 高频低延迟事件 -> Disruptor
                 disruptorManager.publishEvent(eventObject, tenantId, eventType);
                 break;
-            case HYBRID:
-                publishEventInHybridMode(eventObject, tenantId, eventType);
+            case AKKA_ACTOR:
+                // 复杂业务事件 -> Akka Actor
+                actorManager.publishEvent(eventObject, tenantId, eventType);
                 break;
-        }
-    }
-
-    private void publishEventInHybridMode(Object eventObject, String tenantId, EventType eventType) {
-        if (migrationController.shouldUseDisruptor(eventType)) {
-            disruptorManager.publishEvent(eventObject, tenantId, eventType);
-        } else {
-            legacyManager.publishEvent(eventObject, tenantId, eventType);
+            case DISTRIBUTED_WORKER:
+                // 分布式任务 -> 现有Worker集群
+                workerManager.submitTask(eventObject, tenantId, eventType);
+                break;
+            case LEGACY:
+                // 兜底方案 -> 传统处理
+                legacyManager.publishEvent(eventObject, tenantId, eventType);
+                break;
         }
     }
 }
 
-// 事件迁移控制器
+// 智能事件路由器
 @Component
-public class EventMigrationController {
+public class IntelligentEventRouter {
 
-    private final Set<EventType> migratedEventTypes = ConcurrentHashMap.newKeySet();
-    private final EventTypePerformanceMonitor performanceMonitor;
+    private final EventCharacteristicsAnalyzer analyzer;
+    private final PerformanceMetricsCollector metricsCollector;
+    private final DistributedClusterState clusterState;
 
-    public boolean shouldUseDisruptor(EventType eventType) {
-        return migratedEventTypes.contains(eventType);
+    public EventRoutingDecision routeEvent(Object eventObject, String tenantId, EventType eventType) {
+        EventCharacteristics characteristics = analyzer.analyzeEvent(eventObject, eventType);
+        ClusterMetrics clusterMetrics = clusterState.getCurrentMetrics();
+
+        // 多维度路由决策
+        if (isHighFrequencyLowLatency(characteristics)) {
+            return EventRoutingDecision.useDisruptor("High frequency, low latency required");
+        }
+
+        if (isComplexBusinessLogic(characteristics)) {
+            return EventRoutingDecision.useAkkaActor("Complex state management required");
+        }
+
+        if (isDistributedTask(characteristics, clusterMetrics)) {
+            return EventRoutingDecision.useDistributedWorker("Distributed processing required");
+        }
+
+        return EventRoutingDecision.useLegacy("Default fallback");
     }
 
-    public void migrateEventType(EventType eventType) {
-        log.info("Migrating event type {} to Disruptor", eventType);
-        migratedEventTypes.add(eventType);
-        performanceMonitor.startMonitoring(eventType);
+    private boolean isHighFrequencyLowLatency(EventCharacteristics characteristics) {
+        return characteristics.getFrequency() > 1000 || // >1K events/sec
+               characteristics.getLatencyRequirement() < Duration.ofMillis(10) || // <10ms
+               characteristics.getEventType() == EventType.WORKER_HEARTBEAT ||
+               characteristics.getEventType() == EventType.TASK_STATE_CHANGE ||
+               characteristics.getEventType() == EventType.METRIC_COLLECTION;
     }
 
-    public void rollbackEventType(EventType eventType) {
-        log.warn("Rolling back event type {} to legacy system", eventType);
-        migratedEventTypes.remove(eventType);
-        performanceMonitor.stopMonitoring(eventType);
+    private boolean isComplexBusinessLogic(EventCharacteristics characteristics) {
+        return characteristics.requiresStatefulProcessing() ||
+               characteristics.hasEventCorrelation() ||
+               characteristics.getEventType() == EventType.FLOW_TRIGGER ||
+               characteristics.getEventType() == EventType.SUBFLOW_EXECUTION ||
+               characteristics.getEventType() == EventType.CONDITIONAL_BRANCH;
+    }
+
+    private boolean isDistributedTask(EventCharacteristics characteristics, ClusterMetrics clusterMetrics) {
+        return characteristics.requiresDistributedProcessing() ||
+               characteristics.getResourceRequirement().isHeavy() ||
+               clusterMetrics.getCurrentLoad() > 0.8 || // 高负载时分散处理
+               characteristics.getEventType() == EventType.WORKER_JOB ||
+               characteristics.getEventType() == EventType.BULK_OPERATION;
     }
 }
 ```
 
-#### 高性能事件处理器设计
+#### Akka Actor分布式事件处理
 ```java
-// 执行事件处理器
-public class ExecutionEventHandler implements EventHandler<DataFlareEvent> {
+// Akka Actor事件管理器
+@Singleton
+public class AkkaActorEventManager {
 
-    private final ExecutionService executionService;
-    private final ExecutionEventMetrics metrics;
-    private final TenantIsolationService tenantService;
+    private final ActorSystem actorSystem;
+    private final ActorRef<SystemCommand> eventSystemActor;
+    private final DistributedClusterManager clusterManager;
 
-    @Override
-    public void onEvent(DataFlareEvent event, long sequence, boolean endOfBatch) {
-        long startTime = System.nanoTime();
+    public AkkaActorEventManager() {
+        // 初始化Akka Cluster
+        this.actorSystem = ActorSystem.create(
+            DataFlareEventSystemBehavior.create(),
+            "DataFlareEventSystem",
+            createClusterConfig()
+        );
 
-        try {
-            // 租户隔离检查
-            if (!tenantService.isAuthorized(event.getTenantId(), event.getEventType())) {
-                event.setState(EventState.UNAUTHORIZED);
-                return;
-            }
+        this.eventSystemActor = actorSystem.systemActorOf(
+            DataFlareEventSystemBehavior.create(),
+            "event-system",
+            Props.empty()
+        );
 
-            // 处理执行事件
-            if (event.getEventObject() instanceof Execution execution) {
-                processExecutionEvent(execution, event);
-            } else if (event.getEventObject() instanceof TaskRun taskRun) {
-                processTaskRunEvent(taskRun, event);
-            }
-
-            event.setState(EventState.PROCESSED);
-
-        } catch (Exception e) {
-            event.setState(EventState.ERROR);
-            log.error("Failed to process execution event: {}", event.getEventId(), e);
-        } finally {
-            metrics.recordProcessingTime(System.nanoTime() - startTime);
-        }
+        // 集成现有分布式基础设施
+        this.clusterManager = new DistributedClusterManager(actorSystem);
+        integrateWithExistingWorkerCluster();
     }
 
-    private void processExecutionEvent(Execution execution, DataFlareEvent event) {
-        // 高性能执行事件处理逻辑
-        switch (execution.getState().getCurrent()) {
-            case CREATED:
-                handleExecutionCreated(execution);
-                break;
-            case RUNNING:
-                handleExecutionRunning(execution);
-                break;
-            case SUCCESS:
-            case FAILED:
-                handleExecutionTerminated(execution);
-                break;
-        }
+    public void publishEvent(Object eventObject, String tenantId, EventType eventType) {
+        DataFlareEvent event = DataFlareEvent.builder()
+            .eventId(IdUtils.create())
+            .tenantId(tenantId)
+            .eventType(eventType)
+            .eventObject(eventObject)
+            .timestamp(Instant.now())
+            .build();
+
+        eventSystemActor.tell(new ProcessEvent(event));
     }
 
-    // 批量处理优化
-    @Override
-    public void onBatchEnd(long sequence) {
-        // 批量提交数据库操作
-        executionService.flushBatchOperations();
+    private void integrateWithExistingWorkerCluster() {
+        // 与现有Worker集群集成
+        clusterManager.registerWorkerNodes(getExistingWorkerNodes());
+        clusterManager.enableWorkerFailover();
+        clusterManager.enableDynamicScaling();
     }
 }
 
-// 工作任务事件处理器
-public class WorkerJobEventHandler implements EventHandler<DataFlareEvent> {
+// 分布式事件系统Actor
+public class DataFlareEventSystemBehavior extends AbstractBehavior<SystemCommand> {
 
-    private final WorkerJobService workerJobService;
-    private final WorkerJobEventMetrics metrics;
-    private final BatchProcessor<WorkerJob> batchProcessor;
+    // 分布式事件处理器管理
+    private final Map<String, ActorRef<EventCommand>> tenantEventManagers = new HashMap<>();
+    private final ActorRef<EventCommand> flowTriggerManager;
+    private final ActorRef<EventCommand> subflowExecutionManager;
+    private final ActorRef<EventCommand> conditionalBranchManager;
+
+    public static Behavior<SystemCommand> create() {
+        return Behaviors.setup(DataFlareEventSystemBehavior::new);
+    }
+
+    private DataFlareEventSystemBehavior(ActorContext<SystemCommand> context) {
+        super(context);
+
+        // 创建专门的复杂事件处理器
+        this.flowTriggerManager = context.spawn(
+            FlowTriggerEventActor.create(),
+            "flow-trigger-manager"
+        );
+
+        this.subflowExecutionManager = context.spawn(
+            SubflowExecutionEventActor.create(),
+            "subflow-execution-manager"
+        );
+
+        this.conditionalBranchManager = context.spawn(
+            ConditionalBranchEventActor.create(),
+            "conditional-branch-manager"
+        );
+
+        // 集群成员管理
+        Cluster cluster = Cluster.get(context.getSystem());
+        cluster.subscriptions().tell(Subscribe.create(context.getSelf(), ClusterEvent.class));
+    }
 
     @Override
-    public void onEvent(DataFlareEvent event, long sequence, boolean endOfBatch) {
-        if (event.getEventObject() instanceof WorkerJob workerJob) {
-            // 添加到批处理队列
-            batchProcessor.add(workerJob);
+    public Receive<SystemCommand> createReceive() {
+        return newReceiveBuilder()
+            .onMessage(ProcessEvent.class, this::onProcessEvent)
+            .onMessage(ClusterEvent.MemberUp.class, this::onMemberUp)
+            .onMessage(ClusterEvent.MemberRemoved.class, this::onMemberRemoved)
+            .build();
+    }
+
+    private Behavior<SystemCommand> onProcessEvent(ProcessEvent command) {
+        DataFlareEvent event = command.getEvent();
+
+        // 根据事件类型路由到专门的处理器
+        switch (event.getEventType()) {
+            case FLOW_TRIGGER:
+                flowTriggerManager.tell(new ProcessEventCommand(event));
+                break;
+            case SUBFLOW_EXECUTION:
+                subflowExecutionManager.tell(new ProcessEventCommand(event));
+                break;
+            case CONDITIONAL_BRANCH:
+                conditionalBranchManager.tell(new ProcessEventCommand(event));
+                break;
+            default:
+                // 路由到租户专用处理器
+                getTenantEventManager(event.getTenantId())
+                    .tell(new ProcessEventCommand(event));
         }
 
-        // 批量处理
-        if (endOfBatch || batchProcessor.shouldFlush()) {
-            List<WorkerJob> batch = batchProcessor.flush();
-            workerJobService.processBatch(batch);
-            metrics.recordBatchSize(batch.size());
-        }
+        return Behaviors.same();
+    }
+
+    private ActorRef<EventCommand> getTenantEventManager(String tenantId) {
+        return tenantEventManagers.computeIfAbsent(tenantId, id ->
+            getContext().spawn(
+                TenantEventActor.create(id),
+                "tenant-" + id
+            )
+        );
     }
 }
 ```
 
-## 📈 分阶段实施计划
-
-### 第一阶段：基础架构准备 (4周)
-
-#### 周1-2: 性能基准测试和架构设计
-**目标**: 建立性能基准和详细架构设计
-
-**主要任务**:
-- 建立当前事件处理性能基准测试
-- 完成Disruptor架构详细设计
-- 制定事件类型迁移优先级
-- 设计兼容性层架构
-
-**交付物**:
-- 性能基准测试报告
-- Disruptor架构设计文档
-- 事件迁移计划
-- 兼容性层设计
-
-**验收标准**:
-- [ ] 完整的性能基准数据
-- [ ] 详细的技术架构设计
-- [ ] 明确的迁移路径规划
-- [ ] 兼容性保证方案
-
-#### 周3-4: 核心组件开发
-**目标**: 开发Disruptor核心组件
-
-**主要任务**:
-- 实现DataFlareEvent和事件工厂
-- 开发DataFlareDisruptorEventManager
-- 实现事件迁移控制器
-- 创建性能监控组件
-
-**交付物**:
-- 核心Disruptor组件代码
-- 事件迁移控制器
-- 性能监控框架
-- 单元测试用例
-
-**验收标准**:
-- [ ] 核心组件功能完整
-- [ ] 单元测试覆盖率>90%
-- [ ] 性能监控正常工作
-- [ ] 代码质量检查通过
-
-### 第二阶段：事件处理器实现 (6周)
-
-#### 周5-6: 执行事件处理器
-**目标**: 实现执行相关事件的高性能处理
-
-**主要任务**:
-- 开发ExecutionEventHandler
-- 实现TaskRunEventHandler
-- 优化批量处理逻辑
-- 集成租户隔离机制
-
-**交付物**:
-- 执行事件处理器
-- 批量处理优化
-- 租户隔离集成
-- 性能测试报告
-
-**验收标准**:
-- [ ] 执行事件处理正常
-- [ ] 批量处理性能优化
-- [ ] 租户隔离有效
-- [ ] 性能提升明显
-
-#### 周7-8: 工作任务事件处理器
-**目标**: 实现工作任务相关事件处理
-
-**主要任务**:
-- 开发WorkerJobEventHandler
-- 实现WorkerTaskResultEventHandler
-- 优化工作任务调度逻辑
-- 集成负载均衡机制
-
-**交付物**:
-- 工作任务事件处理器
-- 调度逻辑优化
-- 负载均衡集成
-- 集成测试用例
-
-**验收标准**:
-- [ ] 工作任务事件处理正常
-- [ ] 调度性能提升
-- [ ] 负载均衡有效
-- [ ] 集成测试通过
-
-#### 周9-10: 其他事件处理器
-**目标**: 完成所有事件类型的处理器
-
-**主要任务**:
-- 开发TriggerEventHandler
-- 实现MetricEventHandler
-- 开发LogEventHandler
-- 完善错误处理机制
-
-**交付物**:
-- 完整的事件处理器套件
-- 错误处理机制
-- 监控和告警集成
-- 端到端测试
-
-**验收标准**:
-- [ ] 所有事件类型支持
-- [ ] 错误处理完善
-- [ ] 监控告警正常
-- [ ] 端到端测试通过
-
-### 第三阶段：兼容性和集成 (4周)
-
-#### 周11-12: API兼容性层
-**目标**: 确保现有API完全兼容
-
-**主要任务**:
-- 实现统一事件管理器
-- 开发API兼容性层
-- 实现渐进式迁移机制
-- 测试API兼容性
-
-**交付物**:
-- 统一事件管理器
-- API兼容性层
-- 迁移控制机制
-- 兼容性测试报告
-
-**验收标准**:
-- [ ] 现有API完全兼容
-- [ ] 迁移机制正常工作
-- [ ] 兼容性测试通过
-- [ ] 性能无回退
-
-#### 周13-14: 企业级功能集成
-**目标**: 集成企业级功能
-
-**主要任务**:
-- 集成RBAC权限控制
-- 实现多租户事件隔离
-- 集成审计日志功能
-- 完善安全机制
-
-**交付物**:
-- RBAC集成
-- 多租户隔离
-- 审计日志集成
-- 安全机制完善
-
-**验收标准**:
-- [ ] 权限控制有效
-- [ ] 租户隔离完善
-- [ ] 审计日志完整
-- [ ] 安全机制可靠
-
-### 第四阶段：性能优化和测试 (4周)
-
-#### 周15-16: 性能优化
-**目标**: 全面性能优化和调优
-
-**主要任务**:
-- 进行性能压力测试
-- 优化内存使用和GC
-- 调优Disruptor参数
-- 优化批量处理逻辑
-
-**交付物**:
-- 性能压力测试报告
-- 内存优化方案
-- 参数调优建议
-- 批量处理优化
-
-**验收标准**:
-- [ ] 性能目标达成
-- [ ] 内存使用优化
-- [ ] 参数调优完成
-- [ ] 压力测试通过
-
-#### 周17-18: 生产就绪验证
-**目标**: 确保生产环境就绪
-
-**主要任务**:
-- 生产环境部署测试
-- 完善监控和告警
-- 编写运维文档
-- 进行最终验收
-
-**交付物**:
-- 生产部署方案
-- 监控告警配置
-- 运维操作手册
-- 最终验收报告
-
-**验收标准**:
-- [ ] 生产环境稳定
-- [ ] 监控告警完善
-- [ ] 运维文档完整
-- [ ] 验收标准达成
-
-## 🔄 API兼容性保证
-
-### 现有API保持不变
+#### 与现有分布式架构集成
 ```java
-// 现有的事件发布接口保持完全兼容
+// 分布式集群管理器 - 集成现有Worker集群
 @Component
-public class BackwardCompatibleEventPublisher {
+public class DistributedClusterManager {
 
-    private final DataFlareEventManager eventManager;
+    private final ActorSystem actorSystem;
+    private final ServiceLivenessManager serviceLivenessManager;
+    private final WorkerJobQueueInterface workerJobQueue;
+    private final AbstractServiceLivenessCoordinator livenessCoordinator;
 
-    // 保持原有的ApplicationEventPublisher接口
-    public void publishEvent(Object event) {
-        if (event instanceof CrudEvent<?> crudEvent) {
-            eventManager.publishEvent(
-                crudEvent.getModel(),
-                extractTenantId(crudEvent),
-                EventType.CRUD
-            );
-        } else if (event instanceof ServiceStateChangeEvent stateEvent) {
-            eventManager.publishEvent(
-                stateEvent,
-                null,
-                EventType.SERVICE_STATE
-            );
-        } else {
-            // 默认处理
-            eventManager.publishEvent(
-                event,
-                null,
-                EventType.GENERIC
-            );
-        }
+    public DistributedClusterManager(ActorSystem actorSystem) {
+        this.actorSystem = actorSystem;
+        // 集成现有的服务管理组件
+        this.serviceLivenessManager = ApplicationContext.getBean(ServiceLivenessManager.class);
+        this.workerJobQueue = ApplicationContext.getBean(WorkerJobQueueInterface.class);
+        this.livenessCoordinator = ApplicationContext.getBean(AbstractServiceLivenessCoordinator.class);
     }
 
-    // 保持原有的队列接口
-    public void emit(Object message) throws QueueException {
-        publishEvent(message);
+    public void registerWorkerNodes(List<WorkerNode> workerNodes) {
+        // 将现有Worker节点注册到Akka Cluster
+        Cluster cluster = Cluster.get(actorSystem);
+
+        workerNodes.forEach(workerNode -> {
+            Address workerAddress = AddressFromURIString.parse(
+                String.format("akka://%s@%s:%d",
+                    actorSystem.name(),
+                    workerNode.getHostname(),
+                    workerNode.getPort())
+            );
+
+            // 将Worker节点加入Akka集群
+            cluster.join(workerAddress);
+
+            // 保持与现有心跳机制的兼容
+            integrateWithExistingHeartbeat(workerNode);
+        });
     }
 
-    public void emitAsync(Object message) throws QueueException {
-        CompletableFuture.runAsync(() -> {
-            try {
-                publishEvent(message);
-            } catch (Exception e) {
-                log.error("Failed to publish event asynchronously", e);
+    public void enableWorkerFailover() {
+        // 集成现有的故障转移机制
+        Cluster cluster = Cluster.get(actorSystem);
+
+        cluster.subscriptions().tell(Subscribe.create(
+            actorSystem.deadLetters(),
+            ClusterEvent.MemberRemoved.class
+        ));
+
+        // 当Worker节点失效时，触发现有的故障处理逻辑
+        cluster.registerOnMemberRemoved(() -> {
+            livenessCoordinator.handleAllNonRespondingServices(Instant.now());
+        });
+    }
+
+    public void enableDynamicScaling() {
+        // 基于现有的服务发现机制实现动态扩缩容
+        ActorRef<ScalingCommand> scalingManager = actorSystem.systemActorOf(
+            DynamicScalingActor.create(serviceLivenessManager),
+            "dynamic-scaling-manager",
+            Props.empty()
+        );
+
+        // 监控集群负载，触发扩缩容
+        actorSystem.scheduler().scheduleAtFixedRate(
+            Duration.ofSeconds(30),
+            Duration.ofSeconds(30),
+            () -> scalingManager.tell(new EvaluateScaling()),
+            actorSystem.executionContext()
+        );
+    }
+
+    private void integrateWithExistingHeartbeat(WorkerNode workerNode) {
+        // 保持与现有心跳机制的兼容性
+        // 确保Akka集群状态与现有服务状态同步
+        serviceLivenessManager.registerHeartbeatCallback(workerNode.getId(), (isHealthy) -> {
+            if (!isHealthy) {
+                Cluster cluster = Cluster.get(actorSystem);
+                Address workerAddress = getWorkerAddress(workerNode);
+                cluster.down(workerAddress);
             }
         });
     }
 }
-
-// 事件监听器兼容性适配
-@Component
-public class EventListenerAdapter {
-
-    private final List<ApplicationEventListener<?>> legacyListeners;
-
-    // 将Disruptor事件转换为传统事件并分发给现有监听器
-    @EventHandler
-    public void onDisruptorEvent(DataFlareEvent disruptorEvent, long sequence, boolean endOfBatch) {
-        Object originalEvent = disruptorEvent.getEventObject();
-
-        // 分发给所有兼容的监听器
-        for (ApplicationEventListener listener : legacyListeners) {
-            if (listener.supports(originalEvent.getClass())) {
-                try {
-                    listener.onApplicationEvent(originalEvent);
-                } catch (Exception e) {
-                    log.error("Error in legacy event listener", e);
-                }
-            }
-        }
-    }
-}
 ```
 
-### 配置兼容性
-```yaml
-# 兼容性配置
-dataflare:
-  events:
-    # 迁移模式：LEGACY, DISRUPTOR, HYBRID
-    migration:
-      mode: HYBRID
-
-    # 事件类型迁移配置
-    type-migration:
-      # 已迁移到Disruptor的事件类型
-      migrated-types:
-        - EXECUTION
-        - WORKER_JOB
-        - TASK_RESULT
-
-      # 仍使用传统方式的事件类型
-      legacy-types:
-        - FLOW_TRIGGER
-        - SUBFLOW_EXECUTION
-
-    # Disruptor配置
-    disruptor:
-      buffer-size: 2097152  # 2M events
-      wait-strategy: yielding
-      producer-type: multi
-
-      # 事件处理器配置
-      handlers:
-        execution:
-          parallelism: 4
-          batch-size: 100
-        worker-job:
-          parallelism: 8
-          batch-size: 50
-
-    # 性能监控配置
-    monitoring:
-      enabled: true
-      metrics-interval: 60s
-      performance-comparison: true
-
-    # 兼容性设置
-    compatibility:
-      legacy-api-support: true
-      event-listener-adapter: true
-      queue-interface-support: true
 ```
 
-## 💾 数据迁移策略
+### 混合架构性能目标和收益预测
 
-### 零停机迁移方案
-```java
-// 数据迁移控制器
-@Component
-public class EventDataMigrationController {
+#### 分层性能目标
 
-    private final DataFlareEventManager eventManager;
-    private final LegacyQueueManager legacyQueueManager;
-    private final MigrationMetrics migrationMetrics;
+| 处理层级 | 技术方案 | 延迟目标 | 吞吐量目标 | 适用场景 | 预期收益 |
+|---------|---------|----------|-----------|----------|----------|
+| **超低延迟层** | LMAX Disruptor | <1ms (P95) | 100,000+ events/sec | 高频事件、状态变更 | 响应性提升500倍 |
+| **复杂处理层** | Akka Actor | 1-10ms (P95) | 50,000+ events/sec | 业务逻辑、状态管理 | 支持复杂场景 |
+| **分布式任务层** | 现有Worker集群 | 10-100ms (P95) | 10,000+ tasks/sec | 重型任务、分布式处理 | 扩展性无限制 |
+| **兜底保障层** | 传统队列 | 25-500ms | 1,000-4,000 events/sec | 兼容性、稳定性 | 零风险迁移 |
 
-    // 渐进式迁移
-    public void migrateEventType(EventType eventType) {
-        log.info("Starting migration for event type: {}", eventType);
+#### 综合性能提升预测
 
-        // 1. 开始双写模式
-        enableDualWrite(eventType);
+**1. 整体系统性能**
+- **平均延迟**: 25-500ms → 1-50ms (10-500倍提升)
+- **峰值吞吐量**: 4,000 events/sec → 100,000+ events/sec (25倍提升)
+- **并发处理能力**: CPU核心数限制 → 无限制 (10x+提升)
+- **资源利用率**: 30-50% → 70-85% (1.4-2.8倍提升)
 
-        // 2. 迁移历史数据
-        migrateHistoricalData(eventType);
+**2. 业务场景支持能力**
+- **简单事件处理**: 延迟降低500倍，吞吐量提升100倍
+- **复杂工作流**: 支持状态管理、事件关联、条件分支
+- **大规模分布式**: 支持跨数据中心、动态扩缩容
+- **企业级功能**: 完整的多租户、权限控制、审计日志
 
-        // 3. 验证数据一致性
-        validateDataConsistency(eventType);
+### 混合架构实施策略
 
-        // 4. 切换到新系统
-        switchToNewSystem(eventType);
+#### 第一阶段：基础设施准备 (6周)
 
-        // 5. 停止双写模式
-        disableDualWrite(eventType);
+**周1-2: 架构设计和技术验证**
+- 完成混合架构详细设计
+- 搭建Akka Cluster测试环境
+- 验证与现有Worker集群的集成
+- 设计智能路由算法
 
-        log.info("Migration completed for event type: {}", eventType);
-    }
+**周3-4: 核心组件开发**
+- 实现IntelligentEventRouter
+- 开发AkkaActorEventManager
+- 集成DistributedClusterManager
+- 创建事件特征分析器
 
-    private void enableDualWrite(EventType eventType) {
-        // 同时写入新旧系统
-        eventManager.enableDualWrite(eventType);
-    }
+**周5-6: 集成测试和优化**
+- 与现有分布式基础设施集成
+- 性能基准测试和调优
+- 故障转移和恢复测试
+- 监控和可观测性集成
 
-    private void migrateHistoricalData(EventType eventType) {
-        // 批量迁移历史数据
-        int batchSize = 1000;
-        int offset = 0;
+#### 第二阶段：分层迁移实施 (8周)
 
-        while (true) {
-            List<Object> batch = legacyQueueManager.getHistoricalEvents(
-                eventType, offset, batchSize
-            );
+**周7-8: 高频事件迁移到Disruptor**
+- 迁移Worker心跳事件
+- 迁移任务状态变更事件
+- 迁移指标收集事件
+- 性能验证和调优
 
-            if (batch.isEmpty()) {
-                break;
-            }
+**周9-10: 复杂事件迁移到Akka Actor**
+- 迁移Flow触发事件
+- 迁移子流程执行事件
+- 迁移条件分支事件
+- 状态管理和事件关联测试
 
-            // 批量写入新系统
-            eventManager.batchPublishEvents(batch, eventType);
+**周11-12: 分布式任务优化**
+- 优化现有Worker集群性能
+- 集成Akka Cluster扩展能力
+- 实现动态负载均衡
+- 跨数据中心部署测试
 
-            offset += batchSize;
-            migrationMetrics.recordMigratedEvents(batch.size());
-        }
-    }
+**周13-14: 智能路由优化**
+- 完善事件路由算法
+- 实现自适应性能调优
+- 集成机器学习预测
+- A/B测试和性能对比
 
-    private void validateDataConsistency(EventType eventType) {
-        // 数据一致性验证
-        ConsistencyReport report = performConsistencyCheck(eventType);
+#### 第三阶段：企业级功能集成 (4周)
 
-        if (!report.isConsistent()) {
-            throw new MigrationException(
-                "Data inconsistency detected for event type: " + eventType
-            );
-        }
-    }
-}
+**周15-16: 企业级功能集成**
+- 多租户事件隔离
+- RBAC权限控制集成
+- 审计日志和合规性
+- 安全性加固
 
-// 回滚机制
-@Component
-public class MigrationRollbackController {
+**周17-18: 生产就绪和验收**
+- 生产环境部署测试
+- 性能压力测试
+- 故障恢复演练
+- 最终验收和文档
 
-    public void rollbackMigration(EventType eventType) {
-        log.warn("Rolling back migration for event type: {}", eventType);
+### 未来收益评估
 
-        // 1. 停止新系统处理
-        eventManager.stopProcessing(eventType);
+#### 短期收益 (6-12个月)
 
-        // 2. 切换回传统系统
-        legacyQueueManager.resumeProcessing(eventType);
+**1. 性能提升收益**
+- **用户体验**: 系统响应速度提升10-500倍
+- **处理能力**: 支持更大规模的数据编排任务
+- **资源效率**: 硬件成本降低30-50%
 
-        // 3. 数据回滚（如果需要）
-        rollbackData(eventType);
+**2. 技术竞争力**
+- **市场定位**: 从中端产品升级为高端企业级平台
+- **客户满意度**: 性能问题投诉减少90%
+- **技术领先性**: 在数据编排领域建立技术优势
 
-        // 4. 更新配置
-        updateMigrationConfig(eventType, false);
+#### 中期收益 (1-2年)
 
-        log.info("Rollback completed for event type: {}", eventType);
-    }
-}
-```
+**1. 业务扩展能力**
+- **复杂场景支持**: 支持更复杂的数据处理工作流
+- **企业级客户**: 吸引大型企业客户，提升客单价
+- **生态系统**: 支持更丰富的插件和集成
 
-## 🏢 企业级考虑
+**2. 运维效率提升**
+- **自动化运维**: 智能扩缩容、故障自愈
+- **监控可观测性**: 全面的性能监控和问题诊断
+- **维护成本**: 运维成本降低40-60%
 
-### RBAC权限控制集成
-```java
-// 事件级别权限控制
-@Component
-public class EventSecurityManager {
+#### 长期收益 (2-5年)
 
-    private final RBACService rbacService;
-    private final TenantService tenantService;
+**1. 平台生态价值**
+- **技术护城河**: 建立难以复制的技术优势
+- **标准制定**: 在数据编排领域建立技术标准
+- **开源社区**: 吸引更多开发者和贡献者
 
-    public boolean isAuthorized(String tenantId, String userId, EventType eventType, String action) {
-        // 检查租户权限
-        if (!tenantService.isValidTenant(tenantId)) {
-            return false;
-        }
+**2. 商业价值最大化**
+- **市场份额**: 在企业级数据编排市场占据领先地位
+- **产品矩阵**: 支撑更多产品线和解决方案
+- **技术输出**: 技术能力对外输出，创造新的收入来源
 
-        // 检查用户权限
-        String permission = buildEventPermission(eventType, action);
-        return rbacService.hasPermission(userId, tenantId, permission);
-    }
+### 风险控制和缓解策略
 
-    private String buildEventPermission(EventType eventType, String action) {
-        return String.format("events:%s:%s", eventType.name().toLowerCase(), action);
-    }
-}
+#### 技术风险控制
+1. **渐进式迁移**: 分层分批迁移，降低单次变更风险
+2. **完整回滚机制**: 每个阶段都有完整的回滚方案
+3. **性能监控**: 实时监控性能指标，及时发现问题
+4. **专家支持**: 引入Akka和Disruptor专家提供技术支持
 
-// 事件权限检查处理器
-public class EventSecurityHandler implements EventHandler<DataFlareEvent> {
+#### 业务风险控制
+1. **向后兼容**: 保持现有API和功能完全兼容
+2. **零停机部署**: 采用蓝绿部署，确保业务连续性
+3. **数据一致性**: 严格的数据一致性验证和保护
+4. **客户沟通**: 提前与重要客户沟通，获得支持
 
-    private final EventSecurityManager securityManager;
+### 最终推荐方案
 
-    @Override
-    public void onEvent(DataFlareEvent event, long sequence, boolean endOfBatch) {
-        // 权限检查
-        if (!securityManager.isAuthorized(
-                event.getTenantId(),
-                event.getUserId(),
-                event.getEventType(),
-                "process")) {
-            event.setState(EventState.UNAUTHORIZED);
-            return;
-        }
+基于对DataFlare现有分布式架构的深入分析和未来收益的综合评估，**强烈推荐采用混合架构方案**：
 
-        event.setState(EventState.AUTHORIZED);
-    }
-}
-```
+#### 核心优势
+1. **最大化现有投资**: 充分利用已有的成熟分布式基础设施
+2. **最优性能组合**: 结合三种技术的优势，实现最佳性能
+3. **最强扩展能力**: 支持从单机到跨数据中心的无限扩展
+4. **最低实施风险**: 渐进式迁移，每个阶段都有回滚保障
+5. **最高未来价值**: 为DataFlare建立长期技术竞争优势
 
-### 多租户事件隔离
-```java
-// 租户级别的事件隔离
-@Component
-public class TenantEventIsolationManager {
+#### 关键成功因素
+1. **技术团队能力建设**: 投资团队培训，建立技术专长
+2. **分阶段实施**: 严格按照18周计划执行，确保质量
+3. **性能监控**: 建立完善的监控体系，持续优化
+4. **生态系统建设**: 与合作伙伴共同建设技术生态
 
-    private final Map<String, RingBuffer<DataFlareEvent>> tenantRingBuffers;
-    private final TenantConfigService tenantConfigService;
+通过实施这个混合架构方案，DataFlare将实现从中端数据编排平台到高端企业级平台的跨越式升级，在低延时数据处理、复杂数据处理和分布式支持三个维度都达到业界领先水平，为未来5-10年的发展奠定坚实的技术基础。
 
-    public void publishTenantEvent(String tenantId, Object eventObject, EventType eventType) {
-        // 获取租户专用的RingBuffer
-        RingBuffer<DataFlareEvent> tenantBuffer = getTenantRingBuffer(tenantId);
+## 🎯 更新后的性能目标和验收标准
 
-        // 发布事件到租户专用缓冲区
-        long sequence = tenantBuffer.next();
-        try {
-            DataFlareEvent event = tenantBuffer.get(sequence);
-            event.reset();
-            event.setTenantId(tenantId);
-            event.setEventType(eventType);
-            event.setEventObject(eventObject);
-        } finally {
-            tenantBuffer.publish(sequence);
-        }
-    }
+### 混合架构关键性能指标 (KPI)
 
-    private RingBuffer<DataFlareEvent> getTenantRingBuffer(String tenantId) {
-        return tenantRingBuffers.computeIfAbsent(tenantId, this::createTenantRingBuffer);
-    }
-
-    private RingBuffer<DataFlareEvent> createTenantRingBuffer(String tenantId) {
-        TenantConfig config = tenantConfigService.getTenantConfig(tenantId);
-
-        Disruptor<DataFlareEvent> disruptor = new Disruptor<>(
-            DataFlareEvent::new,
-            config.getEventBufferSize(),
-            new NamedThreadFactory("tenant-" + tenantId),
-            ProducerType.MULTI,
-            new YieldingWaitStrategy()
-        );
-
-        // 配置租户专用的事件处理器
-        setupTenantEventHandlers(disruptor, tenantId);
-
-        disruptor.start();
-        return disruptor.getRingBuffer();
-    }
-}
-```
-
-### 审计日志集成
-```java
-// 事件审计日志处理器
-public class EventAuditHandler implements EventHandler<DataFlareEvent> {
-
-    private final AuditLogService auditLogService;
-
-    @Override
-    public void onEvent(DataFlareEvent event, long sequence, boolean endOfBatch) {
-        // 记录事件审计日志
-        AuditLogEntry auditEntry = AuditLogEntry.builder()
-            .eventId(event.getEventId())
-            .tenantId(event.getTenantId())
-            .userId(event.getUserId())
-            .eventType(event.getEventType())
-            .action("PROCESS")
-            .timestamp(Instant.now())
-            .details(buildAuditDetails(event))
-            .build();
-
-        auditLogService.recordAuditLog(auditEntry);
-    }
-
-    private Map<String, Object> buildAuditDetails(DataFlareEvent event) {
-        Map<String, Object> details = new HashMap<>();
-        details.put("sequenceId", event.getSequenceId());
-        details.put("state", event.getState());
-        details.put("processingTime", event.getProcessingTime());
-
-        // 添加事件特定的详细信息
-        if (event.getEventObject() instanceof Execution execution) {
-            details.put("executionId", execution.getId());
-            details.put("flowId", execution.getFlowId());
-            details.put("executionState", execution.getState());
-        }
-
-        return details;
-    }
-}
-```
-
-## 🎯 性能目标和验收标准
-
-### 关键性能指标 (KPI)
-
-| 性能指标 | 当前值 | 目标值 | 提升倍数 | 验收标准 |
-|---------|--------|--------|----------|----------|
-| 事件处理延迟 | 25-500ms | <1ms (P95) | 25-500x | 95%的事件在1ms内处理完成 |
-| 事件吞吐量 | 1,000-4,000/sec | 100,000+/sec | 25-100x | 持续处理100,000 events/sec |
-| CPU利用率 | 30-50% | 70-85% | 1.4-2.8x | 多核CPU充分利用 |
-| 内存使用 | 高GC压力 | 零GC压力 | 显著改善 | GC停顿<1ms |
-| 并发处理能力 | CPU核心数限制 | 无限制 | 10x+ | 支持数万并发事件 |
+| 性能指标 | 当前值 | 混合架构目标值 | 提升倍数 | 验收标准 |
+|---------|--------|---------------|----------|----------|
+| **高频事件延迟** | 25-500ms | <1ms (P95) | 25-500x | 95%的高频事件在1ms内处理完成 |
+| **复杂事件延迟** | 100-2000ms | 1-10ms (P95) | 100-2000x | 95%的复杂事件在10ms内处理完成 |
+| **分布式任务延迟** | 500-5000ms | 10-100ms (P95) | 50x | 95%的分布式任务在100ms内调度完成 |
+| **整体事件吞吐量** | 1,000-4,000/sec | 100,000+/sec | 25-100x | 持续处理100,000 events/sec |
+| **并发处理能力** | CPU核心数限制 | 无限制 | 10x+ | 支持数万并发事件和任务 |
+| **系统可用性** | 99.9% | 99.99% | 10x改进 | 年停机时间<53分钟 |
 
 ### 功能验收标准
 
 #### 核心功能验收
 - [ ] 所有现有事件类型正常处理
+- [ ] 智能路由决策准确率>95%
+- [ ] 与现有Worker集群无缝集成
 - [ ] API接口完全向后兼容
-- [ ] 事件处理顺序保证
-- [ ] 数据一致性验证通过
 - [ ] 企业级功能集成无缝
 
 #### 性能验收
-- [ ] 延迟降低25-500倍达成
-- [ ] 吞吐量提升25-100倍达成
-- [ ] CPU利用率提升达成
-- [ ] 内存优化目标达成
-- [ ] 压力测试通过
+- [ ] 高频事件延迟降低25-500倍达成
+- [ ] 复杂事件处理能力提升100倍达成
+- [ ] 分布式扩展性验证通过
+- [ ] 整体吞吐量提升25-100倍达成
+- [ ] 压力测试和稳定性测试通过
 
 #### 可靠性验收
 - [ ] 故障注入测试通过
-- [ ] 长时间稳定性测试通过
+- [ ] 集群故障转移测试通过
 - [ ] 数据一致性验证通过
-- [ ] 灾难恢复测试通过
-- [ ] 安全性测试通过
+- [ ] 跨数据中心部署测试通过
+- [ ] 安全性和合规性测试通过
 
-这个全面的DataFlare事件驱动架构性能优化方案提供了：
+## 📋 总结
 
-1. **深入的现状分析**：基于实际代码的性能瓶颈识别
-2. **全面的技术对比**：三种方案的详细对比分析
-3. **科学的风险评估**：多维度风险评估矩阵
-4. **最优方案设计**：基于LMAX Disruptor的高性能架构
-5. **详细实施计划**：18周分阶段实施路线图
-6. **完整兼容性保证**：API和数据迁移策略
-7. **企业级功能集成**：RBAC、多租户、审计日志
+这个更新后的DataFlare事件驱动架构性能优化方案基于对现有分布式架构的深入分析，提出了混合架构解决方案，该方案：
 
-通过实施这个方案，DataFlare的事件处理性能将实现质的飞跃，从毫秒级延迟降低到微秒级，吞吐量提升100倍以上，同时保持完全的向后兼容性和企业级功能的完整性。
+### 🎯 核心价值
+1. **最大化现有投资回报**: 充分利用DataFlare已有的成熟分布式基础设施
+2. **实现最优性能组合**: 结合Disruptor、Akka Actor和现有Worker集群的优势
+3. **支持全场景覆盖**: 从微秒级高频事件到复杂分布式任务的全覆盖
+4. **确保平滑演进**: 渐进式迁移策略，最小化风险和业务影响
+
+### 🚀 技术突破
+1. **智能事件路由**: 基于事件特征和集群状态的智能路由决策
+2. **分层性能优化**: 不同类型事件采用最适合的处理技术
+3. **无缝分布式集成**: 与现有Worker集群、服务发现完美集成
+4. **企业级可扩展性**: 支持跨数据中心、动态扩缩容
+
+### 📈 预期收益
+1. **短期**: 性能提升10-500倍，用户体验质的飞跃
+2. **中期**: 支持更复杂业务场景，吸引企业级客户
+3. **长期**: 建立技术护城河，在数据编排领域确立领先地位
+
+通过实施这个混合架构方案，DataFlare将在低延时数据处理、复杂数据处理和分布式支持三个关键维度都达到业界领先水平，为未来的技术发展和商业成功奠定坚实基础。
