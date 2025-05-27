@@ -263,56 +263,56 @@
     "deleted_label": "삭제됨",
     "demos": {
       "IAM": {
-        "message": "Kestra Enterprise Edition은 단일 사인온(SSO), SCIM 디렉토리 동기화, 역할 기반 접근 제어(RBAC)와 같은 IAM 기능을 내장하고 있으며, 여러 ID 공급자와 통합하여 사용자 및 서비스 계정에 대해 세분화된 권한을 할당할 수 있습니다.",
+        "message": "DataFlare Enterprise Edition은 단일 사인온(SSO), SCIM 디렉토리 동기화, 역할 기반 접근 제어(RBAC)와 같은 IAM 기능을 내장하고 있으며, 여러 ID 공급자와 통합하여 사용자 및 서비스 계정에 대해 세분화된 권한을 할당할 수 있습니다.",
         "title": "IAM을 통해 SSO, SCIM 및 RBAC로 사용자 관리"
       },
       "apps": {
-        "message": "Kestra Enterprise Edition의 앱은 플랫폼 외부에서 Kestra 워크플로와 상호작용하는 맞춤형 UI를 구축할 수 있게 해줍니다. 이 기능을 통해 워크플로를 맞춤형 애플리케이션의 백엔드로 사용할 수 있으며, 비기술적 사용자도 양식을 통해 데이터를 제출하거나 승인을 기다리는 PAUSED 워크플로를 재개할 수 있습니다.",
+        "message": "DataFlare Enterprise Edition의 앱은 플랫폼 외부에서 Kestra 워크플로와 상호작용하는 맞춤형 UI를 구축할 수 있게 해줍니다. 이 기능을 통해 워크플로를 맞춤형 애플리케이션의 백엔드로 사용할 수 있으며, 비기술적 사용자도 양식을 통해 데이터를 제출하거나 승인을 기다리는 PAUSED 워크플로를 재개할 수 있습니다.",
         "title": "Kestra로 맞춤형 앱 만들기"
       },
       "audit-logs": {
-        "message": "Kestra Enterprise Edition은 모든 활동을 강력하고 변경 불가능한 기록으로 로그하여 변경 사항을 추적하고, 규정을 준수하며, 문제를 해결하는 것을 쉽게 만듭니다.",
+        "message": "DataFlare Enterprise Edition은 모든 활동을 강력하고 변경 불가능한 기록으로 로그하여 변경 사항을 추적하고, 규정을 준수하며, 문제를 해결하는 것을 쉽게 만듭니다.",
         "title": "변경 사항 추적 - 감사 Log"
       },
       "blueprints": {
-        "message": "Kestra Enterprise Edition에서는 조직에만 사용할 수 있는 맞춤형 Blueprints를 생성할 수 있습니다. 이를 모범 사례 템플릿으로 사용하여 팀 내에서 자주 사용하는 workflow를 공유하고, 중앙 집중화하고, 문서화할 수 있습니다.",
+        "message": "DataFlare Enterprise Edition에서는 조직에만 사용할 수 있는 맞춤형 Blueprints를 생성할 수 있습니다. 이를 모범 사례 템플릿으로 사용하여 팀 내에서 자주 사용하는 workflow를 공유하고, 중앙 집중화하고, 문서화할 수 있습니다.",
         "title": "사용자 정의 Blueprints 추가"
       },
       "enterprise_edition": "엔터프라이즈 에디션",
       "get_a_demo_button": "데모 받기",
       "instance": {
-        "message": "Kestra Enterprise Edition은 플랫폼의 상태를 관찰하고 Workers, Schedulers, Executors와 같은 모든 서비스의 가동 시간 지표를 추적할 수 있는 운영 대시보드를 제공합니다. 같은 페이지에서 계획된 다운타임에 대해 사용자에게 알리기 위한 공지를 생성할 수 있으며, 모든 서비스와 workflow 실행을 일시적으로 PAUSED 상태로 전환하여 업그레이드를 수행할 수 있는 유지보수 모드로 진입할 수 있습니다.",
+        "message": "DataFlare Enterprise Edition은 플랫폼의 상태를 관찰하고 Workers, Schedulers, Executors와 같은 모든 서비스의 가동 시간 지표를 추적할 수 있는 운영 대시보드를 제공합니다. 같은 페이지에서 계획된 다운타임에 대해 사용자에게 알리기 위한 공지를 생성할 수 있으며, 모든 서비스와 workflow 실행을 일시적으로 PAUSED 상태로 전환하여 업그레이드를 수행할 수 있는 유지보수 모드로 진입할 수 있습니다.",
         "title": "인스턴스 전반의 인프라 관리"
       },
       "namespace": {
         "audit-logs": {
-          "message": "Kestra Enterprise Edition에서는 namespace 수준의 감사 로그를 상세한 차이점과 함께 볼 수 있어, 모든 리소스에 걸쳐 누가 무엇을 언제 변경했는지에 대한 명확한 기록을 제공합니다.",
+          "message": "DataFlare Enterprise Edition에서는 namespace 수준의 감사 로그를 상세한 차이점과 함께 볼 수 있어, 모든 리소스에 걸쳐 누가 무엇을 언제 변경했는지에 대한 명확한 기록을 제공합니다.",
           "title": "모든 변경 사항을 한 곳에서 추적하기"
         },
         "edit": {
-          "message": "Kestra Enterprise Edition에서는 namespace가 비밀, 변수 및 플러그인 기본값의 고급 격리 및 관리를 제공합니다. 관리자는 사용자 정의 비밀 관리자, 격리된 저장소 백엔드, 전용 worker 그룹 및 세부적인 권한을 namespace별로 구성할 수 있습니다. 이를 통해 비밀, 변수 및 플러그인 구성이 다양한 팀과 프로젝트 전반에 걸쳐 안전하고 쉽게 유지될 수 있습니다.",
+          "message": "DataFlare Enterprise Edition에서는 namespace가 비밀, 변수 및 플러그인 기본값의 고급 격리 및 관리를 제공합니다. 관리자는 사용자 정의 비밀 관리자, 격리된 저장소 백엔드, 전용 worker 그룹 및 세부적인 권한을 namespace별로 구성할 수 있습니다. 이를 통해 비밀, 변수 및 플러그인 구성이 다양한 팀과 프로젝트 전반에 걸쳐 안전하고 쉽게 유지될 수 있습니다.",
           "title": "네임스페이스 관리 업그레이드"
         },
         "history": {
-          "message": "Kestra Enterprise Edition에서는 namespace의 수정 이력을 관리할 수 있습니다.",
+          "message": "DataFlare Enterprise Edition에서는 namespace의 수정 이력을 관리할 수 있습니다.",
           "title": "한 곳에서 수정 기록 관리"
         },
         "plugin-defaults": {
-          "message": "Kestra Enterprise Edition에서는 각 flow에서 중복된 설정의 필요성을 줄이기 위해 namespace별 플러그인 기본값을 설정할 수 있습니다. 이 중앙 플러그인 관리 기능은 일관된 구성 설정을 강제하고, 비밀 정보나 변수를 안전하게 참조할 수 있게 하며, 워크플로우의 유지 관리를 간소화합니다.",
+          "message": "DataFlare Enterprise Edition에서는 각 flow에서 중복된 설정의 필요성을 줄이기 위해 namespace별 플러그인 기본값을 설정할 수 있습니다. 이 중앙 플러그인 관리 기능은 일관된 구성 설정을 강제하고, 비밀 정보나 변수를 안전하게 참조할 수 있게 하며, 워크플로우의 유지 관리를 간소화합니다.",
           "title": "플러그인 기본값으로 구성 표준화"
         },
         "secrets": {
-          "message": "Kestra Enterprise Edition에서는 namespace 수준에서 비밀을 저장하고 제어할 수 있어 위험을 최소화하고 각 팀의 자격 증명이 격리된 상태로 유지됩니다. 중첩된 계층 구조 덕분에 상위 namespace에서 자격 증명을 구성하면 모든 하위 namespace에서 이를 상속받을 수 있습니다. 전용 비밀 관리자 지원 및 세분화된 namespace 수준의 권한 설정은 보안과 규정을 더욱 강화합니다.",
+          "message": "DataFlare Enterprise Edition에서는 namespace 수준에서 비밀을 저장하고 제어할 수 있어 위험을 최소화하고 각 팀의 자격 증명이 격리된 상태로 유지됩니다. 중첩된 계층 구조 덕분에 상위 namespace에서 자격 증명을 구성하면 모든 하위 namespace에서 이를 상속받을 수 있습니다. 전용 비밀 관리자 지원 및 세분화된 namespace 수준의 권한 설정은 보안과 규정을 더욱 강화합니다.",
           "title": "비밀을 안전하게 관리하기"
         },
         "variables": {
-          "message": "Kestra Enterprise Edition에서는 namespace 수준 변수들을 정의하고 관리하여 flow 전반에 걸친 반복적인 구성을 제거할 수 있습니다. 이러한 변수들은 일관성을 보장하고, 구성 업데이트를 간소화하며, 어떤 task나 trigger에서도 쉽게 참조할 수 있어 더 깔끔하고 유지보수하기 쉬운 워크플로우를 만듭니다.",
+          "message": "DataFlare Enterprise Edition에서는 namespace 수준 변수들을 정의하고 관리하여 flow 전반에 걸친 반복적인 구성을 제거할 수 있습니다. 이러한 변수들은 일관성을 보장하고, 구성 업데이트를 간소화하며, 어떤 task나 trigger에서도 쉽게 참조할 수 있어 더 깔끔하고 유지보수하기 쉬운 워크플로우를 만듭니다.",
           "title": "변수를 중앙에서 관리하세요"
         }
       },
       "secrets": {
         "add_env": {
-          "first": "<strong><a href=\"https://kestra.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">비밀 값 Base64로 인코딩</a></strong>",
+          "first": "<strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">비밀 값 Base64로 인코딩</a></strong>",
           "intro": "새 Secret을 생성하려면:",
           "second": "위의 값을 사용하여 '<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>'라는 환경 변수를 추가하세요.",
           "third": "Kestra 인스턴스를 재시작하십시오"
@@ -323,7 +323,7 @@
         "title": "비밀 관리 업그레이드"
       },
       "tenants": {
-        "message": "Kestra Enterprise Edition은 멀티-tenancy를 지원하여, 각기 다른 팀이나 프로젝트를 위한 완전히 분리된 환경을 제공합니다. 각 환경은 전용 worker 그룹, 비밀 정보 및 내부 저장소 백엔드와 같은 자체 리소스를 갖추고 있습니다.",
+        "message": "DataFlare Enterprise Edition은 멀티-tenancy를 지원하여, 각기 다른 팀이나 프로젝트를 위한 완전히 분리된 환경을 제공합니다. 각 환경은 전용 worker 그룹, 비밀 정보 및 내부 저장소 백엔드와 같은 자체 리소스를 갖추고 있습니다.",
         "title": "격리된 Tenant에서 Workflow 관리"
       }
     },
@@ -391,19 +391,19 @@
         "title": "앱이 아직 없습니다!"
       },
       "concurrency_executions": {
-        "content": "자세한 내용은 <strong><a href=\"https://kestra.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong>에 대한 문서를 참조하세요.",
+        "content": "자세한 내용은 <strong><a href=\"https://dataflare.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong>에 대한 문서를 참조하세요.",
         "title": "이 Flow에 대한 진행 중인 실행이 없습니다."
       },
       "concurrency_limit": {
-        "content": "우리 문서에서 <strong><a href=\"https://kestra.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong>에 대해 더 읽어보세요.",
+        "content": "우리 문서에서 <strong><a href=\"https://dataflare.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong>에 대해 더 읽어보세요.",
         "title": "이 Flow에 대한 제한이 설정되지 않았습니다."
       },
       "dependencies": {
-        "content": "<a href=\"https://kestra.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a>에 대한 자세한 내용은 문서를 참조하세요.",
+        "content": "<a href=\"https://dataflare.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a>에 대한 자세한 내용은 문서를 참조하세요.",
         "title": "이 Flow에 대한 종속성이 설정되지 않았습니다."
       },
       "plugins": {
-        "content": "우리 문서에서 <strong><a href=\"https://kestra.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong>에 대해 더 읽어보세요.",
+        "content": "우리 문서에서 <strong><a href=\"https://dataflare.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong>에 대해 더 읽어보세요.",
         "title": "이 Namespace에 대한 플러그인 기본값이 설정되지 않았습니다."
       },
       "testSuites": {
@@ -411,7 +411,7 @@
         "title": "아직 Test suite가 없습니다!"
       },
       "triggers": {
-        "content": "<strong><a href=\"https://kestra.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong>에 대한 자세한 내용은 문서를 참조하세요.",
+        "content": "<strong><a href=\"https://dataflare.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong>에 대한 자세한 내용은 문서를 참조하세요.",
         "title": "flow에 Triggers가 없습니다."
       }
     },
@@ -628,7 +628,7 @@
       "title": "대시보드",
       "today": "오늘",
       "wel_text": "환영합니다!",
-      "welcome": "Kestra에 오신 것을 환영합니다",
+      "welcome": "DataFlare에 오신 것을 환영합니다",
       "yesterday": "어제"
     },
     "hostname": "호스트 이름",
@@ -903,7 +903,7 @@
         "0": {
           "content": "여기 오신 것을 환영합니다.<br />첫 번째 flow를 만들어 봅시다.",
           "primary": "시작합시다!",
-          "title": "Kestra에 오신 것을 환영합니다!"
+          "title": "DataFlare에 오신 것을 환영합니다!"
         },
         "1": {
           "primary": "다음",
@@ -1209,7 +1209,7 @@
     "template export": "<code>{templateCount}</code> 개의 템플릿을 내보내시겠습니까?",
     "templates": "템플릿들",
     "templates deleted": "<code>{count}</code> 개의 템플릿이 삭제되었습니다",
-    "templates deprecated": "템플릿은 사용 중지되었습니다. 대신 subflows를 사용하세요. 템플릿에서 subflows로 마이그레이션하는 방법을 설명하는 <a href=\"https://kestra.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">마이그레이션 섹션</a>을 참조하세요.",
+    "templates deprecated": "템플릿은 사용 중지되었습니다. 대신 subflows를 사용하세요. 템플릿에서 subflows로 마이그레이션하는 방법을 설명하는 <a href=\"https://dataflare.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">마이그레이션 섹션</a>을 참조하세요.",
     "templates exported": "템플릿이 내보내졌습니다",
     "tenant": {
       "name": "테넌트",
@@ -1310,11 +1310,11 @@
         "title": "제품 투어 시작하기"
       },
       "tutorial": {
-        "text": "* <a href=\"https://kestra.io/tutorial-videos/all\" target=\"_blank\">비디오 튜토리얼</a>  \n* <a href=\"https://kestra.io/docs\" target=\"_blank\">문서</a>  \n* <a href=\"https://kestra.io/blueprints\" target=\"_blank\">Blueprints</a>",
+        "text": "* <a href=\"https://dataflare.io/tutorial-videos/all\" target=\"_blank\">비디오 튜토리얼</a>  \n* <a href=\"https://dataflare.io/docs\" target=\"_blank\">문서</a>  \n* <a href=\"https://dataflare.io/blueprints\" target=\"_blank\">Blueprints</a>",
         "title": "튜토리얼"
       }
     },
-    "welcome aboard": "🚀 Kestra에 오신 것을 환영합니다!",
+    "welcome aboard": "🚀 DataFlare에 오신 것을 환영합니다!",
     "welcome aboard content": "가이드 투어를 사용하여 첫 번째 flow를 만들고 Blueprints에서 더 많은 예제를 확인하세요.",
     "welcome button create": "첫 번째 flow 만들기",
     "welcome display require": "<strong>첫 번째 flow</strong>를 실행하여 시작하세요",

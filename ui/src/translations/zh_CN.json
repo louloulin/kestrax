@@ -271,7 +271,7 @@
         "title": "使用 Kestra 构建自定义应用程序"
       },
       "audit-logs": {
-        "message": "Kestra Enterprise Edition记录每个活动，提供强大且不可更改的记录，使得跟踪更改、保持合规性和解决问题变得容易。",
+        "message": "DataFlare Enterprise Edition记录每个活动，提供强大且不可更改的记录，使得跟踪更改、保持合规性和解决问题变得容易。",
         "title": "使用审计日志跟踪更改"
       },
       "blueprints": {
@@ -281,7 +281,7 @@
       "enterprise_edition": "企业版",
       "get_a_demo_button": "获取演示",
       "instance": {
-        "message": "Kestra Enterprise Edition 提供一个操作仪表板，帮助您观察平台的健康状况并跟踪所有服务（如 Workers、Schedulers 和 Executors）的正常运行时间指标。在同一页面，您还可以创建公告以通知用户计划中的停机时间，并且可以进入维护模式，将所有服务和工作流执行暂时置于 PAUSED 状态以进行升级。",
+        "message": "DataFlare Enterprise Edition 提供一个操作仪表板，帮助您观察平台的健康状况并跟踪所有服务（如 Workers、Schedulers 和 Executors）的正常运行时间指标。在同一页面，您还可以创建公告以通知用户计划中的停机时间，并且可以进入维护模式，将所有服务和工作流执行暂时置于 PAUSED 状态以进行升级。",
         "title": "管理您的实例中的基础设施"
       },
       "namespace": {
@@ -294,15 +294,15 @@
           "title": "升级您的Namespace管理"
         },
         "history": {
-          "message": "在 Kestra Enterprise Edition 中，您可以管理 Namespace 的修订历史记录。",
+          "message": "在 DataFlare Enterprise Edition 中，您可以管理 Namespace 的修订历史记录。",
           "title": "在一个地方管理修订历史"
         },
         "plugin-defaults": {
-          "message": "在 Kestra Enterprise Edition 中，您可以设置特定于 namespace 的插件默认值，从而减少每个 flow 中重复设置的需求。这种集中的插件管理强制执行一致的配置，允许安全引用机密或变量，并简化工作流的维护。",
+          "message": "在 DataFlare Enterprise Edition 中，您可以设置特定于 namespace 的插件默认值，从而减少每个 flow 中重复设置的需求。这种集中的插件管理强制执行一致的配置，允许安全引用机密或变量，并简化工作流的维护。",
           "title": "使用插件默认值标准化配置"
         },
         "secrets": {
-          "message": "在 Kestra Enterprise Edition 中，您可以在 namespace 级别存储和控制机密，从而最大限度地降低风险并确保每个团队的凭据保持隔离。得益于嵌套层次结构，您还可以在父 namespace 中配置凭据，并且它们将被所有子 namespace 继承。对专用机密管理器和细粒度的 namespace 级别权限设置的支持进一步增强了安全性和合规性。",
+          "message": "在 DataFlare Enterprise Edition 中，您可以在 namespace 级别存储和控制机密，从而最大限度地降低风险并确保每个团队的凭据保持隔离。得益于嵌套层次结构，您还可以在父 namespace 中配置凭据，并且它们将被所有子 namespace 继承。对专用机密管理器和细粒度的 namespace 级别权限设置的支持进一步增强了安全性和合规性。",
           "title": "以安全方式管理Secrets"
         },
         "variables": {
@@ -312,7 +312,7 @@
       },
       "secrets": {
         "add_env": {
-          "first": "将<strong><a href=\"https://kestra.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">secret value 编码为 Base64</a></strong>",
+          "first": "将<strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">secret value 编码为 Base64</a></strong>",
           "intro": "创建新Secret：",
           "second": "添加一个名为 '<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>' 的环境变量，并使用上述值",
           "third": "重新启动您的Kestra实例"
@@ -391,19 +391,19 @@
         "title": "您还没有应用程序！"
       },
       "concurrency_executions": {
-        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://kestra.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong>的信息。",
+        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://dataflare.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong>的信息。",
         "title": "此 Flow 没有正在进行的 Executions。"
       },
       "concurrency_limit": {
-        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://kestra.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong>的信息。",
+        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://dataflare.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong>的信息。",
         "title": "此Flow未设置限制。"
       },
       "dependencies": {
-        "content": "在我们的文档中阅读更多关于<a href=\"https://kestra.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a>的信息。",
+        "content": "在我们的文档中阅读更多关于<a href=\"https://dataflare.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a>的信息。",
         "title": "此Flow未设置依赖项。"
       },
       "plugins": {
-        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://kestra.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong>的信息。",
+        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://dataflare.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong>的信息。",
         "title": "此Namespace未设置插件默认值。"
       },
       "testSuites": {
@@ -411,7 +411,7 @@
         "title": "您还没有测试套件！"
       },
       "triggers": {
-        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://kestra.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong>的信息。",
+        "content": "在我们的文档中阅读更多关于<strong><a href=\"https://dataflare.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong>的信息。",
         "title": "您的 flow 没有任何 Triggers。"
       }
     },
@@ -1209,7 +1209,7 @@
     "template export": "确定要导出 <code>{templateCount}</code> 个模板吗？",
     "templates": "模板",
     "templates deleted": "<code>{count}</code> 个模板已删除",
-    "templates deprecated": "模板已弃用。请使用子流程代替。查看 <a href=\"https://kestra.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">迁移部分</a> 了解如何从模板迁移到子流程。",
+    "templates deprecated": "模板已弃用。请使用子流程代替。查看 <a href=\"https://dataflare.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">迁移部分</a> 了解如何从模板迁移到子流程。",
     "templates exported": "模板已导出",
     "tenant": {
       "name": "租户",
@@ -1310,7 +1310,7 @@
         "title": "开始产品导览"
       },
       "tutorial": {
-        "text": "* <a href=\"https://kestra.io/tutorial-videos/all\" target=\"_blank\">视频教程</a>  \n* <a href=\"https://kestra.io/docs\" target=\"_blank\">文档</a>  \n* <a href=\"https://kestra.io/blueprints\" target=\"_blank\">Blueprints</a>",
+        "text": "* <a href=\"https://dataflare.io/tutorial-videos/all\" target=\"_blank\">视频教程</a>  \n* <a href=\"https://dataflare.io/docs\" target=\"_blank\">文档</a>  \n* <a href=\"https://dataflare.io/blueprints\" target=\"_blank\">Blueprints</a>",
         "title": "教程"
       }
     },

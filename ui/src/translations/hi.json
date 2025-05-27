@@ -271,7 +271,7 @@
         "title": "Kestra के साथ कस्टम ऐप्स बनाएं"
       },
       "audit-logs": {
-        "message": "Kestra Enterprise Edition हर गतिविधि को मजबूत, अपरिवर्तनीय रिकॉर्ड के साथ लॉग करता है, जिससे परिवर्तनों को ट्रैक करना, अनुपालन बनाए रखना और समस्याओं का समाधान करना आसान हो जाता है।",
+        "message": "DataFlare Enterprise Edition हर गतिविधि को मजबूत, अपरिवर्तनीय रिकॉर्ड के साथ लॉग करता है, जिससे परिवर्तनों को ट्रैक करना, अनुपालन बनाए रखना और समस्याओं का समाधान करना आसान हो जाता है।",
         "title": "परिवर्तनों को ट्रैक करें Audit Logs के साथ"
       },
       "blueprints": {
@@ -281,7 +281,7 @@
       "enterprise_edition": "एंटरप्राइज एडिशन",
       "get_a_demo_button": "डेमो प्राप्त करें",
       "instance": {
-        "message": "Kestra Enterprise Edition आपके प्लेटफ़ॉर्म के स्वास्थ्य का अवलोकन करने और सभी सेवाओं जैसे कि Workers, Schedulers, और Executors की अपटाइम मेट्रिक्स को ट्रैक करने के लिए एक ऑपरेशनल डैशबोर्ड प्रदान करता है। इसी पृष्ठ से, आप अपने उपयोगकर्ताओं को नियोजित डाउनटाइम के बारे में सूचित करने के लिए Announcements भी बना सकते हैं, और आप एक maintenance mode में प्रवेश कर सकते हैं जो अस्थायी रूप से सभी सेवाओं और workflow executions को एक PAUSED स्थिति में डाल देता है ताकि एक अपग्रेड किया जा सके।",
+        "message": "DataFlare Enterprise Edition आपके प्लेटफ़ॉर्म के स्वास्थ्य का अवलोकन करने और सभी सेवाओं जैसे कि Workers, Schedulers, और Executors की अपटाइम मेट्रिक्स को ट्रैक करने के लिए एक ऑपरेशनल डैशबोर्ड प्रदान करता है। इसी पृष्ठ से, आप अपने उपयोगकर्ताओं को नियोजित डाउनटाइम के बारे में सूचित करने के लिए Announcements भी बना सकते हैं, और आप एक maintenance mode में प्रवेश कर सकते हैं जो अस्थायी रूप से सभी सेवाओं और workflow executions को एक PAUSED स्थिति में डाल देता है ताकि एक अपग्रेड किया जा सके।",
         "title": "अपने इंस्टेंस के पार Infrastructure प्रबंधित करें"
       },
       "namespace": {
@@ -306,13 +306,13 @@
           "title": "सुरक्षित तरीके से Secrets प्रबंधित करें"
         },
         "variables": {
-          "message": "Kestra Enterprise Edition में, आप namespace-स्तर के वेरिएबल्स को परिभाषित और प्रबंधित कर सकते हैं ताकि flows में दोहराव वाली कॉन्फ़िगरेशन को समाप्त किया जा सके। ये वेरिएबल्स स्थिरता सुनिश्चित करते हैं, कॉन्फ़िगरेशन अपडेट को सरल बनाते हैं, और किसी भी task या trigger द्वारा आसानी से संदर्भित किए जा सकते हैं, जिससे workflows को अधिक साफ और बनाए रखने योग्य बनाया जा सके।",
+          "message": "DataFlare Enterprise Edition में, आप namespace-स्तर के वेरिएबल्स को परिभाषित और प्रबंधित कर सकते हैं ताकि flows में दोहराव वाली कॉन्फ़िगरेशन को समाप्त किया जा सके। ये वेरिएबल्स स्थिरता सुनिश्चित करते हैं, कॉन्फ़िगरेशन अपडेट को सरल बनाते हैं, और किसी भी task या trigger द्वारा आसानी से संदर्भित किए जा सकते हैं, जिससे workflows को अधिक साफ और बनाए रखने योग्य बनाया जा सके।",
           "title": "अपने वेरिएबल्स को केंद्रीय रूप से प्रबंधित करें"
         }
       },
       "secrets": {
         "add_env": {
-          "first": "<strong><a href=\"https://kestra.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">गुप्त value को Base64 में एन्कोड करें</a></strong>",
+          "first": "<strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">गुप्त value को Base64 में एन्कोड करें</a></strong>",
           "intro": "नया Secret बनाने के लिए:",
           "second": "'<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>' नामक एक environment variable जोड़ें उपरोक्त value के साथ",
           "third": "अपने Kestra instance को पुनः प्रारंभ करें"
@@ -391,19 +391,19 @@
         "title": "आपके पास अभी तक कोई ऐप्स नहीं हैं!"
       },
       "concurrency_executions": {
-        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://kestra.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong> के बारे में अधिक पढ़ें।",
+        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://dataflare.io/docs/workflow-components/execution\" target=\"_blank\">Executions</a></strong> के बारे में अधिक पढ़ें।",
         "title": "इस Flow के लिए कोई चल रही Executions नहीं हैं।"
       },
       "concurrency_limit": {
-        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://kestra.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong> के बारे में अधिक पढ़ें।",
+        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://dataflare.io/docs/workflow-components/concurrency\" target=\"_blank\">Concurrency Limits</a></strong> के बारे में अधिक पढ़ें।",
         "title": "इस Flow के लिए कोई सीमाएँ निर्धारित नहीं हैं।"
       },
       "dependencies": {
-        "content": "हमारे दस्तावेज़ में <a href=\"https://kestra.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a> के बारे में अधिक पढ़ें।",
+        "content": "हमारे दस्तावेज़ में <a href=\"https://dataflare.io/docs/ui/flows#dependencies\" target=\"_blank\">Flow Dependencies</a> के बारे में अधिक पढ़ें।",
         "title": "इस Flow के लिए कोई dependencies सेट नहीं हैं।"
       },
       "plugins": {
-        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://kestra.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong> के बारे में अधिक पढ़ें।",
+        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://dataflare.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Concurrency Limits</a></strong> के बारे में अधिक पढ़ें।",
         "title": "इस Namespace के लिए कोई प्लगइन डिफॉल्ट सेट नहीं हैं।"
       },
       "testSuites": {
@@ -411,7 +411,7 @@
         "title": "आपके पास अभी तक कोई Test suites नहीं हैं!"
       },
       "triggers": {
-        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://kestra.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong> के बारे में और पढ़ें।",
+        "content": "हमारे दस्तावेज़ में <strong><a href=\"https://dataflare.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong> के बारे में और पढ़ें।",
         "title": "आपके flow में कोई Triggers नहीं हैं।"
       }
     },
@@ -1209,7 +1209,7 @@
     "template export": "क्या आप वाकई <code>{templateCount}</code> template(s) को निर्यात करना चाहते हैं?",
     "templates": "templates",
     "templates deleted": "<code>{count}</code> template(s) हटाए गए",
-    "templates deprecated": "templates अप्रचलित हैं। कृपया इसके बजाय subflows का उपयोग करें। यह समझाने वाला <a href=\"https://kestra.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">माइग्रेशन अनुभाग</a> देखें कि आप टेम्पलेट्स से subflows में कैसे माइग्रेट कर सकते हैं।",
+    "templates deprecated": "templates अप्रचलित हैं। कृपया इसके बजाय subflows का उपयोग करें। यह समझाने वाला <a href=\"https://dataflare.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">माइग्रेशन अनुभाग</a> देखें कि आप टेम्पलेट्स से subflows में कैसे माइग्रेट कर सकते हैं।",
     "templates exported": "templates निर्यात किए गए",
     "tenant": {
       "name": "मंडल",
@@ -1310,7 +1310,7 @@
         "title": "उत्पाद टूर लें"
       },
       "tutorial": {
-        "text": "* <a href=\"https://kestra.io/tutorial-videos/all\" target=\"_blank\">वीडियो ट्यूटोरियल्स</a>  \n* <a href=\"https://kestra.io/docs\" target=\"_blank\">दस्तावेज़ीकरण</a>  \n* <a href=\"https://kestra.io/blueprints\" target=\"_blank\">Blueprints</a>",
+        "text": "* <a href=\"https://dataflare.io/tutorial-videos/all\" target=\"_blank\">वीडियो ट्यूटोरियल्स</a>  \n* <a href=\"https://dataflare.io/docs\" target=\"_blank\">दस्तावेज़ीकरण</a>  \n* <a href=\"https://dataflare.io/blueprints\" target=\"_blank\">Blueprints</a>",
         "title": "ट्यूटोरियल"
       }
     },

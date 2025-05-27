@@ -263,59 +263,59 @@
     "deleted_label": "Deletado",
     "demos": {
       "IAM": {
-        "message": "A Kestra Enterprise Edition possui capacidades IAM integradas com single sign-on (SSO), sincronização de diretório SCIM e controle de acesso baseado em funções (RBAC), integrando-se com vários provedores de identidade e permitindo que você atribua permissões detalhadas para usuários e contas de serviço.",
+        "message": "A DataFlare Enterprise Edition possui capacidades IAM integradas com single sign-on (SSO), sincronização de diretório SCIM e controle de acesso baseado em funções (RBAC), integrando-se com vários provedores de identidade e permitindo que você atribua permissões detalhadas para usuários e contas de serviço.",
         "title": "Gerencie Usuários através do IAM com SSO, SCIM e RBAC"
       },
       "apps": {
-        "message": "As aplicações na Kestra Enterprise Edition permitem que você construa interfaces personalizadas que interagem com os workflows do Kestra fora da plataforma. Este recurso permite usar seus workflows como um backend para aplicações personalizadas, possibilitando que usuários não técnicos enviem dados através de formulários ou retomem workflows PAUSED aguardando aprovação.",
-        "title": "Crie Apps personalizadas com Kestra"
+        "message": "As aplicações na DataFlare Enterprise Edition permitem que você construa interfaces personalizadas que interagem com os workflows do Kestra fora da plataforma. Este recurso permite usar seus workflows como um backend para aplicações personalizadas, possibilitando que usuários não técnicos enviem dados através de formulários ou retomem workflows PAUSED aguardando aprovação.",
+        "title": "Crie Apps personalizadas com DataFlare"
       },
       "audit-logs": {
-        "message": "A Kestra Enterprise Edition registra todas as atividades com registros robustos e imutáveis, facilitando o acompanhamento de alterações, a manutenção da conformidade e a resolução de problemas.",
+        "message": "A DataFlare Enterprise Edition registra todas as atividades com registros robustos e imutáveis, facilitando o acompanhamento de alterações, a manutenção da conformidade e a resolução de problemas.",
         "title": "Acompanhe Alterações com Audit Logs"
       },
       "blueprints": {
-        "message": "Na Kestra Enterprise Edition, você pode criar Blueprints personalizados disponíveis apenas para sua organização. Você pode usá-los como modelos de melhores práticas para compartilhar, centralizar e documentar fluxos de trabalho comumente usados em sua equipe.",
+        "message": "Na DataFlare Enterprise Edition, você pode criar Blueprints personalizados disponíveis apenas para sua organização. Você pode usá-los como modelos de melhores práticas para compartilhar, centralizar e documentar fluxos de trabalho comumente usados em sua equipe.",
         "title": "Adicionar Blueprints Personalizados"
       },
       "enterprise_edition": "Edição Enterprise",
       "get_a_demo_button": "Obter uma Demonstração",
       "instance": {
-        "message": "A Kestra Enterprise Edition fornece um painel operacional para ajudar você a observar a saúde da sua plataforma e acompanhar as métricas de tempo de atividade de todos os serviços, como, por exemplo, Workers, Schedulers e Executors. Na mesma página, você também pode criar Anúncios para notificar seus usuários sobre interrupções planejadas, e pode entrar em um modo de manutenção que coloca temporariamente todos os serviços e execuções de workflow em um estado PAUSED para realizar uma atualização.",
+        "message": "A DataFlare Enterprise Edition fornece um painel operacional para ajudar você a observar a saúde da sua plataforma e acompanhar as métricas de tempo de atividade de todos os serviços, como, por exemplo, Workers, Schedulers e Executors. Na mesma página, você também pode criar Anúncios para notificar seus usuários sobre interrupções planejadas, e pode entrar em um modo de manutenção que coloca temporariamente todos os serviços e execuções de workflow em um estado PAUSED para realizar uma atualização.",
         "title": "Gerencie a Infraestrutura em Toda a Sua Instância"
       },
       "namespace": {
         "audit-logs": {
-          "message": "Na Kestra Enterprise Edition, você pode visualizar logs de auditoria no nível do namespace com diferenças detalhadas, fornecendo um histórico claro de quem alterou o quê e quando em todos os recursos.",
+          "message": "Na DataFlare Enterprise Edition, você pode visualizar logs de auditoria no nível do namespace com diferenças detalhadas, fornecendo um histórico claro de quem alterou o quê e quando em todos os recursos.",
           "title": "Acompanhe Todas as Alterações em Um Só Lugar"
         },
         "edit": {
-          "message": "Na Kestra Enterprise Edition, os namespaces oferecem isolamento avançado e governança de segredos, variáveis e padrões de plugins em escala. Os administradores podem configurar gerenciadores de segredos personalizados, backends de armazenamento isolados, grupos de worker dedicados e permissões detalhadas por namespace. Isso garante que segredos, variáveis e configurações de plugins permaneçam seguros e fáceis de manter em diferentes equipes e projetos.",
+          "message": "Na DataFlare Enterprise Edition, os namespaces oferecem isolamento avançado e governança de segredos, variáveis e padrões de plugins em escala. Os administradores podem configurar gerenciadores de segredos personalizados, backends de armazenamento isolados, grupos de worker dedicados e permissões detalhadas por namespace. Isso garante que segredos, variáveis e configurações de plugins permaneçam seguros e fáceis de manter em diferentes equipes e projetos.",
           "title": "Atualize o Gerenciamento do seu Namespace"
         },
         "history": {
-          "message": "Na Kestra Enterprise Edition, você pode gerenciar o histórico de revisões dos seus Namespaces",
+          "message": "Na DataFlare Enterprise Edition, você pode gerenciar o histórico de revisões dos seus Namespaces",
           "title": "Gerenciar Histórico de Revisões em Um Só Lugar"
         },
         "plugin-defaults": {
-          "message": "Na Kestra Enterprise Edition, você pode definir padrões de plugin específicos para cada namespace, reduzindo a necessidade de configuração duplicada em cada flow. Esta governança central de plugins impõe configurações consistentes, permite a referência segura de segredos ou variáveis e simplifica a manutenção dos seus workflows.",
+          "message": "Na DataFlare Enterprise Edition, você pode definir padrões de plugin específicos para cada namespace, reduzindo a necessidade de configuração duplicada em cada flow. Esta governança central de plugins impõe configurações consistentes, permite a referência segura de segredos ou variáveis e simplifica a manutenção dos seus workflows.",
           "title": "Padronizar Configuração com Padrões de Plugin"
         },
         "secrets": {
-          "message": "Na Kestra Enterprise Edition, você pode armazenar e controlar segredos no nível de namespace, minimizando riscos e garantindo que as credenciais de cada equipe permaneçam isoladas. Graças à hierarquia aninhada, você também pode configurar credenciais em um namespace pai e elas serão herdadas por todos os namespaces filhos. O suporte para gerenciadores de segredos dedicados e configurações de permissão detalhadas no nível de namespace fortalece ainda mais a segurança e a conformidade.",
+          "message": "Na DataFlare Enterprise Edition, você pode armazenar e controlar segredos no nível de namespace, minimizando riscos e garantindo que as credenciais de cada equipe permaneçam isoladas. Graças à hierarquia aninhada, você também pode configurar credenciais em um namespace pai e elas serão herdadas por todos os namespaces filhos. O suporte para gerenciadores de segredos dedicados e configurações de permissão detalhadas no nível de namespace fortalece ainda mais a segurança e a conformidade.",
           "title": "Gerenciar Segredos de Forma Segura"
         },
         "variables": {
-          "message": "Na Kestra Enterprise Edition, você pode definir e gerenciar variáveis no nível do namespace para eliminar configurações repetitivas em flows. Essas variáveis garantem consistência, simplificam atualizações de configuração e podem ser facilmente referenciadas por qualquer task ou trigger para workflows mais limpos e fáceis de manter.",
+          "message": "Na DataFlare Enterprise Edition, você pode definir e gerenciar variáveis no nível do namespace para eliminar configurações repetitivas em flows. Essas variáveis garantem consistência, simplificam atualizações de configuração e podem ser facilmente referenciadas por qualquer task ou trigger para workflows mais limpos e fáceis de manter.",
           "title": "Governe Centralmente Suas Variáveis"
         }
       },
       "secrets": {
         "add_env": {
-          "first": "Codifique o <strong><a href=\"https://kestra.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">valor secreto em Base64</a></strong>",
+          "first": "Codifique o <strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">valor secreto em Base64</a></strong>",
           "intro": "Para criar um novo Secret:",
           "second": "Adicione uma variável de ambiente chamada '<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>' com o valor acima",
-          "third": "Reinicie sua instância do Kestra"
+          "third": "Reinicie sua instância do DataFlare"
         },
         "detected_env": "Aqui estão as variáveis de ambiente do tipo secreto identificadas no momento de inicialização da instância:",
         "empty_env": "Você ainda não tem nenhum Secret no seu ambiente.",
@@ -323,7 +323,7 @@
         "title": "Atualize seu Gerenciamento de Secrets"
       },
       "tenants": {
-        "message": "A Kestra Enterprise Edition suporta multi-tenancy, proporcionando ambientes totalmente isolados para diferentes equipes ou projetos, cada um com seus próprios recursos, como grupos de worker dedicados ou segredos e backends de armazenamento interno.",
+        "message": "A DataFlare Enterprise Edition suporta multi-tenancy, proporcionando ambientes totalmente isolados para diferentes equipes ou projetos, cada um com seus próprios recursos, como grupos de worker dedicados ou segredos e backends de armazenamento interno.",
         "title": "Gerenciar Fluxos de Trabalho em Tenants Isolados"
       }
     },
@@ -391,19 +391,19 @@
         "title": "Você ainda não tem apps!"
       },
       "concurrency_executions": {
-        "content": "Leia mais sobre <strong><a href=\"https://kestra.io/docs/workflow-components/execution\" target=\"_blank\">Execuções</a></strong> em nossa documentação.",
+        "content": "Leia mais sobre <strong><a href=\"https://dataflare.io/docs/workflow-components/execution\" target=\"_blank\">Execuções</a></strong> em nossa documentação.",
         "title": "Nenhuma Execução em andamento para este Flow."
       },
       "concurrency_limit": {
-        "content": "Leia mais sobre <strong><a href=\"https://kestra.io/docs/workflow-components/concurrency\" target=\"_blank\">Limites de Concurrency</a></strong> em nossa documentação.",
+        "content": "Leia mais sobre <strong><a href=\"https://dataflare.io/docs/workflow-components/concurrency\" target=\"_blank\">Limites de Concurrency</a></strong> em nossa documentação.",
         "title": "Nenhum limite está definido para este Flow."
       },
       "dependencies": {
-        "content": "Leia mais sobre <a href=\"https://kestra.io/docs/ui/flows#dependencies\" target=\"_blank\">Dependências de Flow</a> em nossa documentação.",
+        "content": "Leia mais sobre <a href=\"https://dataflare.io/docs/ui/flows#dependencies\" target=\"_blank\">Dependências de Flow</a> em nossa documentação.",
         "title": "Nenhuma dependência está definida para este Flow."
       },
       "plugins": {
-        "content": "Leia mais sobre <strong><a href=\"https://kestra.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Limites de Concurrency</a></strong> em nossa documentação.",
+        "content": "Leia mais sobre <strong><a href=\"https://dataflare.io/docs/workflow-components/plugin-defaults\" target=\"_blank\">Limites de Concurrency</a></strong> em nossa documentação.",
         "title": "Nenhum padrão de plugin está definido para este Namespace."
       },
       "testSuites": {
@@ -411,7 +411,7 @@
         "title": "Você ainda não tem Test suites!"
       },
       "triggers": {
-        "content": "Leia mais sobre <strong><a href=\"https://kestra.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong> em nossa documentação.",
+        "content": "Leia mais sobre <strong><a href=\"https://dataflare.io/docs/workflow-components/triggers\" target=\"_blank\">Triggers</a></strong> em nossa documentação.",
         "title": "Seu flow não possui nenhum trigger."
       }
     },
@@ -1209,7 +1209,7 @@
     "template export": "Tem certeza de que deseja exportar <code>{templateCount}</code> template(s)?",
     "templates": "Templates",
     "templates deleted": "<code>{count}</code> Template(s) deletado(s)",
-    "templates deprecated": "Templates estão obsoletos. Por favor, use subflows. Veja a <a href=\"https://kestra.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">Seção de Migrações</a> explicando como você pode migrar de templates para subflows.",
+    "templates deprecated": "Templates estão obsoletos. Por favor, use subflows. Veja a <a href=\"https://dataflare.io/docs/migration-guide/0.11.0/templates\" target=\"_blank\">Seção de Migrações</a> explicando como você pode migrar de templates para subflows.",
     "templates exported": "Templates exportados",
     "tenant": {
       "name": "Mandante",
@@ -1310,7 +1310,7 @@
         "title": "Faça um tour pelo produto"
       },
       "tutorial": {
-        "text": "* <a href=\"https://kestra.io/tutorial-videos/all\" target=\"_blank\">Tutoriais em Vídeo</a>  \n* <a href=\"https://kestra.io/docs\" target=\"_blank\">Documentação</a>  \n* <a href=\"https://kestra.io/blueprints\" target=\"_blank\">Blueprints</a>",
+        "text": "* <a href=\"https://dataflare.io/tutorial-videos/all\" target=\"_blank\">Tutoriais em Vídeo</a>  \n* <a href=\"https://dataflare.io/docs\" target=\"_blank\">Documentação</a>  \n* <a href=\"https://dataflare.io/blueprints\" target=\"_blank\">Blueprints</a>",
         "title": "Tutorial"
       }
     },
