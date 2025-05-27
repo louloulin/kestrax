@@ -1,0 +1,35 @@
+kestra:
+  repository:
+    type: h2
+  storage:
+    type: local
+    local:
+      base-path: /tmp/kestra/storage
+  queue:
+    type: h2
+  server:
+    access-log:
+      enabled: false
+
+datasources:
+  default:
+    url: jdbc:h2:file:/tmp/kestra/db/kestra;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+micronaut:
+  server:
+    port: 8080
+  application:
+    name: dataflare
+
+logger:
+  level:
+    io.kestra: INFO
+    root: WARN
