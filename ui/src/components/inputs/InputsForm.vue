@@ -157,10 +157,10 @@
                         type="file"
                         @change="onFileChange(input, $event)"
                         autocomplete="off"
-                        :style="{display: typeof(inputsValues[input.id]) === 'string' && inputsValues[input.id].startsWith('kestra:///') ? 'none': ''}"
+                        :style="{display: typeof(inputsValues[input.id]) === 'string' && inputsValues[input.id].startsWith('dataflare:///') ? 'none': ''}"
                     >
                     <label
-                        v-if="typeof(inputsValues[input.id]) === 'string' && inputsValues[input.id].startsWith('kestra:///')"
+                        v-if="typeof(inputsValues[input.id]) === 'string' && inputsValues[input.id].startsWith('dataflare:///')"
                         :for="input.id+'-file'"
                     >DataFlare Internal Storage File</label>
                 </div>
@@ -179,8 +179,8 @@
                             {{ item }}
                         </el-tag>
                     </div>
-                    <el-button 
-                        class="p-3" 
+                    <el-button
+                        class="p-3"
                         @click="toggleArrayEdit(input.id)"
                         :icon="Pencil"
                     >
@@ -202,15 +202,15 @@
                             </div>
                         </div>
                     </div>
-                    <el-button 
-                        class="add-new mt-1 border-0" 
+                    <el-button
+                        class="add-new mt-1 border-0"
                         @click="addNewArrayItem(input)"
                         :icon="Plus"
                     >
                         {{ $t('add_new_item') }}
                     </el-button>
                     <div class="d-flex justify-content-end mt-2">
-                        <el-button 
+                        <el-button
                             @click="toggleArrayEdit(input.id)"
                             type="primary"
                             :icon="ContentSave"
@@ -530,7 +530,7 @@
             parseArrayValue(inputId) {
                 const value = this.inputsValues[inputId];
                 if (!value) return [];
-                
+
                 if (typeof value === "string") {
                     return JSON.parse(value);
                 }
@@ -545,7 +545,7 @@
                 const validItems = this.editableItems[input.id]
                     .filter(item => item && item.trim() !== "")
                     .map(item => item.trim());
-                    
+
                 this.inputsValues[input.id] = JSON.stringify(validItems);
                 this.onChange(input);
             },
@@ -573,7 +573,7 @@
                 if (!isValidMove) return;
                 const targetIndex = direction === "up" ? index - 1 : index + 1;
                 [items[index], items[targetIndex]] = [items[targetIndex], items[index]];
-                
+
                 this.updateArrayValue(input);
             }
         },
@@ -639,7 +639,7 @@
     display: flex;
     align-items: center;
 }
-    
+
 .preview {
     display: flex;
     align-items: center;
@@ -697,7 +697,7 @@
             border: none;
             color: var(--ks-content-secondary);
             background: transparent;
-                
+
             &:hover {
                 color: var(--ks-content-error);
             }
@@ -738,7 +738,7 @@
 
 :deep(.editor-container){
         max-height: 200px;
-        
+
         & .ks-monaco-editor {
             overflow-x: hidden;
         }

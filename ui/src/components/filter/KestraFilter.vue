@@ -40,7 +40,7 @@
                 properties: properties.shown,
             }"
             @focus="handleFocus"
-            data-test-id="KestraFilter__select"
+            data-test-id="DataFlareFilter__select"
         >
             <template #tag>
                 <el-tag
@@ -68,7 +68,7 @@
                     :value="option.value"
                     :label="option.label"
                     @click="() => filterCallback(option)"
-                    :data-test-id="`KestraFilter__type__${index}`"
+                    :data-test-id="`DataFlareFilter__type__${index}`"
                 >
                     <component
                         v-if="option.icon"
