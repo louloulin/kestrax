@@ -16,8 +16,8 @@
 <circle cx="120" cy="120" r="20" fill="#3B82F6"/>
 <circle cx="120" cy="120" r="8" fill="#FFFFFF"/>
 <!-- Text Section -->
-<text x="280" y="90" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#1F2937">Data</text>
-<text x="280" y="150" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#3B82F6">Flare</text>
+<text x="280" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#1F2937">Data</text>
+<text x="400" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#3B82F6">Flare</text>
 <!-- Subtitle -->
-<text x="280" y="180" font-family="Arial, sans-serif" font-size="16" fill="#6B7280">Data Orchestration Platform</text>
+<text x="280" y="150" font-family="Arial, sans-serif" font-size="16" fill="#6B7280">Data Orchestration Platform</text>
 </svg>
