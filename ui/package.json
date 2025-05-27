@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "packageManager": "npm@10.9.0",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build --emptyOutDir",
+    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" vite build --emptyOutDir",
     "preview": "vite preview",
     "test:unit": "vitest run",
     "test:lint": "eslint",

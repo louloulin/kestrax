@@ -35,8 +35,13 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks
-            }
+            },
+            // Optimize memory usage
+            maxParallelFileOps: 2,
         },
+        // Reduce memory usage during build
+        chunkSizeWarningLimit: 1000,
+        sourcemap: false,
     },
     resolve: {
         alias: {

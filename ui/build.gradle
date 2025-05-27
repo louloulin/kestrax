@@ -5,10 +5,11 @@ plugins {
 node {
     download = true
     version = '22.11.0'
+    pnpmVersion = '9.0.0'
 }
 
-tasks.register('assembleFrontend', NpmTask) {
-    dependsOn npmInstall
+tasks.register('assembleFrontend', PnpmTask) {
+    dependsOn pnpmInstall
     description = 'Builds the frontend'
 
     inputs.files(fileTree('node_modules'))
@@ -19,4 +20,9 @@ tasks.register('assembleFrontend', NpmTask) {
 
     args = ['run', 'build']
     outputs.dir('../webserver/src/main/resources/ui')
+
+    // Increase Node.js memory limit
+    environment = [
+        'NODE_OPTIONS': '--max-old-space-size=8192'
+    ]
 }
