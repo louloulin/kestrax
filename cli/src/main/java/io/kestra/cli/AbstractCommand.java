@@ -88,22 +88,26 @@ abstract public class AbstractCommand implements Callable<Integer> {
     public Integer call() throws Exception {
         Thread.currentThread().setName(this.getClass().getDeclaredAnnotation(Command.class).name());
         startLogger();
-        sendServerLog();
         if (this.startupHook != null) {
             this.startupHook.start(this);
         }
 
         if (this.pluginsPath != null && loadExternalPlugins()) {
+            log.info("Loading external plugins from path: {}", this.pluginsPath);
             pluginRegistry = pluginRegistryProvider.get();
             pluginRegistry.registerIfAbsent(pluginsPath);
+            log.info("External plugins loaded successfully from: {}", this.pluginsPath);
 
             // PluginManager mus only be initialized if a registry is also instantiated
             if (isPluginManagerEnabled()) {
                 PluginManager manager = pluginManagerProvider.get();
                 manager.start();
             }
+        } else {
+            log.info("No external plugins path configured or plugin loading disabled. PluginsPath: {}, LoadExternalPlugins: {}", this.pluginsPath, loadExternalPlugins());
         }
 
+        sendServerLog();
         startWebserver();
         return 0;
     }
@@ -189,6 +193,26 @@ abstract public class AbstractCommand implements Callable<Integer> {
     private void sendServerLog() {
         if (log.isTraceEnabled() && pluginRegistry != null) {
             pluginRegistry.plugins().forEach(c -> log.trace(c.toString()));
+        }
+        
+        // Add INFO level logging for plugin information
+        if (pluginRegistry != null) {
+            int totalPlugins = pluginRegistry.plugins().stream()
+                .mapToInt(plugin -> plugin.allClass().size())
+                .sum();
+            log.info("Total registered plugins: {} from {} plugin bundles", totalPlugins, pluginRegistry.plugins().size());
+            
+            // Log external plugins specifically
+            long externalPluginCount = pluginRegistry.externalPlugins().size();
+            if (externalPluginCount > 0) {
+                log.info("External plugins loaded: {} bundles", externalPluginCount);
+                pluginRegistry.externalPlugins().forEach(plugin -> {
+                    log.info("External plugin: {} (version: {}, classes: {})", 
+                        plugin.title(), plugin.version(), plugin.allClass().size());
+                });
+            } else {
+                log.info("No external plugins loaded");
+            }
         }
     }
 
