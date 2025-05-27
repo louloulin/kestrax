@@ -120,8 +120,8 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       splitpanes:
-        specifier: ^3.2.0
-        version: 3.2.0(vue@3.5.15(typescript@5.8.3))
+        specifier: ^4.0.4
+        version: 4.0.4(vue@3.5.15(typescript@5.8.3))
       throttle-debounce:
         specifier: ^5.0.2
         version: 5.0.2
@@ -157,7 +157,7 @@ importers:
         version: 1.5.0(vue@3.5.15(typescript@5.8.3))
       vue3-tour:
         specifier: github:kestra-io/vue3-tour
-        version: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
+        version: git+git@github.com:kestra-io/vue3-tour.git#6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.15(typescript@5.8.3))
@@ -4407,9 +4407,6 @@ packages:
   jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
 
-  jump.js@1.0.2:
-    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
-
   katex@0.16.22:
     resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
     hasBin: true
@@ -5686,8 +5683,8 @@ packages:
   spawnd@5.0.0:
     resolution: {integrity: sha512-28+AJr82moMVWolQvlAIv3JcYDkjkFTEmfDc503wxrF5l2rQ3dFz6DpbXp3kD4zmgGGldfM4xM4v1sFj/ZaIOA==}
 
-  splitpanes@3.2.0:
-    resolution: {integrity: sha512-K+WKxWdqtKShV33gPjQl769wHxB3glypTOReCvYu/AJd38J+abHlpiF8rK6uBNPMrgw5thHZCI5JkEwsAqa9XA==}
+  splitpanes@4.0.4:
+    resolution: {integrity: sha512-RbysugZhjbCw5fgplvk3hOXr41stahQDtZhHVkhnnJI6H4wlGDhM2kIpbehy7v92duy9GnMa8zIhHigIV1TWtg==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -6323,10 +6320,6 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       vue: ^3.2.20
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff:
-    resolution: {tarball: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff}
-    version: 0.3.4
 
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
@@ -11563,8 +11556,6 @@ snapshots:
       is-promise: 2.2.2
       promise: 7.3.1
 
-  jump.js@1.0.2: {}
-
   katex@0.16.22:
     dependencies:
       commander: 8.3.0
@@ -13186,7 +13177,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  splitpanes@3.2.0(vue@3.5.15(typescript@5.8.3)):
+  splitpanes@4.0.4(vue@3.5.15(typescript@5.8.3)):
     dependencies:
       vue: 3.5.15(typescript@5.8.3)
 
@@ -13855,15 +13846,6 @@ snapshots:
       '@popperjs/core': 2.11.8
       debounce: 1.2.1
       vue: 3.5.15(typescript@5.8.3)
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3):
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hash-sum: 2.0.0
-      jump.js: 1.0.2
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@2.7.16:
     dependencies:
