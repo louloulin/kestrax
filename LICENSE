@@ -1,5 +1,5 @@
 
-                                 Apache License
+                          Apache License
                            Version 2.0, January 2004
                         https://www.apache.org/licenses/
 
@@ -176,7 +176,16 @@
 
    END OF TERMS AND CONDITIONS
 
-   Copyright 2019 Nigh Tech.
+   COPYRIGHT NOTICES:
+   
+   Original Work:
+   Copyright 2019 Nigh Tech (Kestra)
+   
+   Derivative Work:
+   Copyright 2025 DataFlare
+   This software is a derivative work based on Kestra, developed by DataFlare.
+   All modifications and enhancements are licensed under the same Apache License,
+   Version 2.0 as the original work.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -189,3 +198,9 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+   ATTRIBUTION:
+   This derivative work is based on Kestra (https://github.com/kestra-io/kestra)
+   developed by Nigh Tech. All modifications and enhancements made by DataFlare
+   are clearly documented and maintain compatibility with the original Apache 2.0
+   license terms.
