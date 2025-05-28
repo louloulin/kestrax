@@ -569,9 +569,9 @@
     "log expand setting": "Log default display",
     "environment name setting": "Environment name",
     "environment color setting": "Environment color",
-    "slack support": "Ask any question via Slack",
+    "support help": "Get technical support",
     "join community": "Join the Community",
-    "join_slack": "Join Slack",
+    "get_support": "Get Support",
     "kestra": "DataFlare",
     "reach us": "Talk to us",
     "new version": "New version {version} available!",
@@ -747,7 +747,7 @@
       },
       "help": {
         "title": "Need help?",
-        "text": "Ask any question in our Slack community. If you are stuck, we are here to help you. ✋"
+        "text": "Contact our support team for assistance. If you are stuck, we are here to help you. ✋"
       }
     },
     "pluginPage": {
