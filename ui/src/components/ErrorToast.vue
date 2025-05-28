@@ -97,7 +97,7 @@
             max-width: calc(100% - 15ch);
         }
 
-        .slack-on-error {
+        .support-on-error {
             top: calc(18px + 0.5rem);
             right: calc(15px + 2rem);
             transform: translateY(-50%);

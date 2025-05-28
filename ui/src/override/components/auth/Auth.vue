@@ -24,10 +24,10 @@
                 {{ $t("settings.label") }}
             </RouterLink>
         </el-option>
-        <el-option label="slack" value="slack">
-            <a href="https://dataflare.io/slack" target="_blank" class="menu-item">
-                <Slack class="menu-icon" />
-                {{ $t("join_slack") }}
+        <el-option label="support" value="support">
+            <a href="https://dataflare.io/support" target="_blank" class="menu-item">
+                <HelpCircle class="menu-icon" />
+                {{ $t("get_support") }}
             </a>
         </el-option>
     </el-select>
@@ -37,7 +37,7 @@
     import {RouterLink} from "vue-router";
 
     import CogOutline from "vue-material-design-icons/CogOutline.vue";
-    import Slack from "vue-material-design-icons/Slack.vue";
+    import HelpCircle from "vue-material-design-icons/HelpCircle.vue";
     import ChevronRight from "vue-material-design-icons/ChevronRight.vue";
 </script>
 

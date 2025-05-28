@@ -58,7 +58,7 @@
 
     import MessageOutline from "vue-material-design-icons/MessageOutline.vue"
     import FileDocument from "vue-material-design-icons/FileDocument.vue"
-    import Slack from "vue-material-design-icons/Slack.vue"
+    import HelpCircle from "vue-material-design-icons/HelpCircle.vue"
     import Github from "vue-material-design-icons/Github.vue"
     import Calendar from "vue-material-design-icons/Calendar.vue"
     import Close from "vue-material-design-icons/Close.vue"
@@ -108,8 +108,8 @@
         },
         help: {
             title: t("contextBar.help"),
-            icon: Slack,
-            url: "https://kestra.io/slack"
+            icon: HelpCircle,
+            url: "https://dataflare.io/support"
         },
         issue: {
             title: t("contextBar.issue"),

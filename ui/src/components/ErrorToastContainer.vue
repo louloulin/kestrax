@@ -1,11 +1,11 @@
 <template>
     <a
-        href="https://kestra.io/slack?utm_source=app&utm_campaign=slack&utm_content=error"
-        class="position-absolute slack-on-error el-button el-button--small"
+        href="https://dataflare.io/support?utm_source=app&utm_campaign=support&utm_content=error"
+        class="position-absolute support-on-error el-button el-button--small"
         target="_blank"
     >
-        <Slack />
-        <span>{{ $t("slack support") }}</span>
+        <HelpCircle />
+        <span>{{ $t("support help") }}</span>
     </a>
     <span v-html="markdownRenderer" v-if="items.length === 0" />
     <ul>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import Slack from "vue-material-design-icons/Slack.vue";
+    import HelpCircle from "vue-material-design-icons/HelpCircle.vue";
     import * as Markdown from "../utils/markdown";
 
     export default {
@@ -46,7 +46,7 @@
                 this.markdownRenderer = await this.renderMarkdown();
             }
         },
-        components: {Slack},
+        components: {HelpCircle},
         methods: {
             async renderMarkdown() {
                 return await Markdown.render(this.message.message || this.message.content.message, {html: true});
