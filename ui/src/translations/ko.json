@@ -659,7 +659,7 @@
     "item": "항목",
     "items": "항목",
     "join community": "커뮤니티에 참여하기",
-    "join_slack": "Slack 참여",
+    "get_support": "지원 받기",
     "jump to...": "이동...",
     "kestra": "Kestra",
     "key": "Key",
@@ -1166,7 +1166,7 @@
     "showLess": "덜 보기",
     "showMore": "더 보기",
     "side-by-side": "나란히",
-    "slack support": "Slack을 통해 질문하기",
+    "support help": "기술 지원 받기",
     "something_went_wrong": {
       "loading_execution": "실행을 로드하는 중 문제가 발생했습니다."
     },
@@ -1302,7 +1302,7 @@
     "weeks": "주",
     "welcome": {
       "help": {
-        "text": "Slack 커뮤니티에서 질문을 하세요. 문제가 생기면 저희가 도와드리겠습니다. ✋",
+        "text": "지원팀에 문의하세요. 문제가 생기면 저희가 도와드리겠습니다. ✋",
         "title": "도움이 필요하신가요?"
       },
       "tour": {

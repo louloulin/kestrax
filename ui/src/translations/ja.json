@@ -659,7 +659,7 @@
     "item": "アイテム",
     "items": "アイテム",
     "join community": "コミュニティに参加",
-    "join_slack": "Slackに参加",
+    "get_support": "サポートを受ける",
     "jump to...": "ジャンプ先...",
     "kestra": "Kestra",
     "key": "Key",
@@ -1166,7 +1166,7 @@
     "showLess": "表示を減らす",
     "showMore": "もっと表示",
     "side-by-side": "並列表示",
-    "slack support": "Slackで質問する",
+    "support help": "技術サポートを受ける",
     "something_went_wrong": {
       "loading_execution": "実行の読み込み中に問題が発生しました。"
     },
@@ -1302,7 +1302,7 @@
     "weeks": "週間",
     "welcome": {
       "help": {
-        "text": "Slackコミュニティで質問してください。行き詰まった場合は、私たちがサポートします。✋",
+        "text": "サポートチームにお問い合わせください。行き詰まった場合は、私たちがサポートします。✋",
         "title": "お困りですか？"
       },
       "tour": {
