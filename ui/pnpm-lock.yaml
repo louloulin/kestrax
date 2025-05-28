@@ -12,8 +12,8 @@ importers:
         specifier: ^5.6.5
         version: 5.6.5
       '@kestra-io/ui-libs':
-        specifier: ^0.0.194
-        version: 0.0.194(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)
+        specifier: ^0.0.198
+        version: 0.0.198(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)
       '@vue-flow/background':
         specifier: ^1.3.2
         version: 1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))
@@ -157,7 +157,7 @@ importers:
         version: 1.5.0(vue@3.5.15(typescript@5.8.3))
       vue3-tour:
         specifier: github:kestra-io/vue3-tour
-        version: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
+        version: git+git@github.com:kestra-io/vue3-tour.git#6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.15(typescript@5.8.3))
@@ -1026,8 +1026,8 @@ packages:
   '@js-joda/core@5.6.5':
     resolution: {integrity: sha512-3zwefSMwHpu8iVUW8YYz227sIv6UFqO31p1Bf1ZH/Vom7CmNyUsXjDBlnNzcuhmOL1XfxZ3nvND42kR23XlbcQ==}
 
-  '@kestra-io/ui-libs@0.0.194':
-    resolution: {integrity: sha512-sh57BdCNrzVrBtb1/RIqdXR8qrqWXRtR85KtkHyfbG1xzP+Z90r+gaQhTorn/VlY4epAUwS8AV/jwP0LoVhPxw==}
+  '@kestra-io/ui-libs@0.0.198':
+    resolution: {integrity: sha512-OmfxYMHRy2doE6AH/VkLm0mA4QlcKhgrUHc/nbOKqiIoz6ofimV/u7IvJOUJcpsT6UEDLPjADZVEbrAAtKvSRA==}
     peerDependencies:
       '@vue-flow/background': ^1.3.0
       '@vue-flow/controls': ^1.1.1
@@ -4407,9 +4407,6 @@ packages:
   jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
 
-  jump.js@1.0.2:
-    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
-
   katex@0.16.22:
     resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
     hasBin: true
@@ -6077,8 +6074,8 @@ packages:
     resolution: {integrity: sha512-4/u/j4FrCKdi17jaxuJA0jClGxB1AvU2hw/IuayPc4ay1XGaJs/rbb4v5WKwAjNifjmXK9PIFyuPiaK8azyR9w==}
     engines: {node: '>=14.0.0'}
 
-  unplugin@2.3.4:
-    resolution: {integrity: sha512-m4PjxTurwpWfpMomp8AptjD5yj8qEZN5uQjjGM3TAs9MWWD2tXSSNNj6jGR2FoVGod4293ytyV6SwBbertfyJg==}
+  unplugin@2.3.5:
+    resolution: {integrity: sha512-RyWSb5AHmGtjjNQ6gIlA67sHOsWpsbWpwDokLwTcejVdOjEkJZh7QKu14J00gDDVSh8kGH4KYC/TNBceXFZhtw==}
     engines: {node: '>=18.12.0'}
 
   unraw@3.0.0:
@@ -6323,10 +6320,6 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       vue: ^3.2.20
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff:
-    resolution: {tarball: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff}
-    version: 0.3.4
 
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
@@ -7307,7 +7300,7 @@ snapshots:
 
   '@js-joda/core@5.6.5': {}
 
-  '@kestra-io/ui-libs@0.0.194(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)':
+  '@kestra-io/ui-libs@0.0.198(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)':
     dependencies:
       '@nuxtjs/mdc': 0.16.1(magicast@0.3.5)
       '@popperjs/core': 2.11.8
@@ -11563,8 +11556,6 @@ snapshots:
       is-promise: 2.2.2
       promise: 7.3.1
 
-  jump.js@1.0.2: {}
-
   katex@0.16.22:
     dependencies:
       commander: 8.3.0
@@ -12101,7 +12092,7 @@ snapshots:
   micromark@4.0.2:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.0
+      debug: 4.4.1
       decode-named-character-reference: 1.1.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -13501,7 +13492,7 @@ snapshots:
       acorn: 8.14.1
       estree-walker: 3.0.3
       magic-string: 0.30.17
-      unplugin: 2.3.4
+      unplugin: 2.3.5
 
   undici-types@6.21.0: {}
 
@@ -13535,7 +13526,7 @@ snapshots:
       scule: 1.3.0
       strip-literal: 3.0.0
       tinyglobby: 0.2.14
-      unplugin: 2.3.4
+      unplugin: 2.3.5
       unplugin-utils: 0.2.4
 
   unist-builder@4.0.0:
@@ -13586,7 +13577,7 @@ snapshots:
       acorn: 8.14.1
       webpack-virtual-modules: 0.6.2
 
-  unplugin@2.3.4:
+  unplugin@2.3.5:
     dependencies:
       acorn: 8.14.1
       picomatch: 4.0.2
@@ -13855,15 +13846,6 @@ snapshots:
       '@popperjs/core': 2.11.8
       debounce: 1.2.1
       vue: 3.5.15(typescript@5.8.3)
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3):
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hash-sum: 2.0.0
-      jump.js: 1.0.2
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@2.7.16:
     dependencies:
