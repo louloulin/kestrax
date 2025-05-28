@@ -1,4 +1,4 @@
-rootProject.name = "kestra"
+rootProject.name = "dataflare"
 
 include 'platform'
 

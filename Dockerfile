@@ -1,15 +1,15 @@
 FROM eclipse-temurin:21-jre-jammy
 
-ARG KESTRA_PLUGINS=""
+ARG DATAFLARE_PLUGINS=""
 ARG APT_PACKAGES=""
 ARG PYTHON_LIBRARIES=""
 
 WORKDIR /app
 
-RUN groupadd kestra && \
-    useradd -m -g kestra kestra
+RUN groupadd dataflare && \
+    useradd -m -g dataflare dataflare
 
-COPY --chown=kestra:kestra docker /
+COPY --chown=dataflare:dataflare docker /
 
 RUN apt-get update -y && \
     apt-get upgrade -y && \
@@ -17,11 +17,11 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/* && \
     curl -LsSf https://astral.sh/uv/0.6.17/install.sh | sh && mv /root/.local/bin/uv /bin && mv /root/.local/bin/uvx /bin && \
-    if [ -n "${KESTRA_PLUGINS}" ]; then /app/kestra plugins install ${KESTRA_PLUGINS} && rm -rf /tmp/*; fi && \
+    if [ -n "${DATAFLARE_PLUGINS}" ]; then /app/dataflare plugins install ${DATAFLARE_PLUGINS} && rm -rf /tmp/*; fi && \
     if [ -n "${PYTHON_LIBRARIES}" ]; then uv pip install --system ${PYTHON_LIBRARIES}; fi && \
-    chown -R kestra:kestra /app
+    chown -R dataflare:dataflare /app
 
-USER kestra
+USER dataflare
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 

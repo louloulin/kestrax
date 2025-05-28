@@ -52,7 +52,7 @@ idea {
 /**********************************************************************************************************************\
  * Main
  **********************************************************************************************************************/
-final mainClassName = "io.kestra.cli.App"
+final mainClassName = "io.dataflare.cli.App"
 final targetJavaVersion = JavaVersion.VERSION_23
 
 application {
@@ -78,7 +78,7 @@ dependencies {
  **********************************************************************************************************************/
 allprojects {
     if (it.name != 'platform') {
-        group = "io.kestra"
+        group = "io.dataflare"
 
         java {
             sourceCompatibility = targetJavaVersion
@@ -349,8 +349,8 @@ subprojects {
 
 sonar {
     properties {
-        property "sonar.projectKey", "kestra-io_kestra"
-        property "sonar.organization", "kestra-io"
+        property "sonar.projectKey", "dataflare-io_dataflare"
+        property "sonar.organization", "dataflare-io"
         property "sonar.host.url", "https://sonarcloud.io"
     }
 }
@@ -417,10 +417,10 @@ jar {
     manifest {
         attributes(
             "Main-Class": mainClassName,
-            "X-Kestra-Name": project.name,
-            "X-Kestra-Title": project.name,
-            "X-Kestra-Group": project.group,
-            "X-Kestra-Version": project.version
+            "X-DataFlare-Name": project.name,
+            "X-DataFlare-Title": project.name,
+            "X-DataFlare-Group": project.group,
+            "X-DataFlare-Version": project.version
         )
     }
 }
@@ -460,10 +460,10 @@ tasks.register('writeExecutableJar') {
     doLast {
         executable.setBytes(shadowJarFile.readBytes())
         ByteArrayOutputStream executableBytes = new ByteArrayOutputStream()
-        executableBytes.write("\n: <<END_OF_KESTRA_SELFRUN\r\n".getBytes())
+        executableBytes.write("\n: <<END_OF_DATAFLARE_SELFRUN\r\n".getBytes())
         executableBytes.write(file("gradle/jar/selfrun.bat").readBytes())
         executableBytes.write("\r\n".getBytes())
-        executableBytes.write("END_OF_KESTRA_SELFRUN\r\n\n".getBytes())
+        executableBytes.write("END_OF_DATAFLARE_SELFRUN\r\n\n".getBytes())
         executableBytes.write(file("gradle/jar/selfrun.sh").readBytes())
         ZipPrefixer.applyPrefixBytesToZip(executable.toPath(), executableBytes.toByteArray())
         executable.setExecutable(true)
@@ -487,7 +487,7 @@ tasks.register('executableJar', Zip) {
  **********************************************************************************************************************/
 tasks.register('runLocal', JavaExec) {
     group = "application"
-    description = "Run Kestra as server local"
+    description = "Run DataFlare as server local"
     classpath = project(":cli").sourceSets.main.runtimeClasspath
     mainClass = mainClassName
     environment 'MICRONAUT_ENVIRONMENTS', 'override'
@@ -496,11 +496,11 @@ tasks.register('runLocal', JavaExec) {
 
 tasks.register('runStandalone', JavaExec) {
     group = "application"
-    description = "Run Kestra as server local"
+    description = "Run DataFlare as server standalone"
     classpath = project(":cli").sourceSets.main.runtimeClasspath
     mainClass = mainClassName
     environment 'MICRONAUT_ENVIRONMENTS', 'standalone,override'
-    args 'server', 'standalone', '--plugins', '/Users/louloulin/.kestra/current/bin/plugins'
+    args 'server', 'standalone', '--plugins', '/Users/louloulin/.dataflare/current/bin/plugins'
 }
 
 /**********************************************************************************************************************\
@@ -558,10 +558,10 @@ subprojects {
         }
 
         github {
-            user 'kestra-io'
+            user 'dataflare-io'
             license 'Apache'
-            repository 'kestra'
-            site 'https://kestra.io'
+            repository 'dataflare'
+            site 'https://dataflare.io'
         }
 
         maven.pom {
@@ -581,8 +581,8 @@ subprojects {
                     version project.version
 
                     if (project.name.contains('cli')) {
-                        groupId "io.kestra"
-                        artifactId "kestra"
+                        groupId "io.dataflare"
+                        artifactId "dataflare"
 
                         artifact shadowJar
                         artifact executableJar
@@ -610,7 +610,7 @@ subprojects {
         }
 
         tasks.withType(GenerateModuleMetadata).configureEach {
-            // Suppression this validation error as we want to enforce the Kestra platform
+            // Suppression this validation error as we want to enforce the DataFlare platform
             suppressedValidationErrors.add('enforced-platform')
         }
     }
