@@ -18,7 +18,7 @@ import java.util.Set;
  * User entity for RBAC system
  */
 @Value
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 @Introspected
 @With
@@ -56,6 +56,16 @@ public class User implements TenantInterface {
     @Builder.Default
     Set<String> roleIds = Set.of();
 
+    @Builder.Default
+    boolean deleted = false;
+
+    // Additional fields for SSO integration
+    @Builder.Default
+    Set<String> roles = Set.of();
+
+    @Builder.Default
+    Set<String> permissions = Set.of();
+
     /**
      * Get full name of the user
      */
@@ -75,7 +85,14 @@ public class User implements TenantInterface {
      * Check if user is active
      */
     public boolean isActive() {
-        return enabled;
+        return enabled && !deleted;
+    }
+
+    /**
+     * Check if user is deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
     }
 
     /**
