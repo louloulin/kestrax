@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -22,39 +23,39 @@ import java.util.Set;
 @Introspected
 @With
 public class User implements TenantInterface {
-    
+
     @NotBlank
     String id;
-    
+
     @NotBlank
     String tenantId;
-    
+
     @NotBlank
     String username;
-    
+
     @NotBlank
     @Email
     String email;
-    
+
     String firstName;
-    
+
     String lastName;
-    
+
     @Builder.Default
     boolean enabled = true;
-    
+
     @NotNull
     @Builder.Default
     Instant createdAt = Instant.now();
-    
+
     Instant lastLoginAt;
-    
+
     @Builder.Default
     Set<String> groupIds = Set.of();
-    
+
     @Builder.Default
     Set<String> roleIds = Set.of();
-    
+
     /**
      * Get full name of the user
      */
@@ -69,53 +70,53 @@ public class User implements TenantInterface {
             return username;
         }
     }
-    
+
     /**
      * Check if user is active
      */
     public boolean isActive() {
         return enabled;
     }
-    
+
     /**
      * Update last login time
      */
     public User updateLastLogin() {
         return this.withLastLoginAt(Instant.now());
     }
-    
+
     /**
      * Add role to user
      */
     public User addRole(String roleId) {
-        Set<String> newRoles = Set.copyOf(roleIds);
+        Set<String> newRoles = new HashSet<>(roleIds);
         newRoles.add(roleId);
         return this.withRoleIds(newRoles);
     }
-    
+
     /**
      * Remove role from user
      */
     public User removeRole(String roleId) {
-        Set<String> newRoles = Set.copyOf(roleIds);
+        Set<String> newRoles = new HashSet<>(roleIds);
         newRoles.remove(roleId);
         return this.withRoleIds(newRoles);
     }
-    
+
     /**
      * Add group to user
      */
     public User addGroup(String groupId) {
-        Set<String> newGroups = Set.copyOf(groupIds);
+        Set<String> newGroups = new HashSet<>(groupIds);
         newGroups.add(groupId);
         return this.withGroupIds(newGroups);
     }
-    
+
     /**
      * Remove group from user
      */
     public User removeGroup(String groupId) {
-        Set<String> newGroups = Set.copyOf(groupIds);
+        Set<String> newGroups = new HashSet<>(groupIds);
         newGroups.remove(groupId);
         return this.withGroupIds(newGroups);
     }
