@@ -628,7 +628,7 @@
       "title": "Dashboards",
       "today": "Heute",
       "wel_text": "Willkommen!",
-      "welcome": "Willkommen bei Kestra",
+      "welcome": "Willkommen bei DataFlare",
       "yesterday": "Gestern"
     },
     "hostname": "Hostname",
@@ -661,7 +661,7 @@
     "join community": "Community beitreten",
     "get_support": "Support erhalten",
     "jump to...": "Springe zu...",
-    "kestra": "Kestra",
+    "kestra": "DataFlare",
     "key": "Key",
     "kill": "Beenden",
     "kill only parents": "Nur Eltern beenden",
@@ -903,7 +903,7 @@
         "0": {
           "content": "Wir freuen uns, dass Sie hier sind.<br />Lassen Sie uns Ihren ersten Flow erstellen.",
           "primary": "Los geht's!",
-          "title": "Willkommen bei Kestra!"
+          "title": "Willkommen bei DataFlare!"
         },
         "1": {
           "primary": "Weiter",

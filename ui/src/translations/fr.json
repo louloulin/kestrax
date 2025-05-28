@@ -290,7 +290,7 @@
           "title": "Suivez tous les changements en un seul endroit"
         },
         "edit": {
-          "message": "Dans l'édition Kestra Enterprise, les namespaces offrent une isolation avancée et une gouvernance des secrets, variables et paramètres par défaut des plugins à grande échelle. Les administrateurs peuvent configurer des gestionnaires de secrets personnalisés, des stockages backends isolés, des groupes de workers dédiés, et des permissions fines par namespace. Cela garantit que les secrets, variables et configurations de plugins restent sécurisés et faciles à maintenir à travers différentes équipes et projets.",
+          "message": "Dans l'édition DataFlare Enterprise, les namespaces offrent une isolation avancée et une gouvernance des secrets, variables et paramètres par défaut des plugins à grande échelle. Les administrateurs peuvent configurer des gestionnaires de secrets personnalisés, des stockages backends isolés, des groupes de workers dédiés, et des permissions fines par namespace. Cela garantit que les secrets, variables et configurations de plugins restent sécurisés et faciles à maintenir à travers différentes équipes et projets.",
           "title": "Améliorez la Gestion de votre Namespace"
         },
         "history": {
@@ -312,7 +312,7 @@
       },
       "secrets": {
         "add_env": {
-          "first": "Encodez la <strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">valeur secrète en Base64</a></strong>",
+          "first": "Encodez la <strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-dataflare\" target=\"_blank\">valeur secrète en Base64</a></strong>",
           "intro": "Pour créer un nouveau Secret :",
           "second": "Ajoutez une variable d'environnement nommée '<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>' avec la valeur ci-dessus.",
           "third": "Redémarrez votre instance DataFlare"
@@ -323,7 +323,7 @@
         "title": "Améliorez votre gestion des Secrets"
       },
       "tenants": {
-        "message": "L'édition Kestra Enterprise prend en charge la multi-tenance, vous offrant des environnements entièrement isolés pour différentes équipes ou projets, chacun avec ses propres ressources telles que des groupes de workers dédiés ou des secrets et des backends de stockage internes.",
+        "message": "L'édition DataFlare Enterprise prend en charge la multi-tenance, vous offrant des environnements entièrement isolés pour différentes équipes ou projets, chacun avec ses propres ressources telles que des groupes de workers dédiés ou des secrets et des backends de stockage internes.",
         "title": "Gérer les flux de travail dans des tenants isolés"
       }
     },
@@ -473,7 +473,7 @@
     "execution_failed": "Échec de l'exécution ! La dernière erreur était",
     "execution_guide": {
       "get_started": {
-        "text": "Suivez le Guide de démarrage rapide pour installer Kestra et commencer à créer vos premiers workflows.",
+        "text": "Suivez le Guide de démarrage rapide pour installer DataFlare et commencer à créer vos premiers workflows.",
         "title": "Commencer ⚡"
       },
       "videos_tutorials": {
@@ -481,7 +481,7 @@
         "title": "Tutoriels Vidéo"
       },
       "workflow_components": {
-        "text": "Découvrez les principaux composants d'orchestration d'un workflow Kestra.",
+        "text": "Découvrez les principaux composants d'orchestration d'un workflow DataFlare.",
         "title": "Composants du Workflow"
       }
     },
@@ -512,7 +512,7 @@
     "failed to render pdf": "Impossible de rendre l'aperçu PDF",
     "false": "Faux",
     "feeds": {
-      "title": "Quoi de neuf sur Kestra"
+      "title": "Quoi de neuf sur DataFlare"
     },
     "file preview truncated": "Displayed content has been truncated",
     "files": "Fichiers",
@@ -623,12 +623,12 @@
       "lastXdays": "Dernier {days} jours",
       "namespacesErrorExecutions": "Exécutions en erreur par espace de nom",
       "namespacesExecutions": "Exécutions par espace de nom",
-      "no executions": "Prêt à voir votre flow Kestra en action ?",
+      "no executions": "Prêt à voir votre flow DataFlare en action ?",
       "start": "Mettons votre premier workflow en marche.",
       "title": "Tableaux de bord",
       "today": "Aujourd'hui",
       "wel_text": "Bienvenue !",
-      "welcome": "Bienvenue sur Kestra",
+      "welcome": "Bienvenue sur DataFlare",
       "yesterday": "Hier"
     },
     "hostname": "Nom d'hôte",
@@ -661,7 +661,7 @@
     "join community": "Rejoignez la communauté",
     "get_support": "Obtenir de l'aide",
     "jump to...": "Aller à...",
-    "kestra": "Kestra",
+    "kestra": "DataFlare",
     "key": "Clé",
     "kill": "Arrêter",
     "kill only parents": "Arrêter uniquement les exécutions parents",
@@ -903,7 +903,7 @@
         "0": {
           "content": "Nous sommes ravis de vous avoir ici.<br />Créons votre premier flux.",
           "primary": "Allons-y!",
-          "title": "Bienvenue chez Kestra!"
+          "title": "Bienvenue chez DataFlare!"
         },
         "1": {
           "primary": "Suivant",
@@ -1137,7 +1137,7 @@
           "fields": {
             "chart_color_scheme": {
               "classic": "Classique",
-              "kestra": "Kestra",
+              "kestra": "DataFlare",
               "label": "Schéma de Couleurs du Graphique"
             },
             "editor_folding_stratgy": "Stratégie de Pliage Automatique ou Multi-Lignes de l'Éditeur",
@@ -1306,7 +1306,7 @@
         "title": "Besoin d'aide ?"
       },
       "tour": {
-        "text": "Choisissez votre cas d'utilisation et suivez un guide étape par étape pour découvrir les fonctionnalités et capacités de Kestra. ❤️",
+        "text": "Choisissez votre cas d'utilisation et suivez un guide étape par étape pour découvrir les fonctionnalités et capacités de DataFlare. ❤️",
         "title": "Faire une visite guidée du produit"
       },
       "tutorial": {
@@ -1315,9 +1315,9 @@
       }
     },
     "welcome aboard": "🚀 Bienvenue à bord !",
-    "welcome aboard content": "Tout est prêt pour Kestra, commencez la création de votre flow et admirez la magie !",
+    "welcome aboard content": "Tout est prêt pour DataFlare, commencez la création de votre flow et admirez la magie !",
     "welcome button create": "Créer mon premier flow",
-    "welcome display require": "Prêt à commencer à utiliser Kestra ? Créons ensemble <strong>votre premier flow</strong> !",
+    "welcome display require": "Prêt à commencer à utiliser DataFlare ? Créons ensemble <strong>votre premier flow</strong> !",
     "wordmark_colors": "Les couleurs du logotype s'adaptent en fonction de l'arrière-plan, tandis que l'icône reste sans arrière-plan lorsqu'elle est placée sur un fond sombre.",
     "worker group": "Worker Group",
     "worker group fallback": "Groupe de Worker de secours",

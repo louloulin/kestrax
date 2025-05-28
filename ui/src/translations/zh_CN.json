@@ -263,19 +263,19 @@
     "deleted_label": "已删除",
     "demos": {
       "IAM": {
-        "message": "Kestra 企业版具有内置的 IAM 功能，包括单点登录 (SSO)、SCIM 目录同步和基于角色的访问控制 (RBAC)，可以与多个身份提供商集成，并允许您为用户和服务帐户分配细粒度的权限。",
+        "message": "DataFlare 企业版具有内置的 IAM 功能，包括单点登录 (SSO)、SCIM 目录同步和基于角色的访问控制 (RBAC)，可以与多个身份提供商集成，并允许您为用户和服务帐户分配细粒度的权限。",
         "title": "通过IAM使用SSO、SCIM和RBAC管理用户"
       },
       "apps": {
-        "message": "在 Kestra 企业版中，应用程序允许您构建自定义 UI，以便从平台外部与 Kestra 工作流进行交互。此功能使您可以将工作流用作自定义应用程序的后端，允许非技术用户通过表单提交数据或恢复等待批准的暂停工作流。",
-        "title": "使用 Kestra 构建自定义应用程序"
+        "message": "在 DataFlare 企业版中，应用程序允许您构建自定义 UI，以便从平台外部与 DataFlare 工作流进行交互。此功能使您可以将工作流用作自定义应用程序的后端，允许非技术用户通过表单提交数据或恢复等待批准的暂停工作流。",
+        "title": "使用 DataFlare 构建自定义应用程序"
       },
       "audit-logs": {
         "message": "DataFlare Enterprise Edition记录每个活动，提供强大且不可更改的记录，使得跟踪更改、保持合规性和解决问题变得容易。",
         "title": "使用审计日志跟踪更改"
       },
       "blueprints": {
-        "message": "在 Kestra 企业版中，您可以创建仅供您的组织使用的自定义 Blueprints。您可以将它们用作最佳实践模板，以便在团队中共享、集中和记录常用的工作流。",
+        "message": "在 DataFlare 企业版中，您可以创建仅供您的组织使用的自定义 Blueprints。您可以将它们用作最佳实践模板，以便在团队中共享、集中和记录常用的工作流。",
         "title": "添加自定义蓝图"
       },
       "enterprise_edition": "企业版",
@@ -290,7 +290,7 @@
           "title": "在一个地方跟踪所有更改"
         },
         "edit": {
-          "message": "在 Kestra 企业版中，namespace 提供了高级的隔离和治理功能，用于管理大规模的密钥、变量和插件默认值。管理员可以为每个 namespace 配置自定义密钥管理器、隔离存储后端、专用 worker 组以及细粒度权限。这确保了密钥、变量和插件配置在不同团队和项目中保持安全且易于维护。",
+          "message": "在 DataFlare 企业版中，namespace 提供了高级的隔离和治理功能，用于管理大规模的密钥、变量和插件默认值。管理员可以为每个 namespace 配置自定义密钥管理器、隔离存储后端、专用 worker 组以及细粒度权限。这确保了密钥、变量和插件配置在不同团队和项目中保持安全且易于维护。",
           "title": "升级您的Namespace管理"
         },
         "history": {
@@ -306,16 +306,16 @@
           "title": "以安全方式管理Secrets"
         },
         "variables": {
-          "message": "在 Kestra 企业版中，您可以定义和管理 namespace 级别的变量，以消除跨 flow 的重复配置。这些变量确保了一致性，简化了配置更新，并且可以被任何 task 或 trigger 轻松引用，从而实现更简洁、更易维护的工作流。",
+          "message": "在 DataFlare 企业版中，您可以定义和管理 namespace 级别的变量，以消除跨 flow 的重复配置。这些变量确保了一致性，简化了配置更新，并且可以被任何 task 或 trigger 轻松引用，从而实现更简洁、更易维护的工作流。",
           "title": "集中管理您的变量"
         }
       },
       "secrets": {
         "add_env": {
-          "first": "将<strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-kestra\" target=\"_blank\">secret value 编码为 Base64</a></strong>",
+          "first": "将<strong><a href=\"https://dataflare.io/docs/how-to-guides/secrets#using-secrets-in-dataflare\" target=\"_blank\">secret value 编码为 Base64</a></strong>",
           "intro": "创建新Secret：",
           "second": "添加一个名为 '<strong>SECRET_{'{MY_SECRET_KEY}'}</strong>' 的环境变量，并使用上述值",
-          "third": "重新启动您的Kestra实例"
+          "third": "重新启动您的DataFlare实例"
         },
         "detected_env": "以下是在实例启动时识别的secret-type环境变量：",
         "empty_env": "您还没有在您的环境中添加任何Secrets。",
@@ -323,7 +323,7 @@
         "title": "升级您的Secrets管理"
       },
       "tenants": {
-        "message": "Kestra 企业版支持多租户，为不同的团队或项目提供完全隔离的环境，每个环境都有自己的资源，如专用的worker组、密钥和内部存储后端。",
+        "message": "DataFlare 企业版支持多租户，为不同的团队或项目提供完全隔离的环境，每个环境都有自己的资源，如专用的worker组、密钥和内部存储后端。",
         "title": "在独立的tenant中管理工作流"
       }
     },
@@ -387,7 +387,7 @@
         "title": "您还没有公告！"
       },
       "apps": {
-        "content": "开始构建应用程序，以便与外部世界的Kestra进行交互。",
+        "content": "开始构建应用程序，以便与外部世界的DataFlare进行交互。",
         "title": "您还没有应用程序！"
       },
       "concurrency_executions": {
@@ -473,7 +473,7 @@
     "execution_failed": "执行失败！最后的错误是",
     "execution_guide": {
       "get_started": {
-        "text": "请按照快速入门指南安装Kestra并开始构建您的第一个工作流。",
+        "text": "请按照快速入门指南安装DataFlare并开始构建您的第一个工作流。",
         "title": "开始使用 ⚡"
       },
       "videos_tutorials": {
@@ -481,7 +481,7 @@
         "title": "视频教程"
       },
       "workflow_components": {
-        "text": "了解 Kestra 工作流的主要编排组件。",
+        "text": "了解 DataFlare 工作流的主要编排组件。",
         "title": "工作流组件"
       }
     },
@@ -512,7 +512,7 @@
     "failed to render pdf": "渲染PDF预览失败",
     "false": "假",
     "feeds": {
-      "title": "Kestra的最新动态"
+      "title": "DataFlare的最新动态"
     },
     "file preview truncated": "显示的内容已被截断",
     "files": "文件",
@@ -662,7 +662,7 @@
     "get_support": "获取支持",
     "support help": "获取技术支持",
     "jump to...": "跳转到...",
-    "kestra": "Kestra",
+    "kestra": "DataFlare",
     "key": "键",
     "kill": "终止",
     "kill only parents": "仅终止父流程",
@@ -904,7 +904,7 @@
         "0": {
           "content": "我们很高兴你在这里。<br />让我们创建你的第一个流程。",
           "primary": "开始吧！",
-          "title": "欢迎使用Kestra！"
+          "title": "欢迎使用DataFlare！"
         },
         "1": {
           "primary": "下一步",
@@ -1138,7 +1138,7 @@
           "fields": {
             "chart_color_scheme": {
               "classic": "经典",
-              "kestra": "Kestra",
+              "kestra": "DataFlare",
               "label": "图表配色方案"
             },
             "editor_folding_stratgy": "编辑器中的自动代码折叠",
@@ -1307,7 +1307,7 @@
         "title": "需要帮助吗？"
       },
       "tour": {
-        "text": "选择您的用例，并按照分步指南学习 Kestra 的功能和能力。❤️",
+        "text": "选择您的用例，并按照分步指南学习 DataFlare 的功能和能力。❤️",
         "title": "开始产品导览"
       },
       "tutorial": {
