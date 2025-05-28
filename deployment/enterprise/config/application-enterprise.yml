@@ -1,0 +1,306 @@
+# DataFlare Enterprise Configuration
+dataflare:
+  # Cluster Configuration
+  cluster:
+    enabled: true
+    cluster-id: ${DATAFLARE_CLUSTER_ID:production-cluster}
+    cluster-name: "DataFlare Production Cluster"
+    topology: ACTIVE_ACTIVE
+    
+    node:
+      node-id: ${DATAFLARE_NODE_ID:node-1}
+      node-name: ${DATAFLARE_NODE_NAME:DataFlare Node 1}
+      host: ${HOSTNAME:localhost}
+      port: 8080
+      roles: ${DATAFLARE_NODE_ROLES:EXECUTOR,SCHEDULER,WEBSERVER}
+      
+      discovery:
+        method: STATIC
+        static-nodes:
+          - "dataflare-node-1:8080"
+          - "dataflare-node-2:8080"
+        discovery-interval: PT30S
+      
+      communication:
+        protocol: HTTP
+        port: 8080
+        connection-timeout: PT10S
+        read-timeout: PT30S
+    
+    load-balancer:
+      algorithm: WEIGHTED_ROUND_ROBIN
+      health-check:
+        interval: PT30S
+        timeout: PT10S
+        failure-threshold: 3
+        success-threshold: 1
+      session-affinity:
+        enabled: true
+        session-timeout: PT30M
+    
+    failover:
+      strategy: AUTOMATIC
+      max-failover-time: PT5M
+      retry-count: 3
+      retry-interval: PT10S
+      auto-failback: true
+      failback-delay: PT2M
+
+  # Multi-Tenancy Configuration
+  multi-tenant:
+    enabled: ${DATAFLARE_MULTI_TENANT_ENABLED:true}
+    default-tenant: "default"
+    tenant-isolation: STRICT
+    
+    routing:
+      strategy: HEADER_BASED
+      header-name: "X-Tenant-ID"
+      fallback-strategy: SUBDOMAIN
+    
+    limits:
+      max-tenants: 1000
+      max-users-per-tenant: 10000
+      max-executions-per-tenant: 100000
+
+  # RBAC Configuration
+  rbac:
+    enabled: ${DATAFLARE_RBAC_ENABLED:true}
+    cache-enabled: true
+    cache-ttl: PT1H
+    permission-inheritance: true
+    
+    default-permissions:
+      - "flows:read"
+      - "executions:read"
+    
+    admin-roles:
+      - "SYSTEM_ADMIN"
+      - "TENANT_ADMIN"
+
+  # SSO Configuration
+  sso:
+    enabled: ${DATAFLARE_SSO_ENABLED:true}
+    provider: OIDC
+    
+    oidc:
+      client-id: ${SSO_CLIENT_ID:dataflare-client}
+      client-secret: ${SSO_CLIENT_SECRET:client-secret}
+      issuer-url: ${SSO_ISSUER_URL:https://auth.example.com}
+      redirect-uri: ${SSO_REDIRECT_URI:https://dataflare.example.com/auth/callback}
+      scopes:
+        - openid
+        - profile
+        - email
+        - groups
+    
+    user-mapping:
+      auto-create-users: true
+      auto-update-users: true
+      username-attribute: "preferred_username"
+      email-attribute: "email"
+      first-name-attribute: "given_name"
+      last-name-attribute: "family_name"
+      groups-attribute: "groups"
+      default-roles:
+        - "USER"
+
+  # MFA Configuration
+  mfa:
+    enabled: ${DATAFLARE_MFA_ENABLED:true}
+    required: false
+    providers:
+      - TOTP
+      - EMAIL
+    
+    totp:
+      issuer: "DataFlare"
+      algorithm: "SHA1"
+      digits: 6
+      period: 30
+    
+    backup-codes:
+      enabled: true
+      count: 10
+      length: 8
+
+  # JWT Configuration
+  jwt:
+    secret: ${JWT_SECRET:your-256-bit-secret-key-here-must-be-at-least-32-characters}
+    access-token-expiry: PT1H
+    refresh-token-expiry: P7D
+    issuer: "dataflare"
+    
+    blacklist:
+      enabled: true
+      cleanup-interval: PT1H
+
+  # Monitoring Configuration
+  monitoring:
+    enabled: ${DATAFLARE_MONITORING_ENABLED:true}
+    
+    metrics:
+      enabled: true
+      collection-interval: PT30S
+      retention-period: P7D
+      enabled-metrics:
+        - SYSTEM
+        - JVM
+        - APPLICATION
+        - EXECUTION
+      
+      prometheus:
+        enabled: true
+        endpoint: "/metrics"
+        port: 9090
+        prefix: "dataflare"
+    
+    health-check:
+      enabled: true
+      endpoint: "/health"
+      interval: PT30S
+      timeout: PT10S
+      enabled-checks:
+        - DATABASE
+        - CACHE
+        - DISK_SPACE
+        - MEMORY
+    
+    alerting:
+      enabled: true
+      evaluation-interval: PT1M
+      rules:
+        - name: "High CPU Usage"
+          metric: "system.cpu.usage"
+          condition: GREATER_THAN
+          threshold: 80.0
+          duration: PT5M
+          severity: WARNING
+        - name: "High Memory Usage"
+          metric: "jvm.memory.heap.usage"
+          condition: GREATER_THAN
+          threshold: 90.0
+          duration: PT2M
+          severity: CRITICAL
+    
+    logging:
+      level: INFO
+      format: JSON
+      retention-period: P30D
+      structured-logging: true
+    
+    tracing:
+      enabled: true
+      system: JAEGER
+      sampling-rate: 0.1
+      endpoint: "http://jaeger:14268/api/traces"
+      service-name: "dataflare"
+
+# Database Configuration
+datasources:
+  default:
+    url: ${DATAFLARE_DATABASE_URL:jdbc:postgresql://localhost:5432/dataflare}
+    username: ${DATAFLARE_DATABASE_USERNAME:dataflare}
+    password: ${DATAFLARE_DATABASE_PASSWORD:dataflare}
+    driver-class-name: org.postgresql.Driver
+    maximum-pool-size: 20
+    minimum-idle: 5
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
+# Redis Configuration
+redis:
+  uri: ${DATAFLARE_REDIS_URL:redis://localhost:6379}
+  timeout: PT10S
+  
+  pool:
+    max-active: 20
+    max-idle: 10
+    min-idle: 5
+
+# Elasticsearch Configuration
+elasticsearch:
+  httpHosts: ${ELASTICSEARCH_HOSTS:http://localhost:9200}
+  
+  indices:
+    executions: "dataflare-executions"
+    logs: "dataflare-logs"
+    metrics: "dataflare-metrics"
+
+# Security Configuration
+micronaut:
+  security:
+    enabled: true
+    authentication: bearer
+    
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET:your-256-bit-secret-key-here-must-be-at-least-32-characters}
+    
+    endpoints:
+      login:
+        enabled: true
+        path: "/login"
+      logout:
+        enabled: true
+        path: "/logout"
+
+# Server Configuration
+micronaut:
+  server:
+    port: 8080
+    host: 0.0.0.0
+    
+    ssl:
+      enabled: ${SSL_ENABLED:false}
+      port: 8443
+      key-store: ${SSL_KEYSTORE_PATH:/app/ssl/keystore.jks}
+      key-store-password: ${SSL_KEYSTORE_PASSWORD:changeit}
+      key-store-type: JKS
+    
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowed-origins:
+            - "https://dataflare.example.com"
+            - "http://localhost:3000"
+          allowed-methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - OPTIONS
+          allowed-headers:
+            - "*"
+          exposed-headers:
+            - "X-Total-Count"
+          allow-credentials: true
+
+# Logging Configuration
+logger:
+  levels:
+    io.kestra: INFO
+    io.kestra.core.services: DEBUG
+    io.kestra.core.security: DEBUG
+    root: WARN
+
+# Management Endpoints
+endpoints:
+  all:
+    enabled: true
+    sensitive: false
+  health:
+    enabled: true
+    details-visible: AUTHENTICATED
+  info:
+    enabled: true
+  metrics:
+    enabled: true
+  prometheus:
+    enabled: true
+    sensitive: false

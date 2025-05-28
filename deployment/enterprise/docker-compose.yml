@@ -1,0 +1,241 @@
+version: '3.8'
+
+services:
+  # DataFlare Application Cluster
+  dataflare-node-1:
+    image: dataflare/dataflare:enterprise
+    container_name: dataflare-node-1
+    environment:
+      - DATAFLARE_NODE_ID=node-1
+      - DATAFLARE_NODE_NAME=DataFlare Node 1
+      - DATAFLARE_CLUSTER_ID=production-cluster
+      - DATAFLARE_CLUSTER_ENABLED=true
+      - DATAFLARE_NODE_ROLES=EXECUTOR,SCHEDULER,WEBSERVER
+      - DATAFLARE_DATABASE_URL=jdbc:postgresql://postgres:5432/dataflare
+      - DATAFLARE_DATABASE_USERNAME=dataflare
+      - DATAFLARE_DATABASE_PASSWORD=dataflare_password
+      - DATAFLARE_REDIS_URL=redis://redis:6379
+      - DATAFLARE_MONITORING_ENABLED=true
+      - DATAFLARE_SSO_ENABLED=true
+      - DATAFLARE_MFA_ENABLED=true
+      - DATAFLARE_RBAC_ENABLED=true
+      - DATAFLARE_MULTI_TENANT_ENABLED=true
+      - JAVA_OPTS=-Xmx4g -Xms2g -XX:+UseG1GC
+    ports:
+      - "8080:8080"
+      - "9090:9090" # Prometheus metrics
+    volumes:
+      - dataflare-data-1:/app/data
+      - dataflare-logs-1:/app/logs
+      - ./config/application-enterprise.yml:/app/config/application.yml
+      - ./config/ssl:/app/ssl
+    depends_on:
+      - postgres
+      - redis
+      - elasticsearch
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dataflare-node-2:
+    image: dataflare/dataflare:enterprise
+    container_name: dataflare-node-2
+    environment:
+      - DATAFLARE_NODE_ID=node-2
+      - DATAFLARE_NODE_NAME=DataFlare Node 2
+      - DATAFLARE_CLUSTER_ID=production-cluster
+      - DATAFLARE_CLUSTER_ENABLED=true
+      - DATAFLARE_NODE_ROLES=EXECUTOR,SCHEDULER
+      - DATAFLARE_DATABASE_URL=jdbc:postgresql://postgres:5432/dataflare
+      - DATAFLARE_DATABASE_USERNAME=dataflare
+      - DATAFLARE_DATABASE_PASSWORD=dataflare_password
+      - DATAFLARE_REDIS_URL=redis://redis:6379
+      - DATAFLARE_MONITORING_ENABLED=true
+      - JAVA_OPTS=-Xmx4g -Xms2g -XX:+UseG1GC
+    ports:
+      - "8081:8080"
+      - "9091:9090"
+    volumes:
+      - dataflare-data-2:/app/data
+      - dataflare-logs-2:/app/logs
+      - ./config/application-enterprise.yml:/app/config/application.yml
+    depends_on:
+      - postgres
+      - redis
+      - elasticsearch
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Load Balancer
+  nginx:
+    image: nginx:alpine
+    container_name: dataflare-lb
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/ssl:/etc/nginx/ssl
+    depends_on:
+      - dataflare-node-1
+      - dataflare-node-2
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+
+  # Database
+  postgres:
+    image: postgres:15
+    container_name: dataflare-postgres
+    environment:
+      - POSTGRES_DB=dataflare
+      - POSTGRES_USER=dataflare
+      - POSTGRES_PASSWORD=dataflare_password
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./config/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataflare"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: dataflare-redis
+    command: redis-server --requirepass redis_password --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Elasticsearch for logging and search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: dataflare-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dataflare-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+
+  # Grafana for monitoring dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dataflare-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_password
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: dataflare-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+
+  # Consul for service discovery (optional)
+  consul:
+    image: consul:latest
+    container_name: dataflare-consul
+    command: consul agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+    volumes:
+      - consul-data:/consul/data
+    networks:
+      - dataflare-network
+    restart: unless-stopped
+
+volumes:
+  dataflare-data-1:
+  dataflare-data-2:
+  dataflare-logs-1:
+  dataflare-logs-2:
+  postgres-data:
+  redis-data:
+  elasticsearch-data:
+  prometheus-data:
+  grafana-data:
+  consul-data:
+
+networks:
+  dataflare-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
