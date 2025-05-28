@@ -30,7 +30,7 @@
 <script setup>
     import OpenInNew from "vue-material-design-icons/OpenInNew.vue";
     import Monitor from "vue-material-design-icons/Monitor.vue";
-    import Slack from "./components/SlackLogo.vue";
+    import HelpCircle from "vue-material-design-icons/HelpCircle.vue";
     import PlayBox from "vue-material-design-icons/PlayBoxMultiple.vue";
 </script>
 <script>
@@ -54,7 +54,7 @@
             getIcon() {
                 switch (this.category) {
                 case "help":
-                    return Slack;
+                    return HelpCircle;
                 case "tutorial":
                     return PlayBox;
                 case "tour":
@@ -65,7 +65,7 @@
             },
             getLink() {
                 const links = {
-                    help: "https://kestra.io/slack",
+                    help: "https://dataflare.io/support",
                 };
                 return links[this.category] || "#";
             },

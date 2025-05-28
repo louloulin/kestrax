@@ -51,7 +51,7 @@
                 if (card.category === "tour") {
                     this.startTour();
                 } else if (card.category === "help") {
-                    window.open("https://kestra.io/slack", "_blank");
+                    window.open("https://dataflare.io/support", "_blank");
                 }
             }
         }
