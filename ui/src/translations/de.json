@@ -659,7 +659,7 @@
     "item": "Element",
     "items": "Elemente",
     "join community": "Community beitreten",
-    "join_slack": "Slack beitreten",
+    "get_support": "Support erhalten",
     "jump to...": "Springe zu...",
     "kestra": "Kestra",
     "key": "Key",
@@ -1166,7 +1166,7 @@
     "showLess": "Es scheint, dass der Text, den Sie übersetzen möchten, nicht bereitgestellt wurde. Bitte geben Sie den Text nach der Linie \"----------\" ein, damit ich Ihnen bei der Übersetzung ins Deutsche helfen kann.",
     "showMore": "Mehr anzeigen",
     "side-by-side": "nebeneinander",
-    "slack support": "Fragen Sie via Slack",
+    "support help": "Technischen Support erhalten",
     "something_went_wrong": {
       "loading_execution": "Beim Laden der Ausführung ist etwas schiefgelaufen."
     },

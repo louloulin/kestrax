@@ -659,7 +659,7 @@
     "item": "elemento",
     "items": "elementi",
     "join community": "Unisciti alla Community",
-    "join_slack": "Unisciti a Slack",
+    "get_support": "Ottieni supporto",
     "jump to...": "Vai a...",
     "kestra": "Kestra",
     "key": "Key",
@@ -1166,7 +1166,7 @@
     "showLess": "Mostra meno",
     "showMore": "Mostra di più",
     "side-by-side": "affiancato",
-    "slack support": "Fai qualsiasi domanda via Slack",
+    "support help": "Ottieni supporto tecnico",
     "something_went_wrong": {
       "loading_execution": "Si è verificato un errore durante il caricamento dell'esecuzione"
     },

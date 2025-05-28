@@ -659,7 +659,7 @@
     "item": "item",
     "items": "itens",
     "join community": "Junte-se à Comunidade",
-    "join_slack": "Participar do Slack",
+    "get_support": "Obter suporte",
     "jump to...": "Ir para...",
     "kestra": "Kestra",
     "key": "Key",
@@ -1166,7 +1166,7 @@
     "showLess": "Mostrar menos",
     "showMore": "Mostrar mais",
     "side-by-side": "lado a lado",
-    "slack support": "Faça qualquer pergunta via Slack",
+    "support help": "Obter suporte técnico",
     "something_went_wrong": {
       "loading_execution": "Algo deu errado ao carregar a execução"
     },
@@ -1302,7 +1302,7 @@
     "weeks": "Semanas",
     "welcome": {
       "help": {
-        "text": "Faça qualquer pergunta em nossa comunidade no Slack. Se você estiver com dificuldades, estamos aqui para ajudar você. ✋",
+        "text": "Entre em contato com nossa equipe de suporte. Se você estiver com dificuldades, estamos aqui para ajudar você. ✋",
         "title": "Precisa de ajuda?"
       },
       "tour": {
