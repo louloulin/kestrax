@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
     import GithubIcon from "vue-material-design-icons/Github.vue";
-    import SlackIcon from "vue-material-design-icons/Slack.vue";
+    import BugIcon from "vue-material-design-icons/Bug.vue";
     import LifebuoyIcon from "vue-material-design-icons/Lifebuoy.vue";
 
     defineProps<{
@@ -21,21 +21,22 @@
     }>()
 
     const buttons = [{
-                         label: "Community Slack",
-                         description: "Discuss topics with other users and kestra Team",
-                         href: "https://kestra.io/slack",
-                         icon: SlackIcon,
+                         label: "报告问题",
+                         description: "报告Bug、提出功能请求或寻求帮助",
+                         href: "#",
+                         icon: BugIcon,
+                         action: "report-issue"
                      },
                      {
                          label: "GitHub",
-                         description: "Give our open-source project a star",
+                         description: "给我们的开源项目点个星",
                          href: "https://github.com/kestra-io/kestra",
                          icon: GithubIcon,
                      },
                      {
-                         label: "Help Center",
-                         description: "Contact support for help with your Enterprise account",
-                         href: "https://kestra.io/demo",
+                         label: "帮助中心",
+                         description: "联系技术支持获取企业版账户帮助",
+                         href: "https://dataflare.io/support",
                          icon: LifebuoyIcon,
                      }]
 </script>
