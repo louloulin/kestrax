@@ -117,6 +117,11 @@ dependencies {
         // Json Diff
         api group: 'com.github.java-json-tools', name: 'json-patch', version: '1.13'
 
+        // JWT
+        api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
+        api group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
+        api group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
+
         // force transitive version to fix CVE
         api 'org.codehaus.plexus:plexus-utils:3.0.24' // https://nvd.nist.gov/vuln/detail/CVE-2022-4244
 

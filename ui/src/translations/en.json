@@ -1343,6 +1343,175 @@
     "searching": "Searching...",
     "worker information": "Worker Information",
     "test-badge-text": "Test",
-    "test-badge-tooltip": "This execution was created by a Test"
+    "test-badge-tooltip": "This execution was created by a Test",
+    "authentication": {
+      "title": "Authentication Management",
+      "description": "Configure SSO, MFA, and token management for your DataFlare instance",
+      "sso": {
+        "title": "Single Sign-On (SSO)",
+        "enabled": "SSO Enabled",
+        "disabled": "SSO Disabled",
+        "provider": "Provider",
+        "mfaEnabled": "MFA Enabled",
+        "mfaRequired": "MFA Required",
+        "configure": "Configure SSO",
+        "test": "Test Connection",
+        "configuration": "SSO Configuration",
+        "configurationNote": "SSO configuration is managed through application configuration files.",
+        "testSuccess": "SSO connection test successful",
+        "testFailed": "SSO connection test failed"
+      },
+      "mfa": {
+        "title": "Multi-Factor Authentication",
+        "usersWithMFA": "Users with MFA",
+        "pendingChallenges": "Pending Challenges",
+        "availableProviders": "Available Providers",
+        "configure": "Configure MFA",
+        "configuration": "MFA Configuration",
+        "configurationNote": "MFA configuration is managed through application configuration files."
+      },
+      "tokens": {
+        "title": "Token Management",
+        "activeRefreshTokens": "Active Refresh Tokens",
+        "blacklistedTokens": "Blacklisted Tokens",
+        "cleanup": "Cleanup Expired",
+        "revokeAll": "Revoke All Tokens",
+        "cleanupSuccess": "Expired tokens cleaned up successfully",
+        "cleanupFailed": "Failed to cleanup expired tokens",
+        "revokeAllConfirm": "Are you sure you want to revoke all tokens? This will log out all users.",
+        "revokeAllSuccess": "All tokens revoked successfully",
+        "revokeAllFailed": "Failed to revoke all tokens"
+      },
+      "sessions": {
+        "title": "User Sessions",
+        "activeSessions": "Active Sessions",
+        "activeStates": "Active States"
+      },
+      "errors": {
+        "loadFailed": "Failed to load authentication data"
+      }
+    },
+    "mfa": {
+      "title": "Multi-Factor Authentication",
+      "description": "Secure your account with an additional layer of protection",
+      "enabled": "MFA Enabled",
+      "disabled": "MFA Disabled",
+      "setupPending": "Setup Pending",
+      "enabledProviders": "Enabled Providers",
+      "backupCodesRemaining": "{count} backup codes remaining",
+      "viewBackupCodes": "View Backup Codes",
+      "totp": {
+        "title": "Authenticator App (TOTP)",
+        "description": "Use an authenticator app like Google Authenticator or Authy to generate verification codes",
+        "setup": "Setup Authenticator",
+        "scanQR": "Scan QR Code",
+        "manualEntry": "Manual entry",
+        "verify": "Verify Setup",
+        "enterCode": "Enter 6-digit code",
+        "confirm": "Confirm Setup",
+        "setupSuccess": "TOTP setup completed successfully",
+        "setupFailed": "Failed to setup TOTP",
+        "confirmFailed": "Failed to confirm TOTP setup"
+      },
+      "providers": {
+        "TOTP": "Authenticator App",
+        "SMS": "SMS",
+        "EMAIL": "Email"
+      },
+      "management": {
+        "title": "MFA Management",
+        "generateBackupCodes": "Generate New Backup Codes",
+        "disable": "Disable MFA"
+      },
+      "backupCodes": {
+        "title": "Backup Codes",
+        "warning": "Save these backup codes in a safe place. Each code can only be used once.",
+        "download": "Download Codes",
+        "generated": "New backup codes generated",
+        "generateFailed": "Failed to generate backup codes"
+      },
+      "disable": {
+        "title": "Disable MFA",
+        "warning": "Disabling MFA will make your account less secure. Are you sure you want to continue?",
+        "confirm": "Yes, Disable MFA",
+        "success": "MFA disabled successfully",
+        "failed": "Failed to disable MFA"
+      },
+      "errors": {
+        "loadFailed": "Failed to load MFA status"
+      }
+    },
+    "cluster": {
+      "title": "Cluster Management",
+      "description": "Monitor and manage your DataFlare cluster nodes and configuration",
+      "overview": {
+        "title": "Cluster Overview",
+        "totalNodes": "Total Nodes",
+        "healthyNodes": "Healthy Nodes",
+        "unhealthyNodes": "Unhealthy Nodes",
+        "activeExecutions": "Active Executions",
+        "averageLoad": "Average Load"
+      },
+      "nodes": {
+        "title": "Cluster Nodes",
+        "host": "Host",
+        "roles": "Roles",
+        "cpu": "CPU",
+        "memory": "Memory",
+        "disk": "Disk",
+        "executions": "Executions",
+        "details": "Details",
+        "drain": "Drain",
+        "drainConfirm": "Are you sure you want to drain node {nodeName}? It will stop accepting new tasks.",
+        "drainSuccess": "Node drained successfully",
+        "drainFailed": "Failed to drain node",
+        "status": {
+          "starting": "Starting",
+          "healthy": "Healthy",
+          "unhealthy": "Unhealthy",
+          "draining": "Draining",
+          "offline": "Offline",
+          "failed": "Failed",
+          "maintenance": "Maintenance"
+        },
+        "roles": {
+          "executor": "Executor",
+          "scheduler": "Scheduler",
+          "webserver": "Web Server",
+          "coordinator": "Coordinator",
+          "indexer": "Indexer"
+        },
+        "basicInfo": "Basic Information",
+        "nodeId": "Node ID",
+        "clusterId": "Cluster ID",
+        "capabilities": "Capabilities",
+        "cpuCores": "CPU Cores",
+        "totalMemory": "Total Memory",
+        "availableMemory": "Available Memory",
+        "maxExecutions": "Max Executions",
+        "health": "Health Status",
+        "version": "Version Information",
+        "dataFlareVersion": "DataFlare Version",
+        "buildTimestamp": "Build Timestamp",
+        "gitCommit": "Git Commit"
+      },
+      "loadBalancing": {
+        "title": "Load Balancing Configuration",
+        "algorithm": "Algorithm",
+        "sessionAffinity": "Session Affinity",
+        "update": "Update Configuration",
+        "updateSuccess": "Load balancing configuration updated successfully",
+        "updateFailed": "Failed to update load balancing configuration",
+        "algorithms": {
+          "roundRobin": "Round Robin",
+          "leastConnections": "Least Connections",
+          "weightedRoundRobin": "Weighted Round Robin",
+          "random": "Random"
+        }
+      },
+      "errors": {
+        "loadFailed": "Failed to load cluster data"
+      }
+    }
   }
 }
