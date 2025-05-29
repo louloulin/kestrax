@@ -14,6 +14,11 @@ import ViewDashboardVariantOutline from "vue-material-design-icons/ViewDashboard
 import Connection from "vue-material-design-icons/Connection.vue";
 import DotsSquare from "vue-material-design-icons/DotsSquare.vue";
 import DatabaseOutline from "vue-material-design-icons/DatabaseOutline.vue";
+import AccountMultiple from "vue-material-design-icons/AccountMultiple.vue";
+import Security from "vue-material-design-icons/Security.vue";
+import OfficeBuilding from "vue-material-design-icons/OfficeBuilding.vue";
+import MonitorDashboard from "vue-material-design-icons/MonitorDashboard.vue";
+import FileDocumentOutline from "vue-material-design-icons/FileDocumentOutline.vue";
 
 export function useLeftMenu() {
     const {t} = useI18n({useScope: "global"});
@@ -148,6 +153,110 @@ export function useLeftMenu() {
                 title: t("plugins.names"),
                 icon: {
                     element: shallowRef(Connection),
+                    class: "menu-icon",
+                },
+            },
+            {
+                title: t("rbac.title"),
+                routes: routeStartWith("rbac"),
+                icon: {
+                    element: shallowRef(AccountMultiple),
+                    class: "menu-icon",
+                },
+                child: [
+                    {
+                        href: {name: "rbac/users"},
+                        routes: routeStartWith("rbac/users"),
+                        title: t("rbac.users"),
+                    },
+                    {
+                        href: {name: "rbac/roles"},
+                        routes: routeStartWith("rbac/roles"),
+                        title: t("rbac.roles"),
+                    },
+                    {
+                        href: {name: "rbac/groups"},
+                        routes: routeStartWith("rbac/groups"),
+                        title: t("rbac.groups"),
+                    },
+                    {
+                        href: {name: "rbac/bindings"},
+                        routes: routeStartWith("rbac/bindings"),
+                        title: t("rbac.bindings"),
+                    },
+                ],
+            },
+            {
+                title: t("auth.title"),
+                routes: routeStartWith("auth"),
+                icon: {
+                    element: shallowRef(Security),
+                    class: "menu-icon",
+                },
+                child: [
+                    {
+                        href: {name: "auth/sso"},
+                        routes: routeStartWith("auth/sso"),
+                        title: t("auth.sso"),
+                    },
+                    {
+                        href: {name: "auth/mfa"},
+                        routes: routeStartWith("auth/mfa"),
+                        title: t("auth.mfa"),
+                    },
+                    {
+                        href: {name: "auth/tokens"},
+                        routes: routeStartWith("auth/tokens"),
+                        title: t("auth.tokens"),
+                    },
+                ],
+            },
+            {
+                title: t("tenants.title"),
+                routes: routeStartWith("tenants"),
+                icon: {
+                    element: shallowRef(OfficeBuilding),
+                    class: "menu-icon",
+                },
+                child: [
+                    {
+                        href: {name: "tenants/list"},
+                        routes: routeStartWith("tenants/list"),
+                        title: t("tenants.management"),
+                    },
+                    {
+                        href: {name: "tenants/dashboard"},
+                        routes: routeStartWith("tenants/dashboard"),
+                        title: t("tenants.dashboard"),
+                    },
+                ],
+            },
+            {
+                title: t("monitoring.title"),
+                routes: routeStartWith("monitoring"),
+                icon: {
+                    element: shallowRef(MonitorDashboard),
+                    class: "menu-icon",
+                },
+                child: [
+                    {
+                        href: {name: "monitoring/system"},
+                        routes: routeStartWith("monitoring/system"),
+                        title: t("monitoring.system"),
+                    },
+                    {
+                        href: {name: "monitoring/custom"},
+                        routes: routeStartWith("monitoring/custom"),
+                        title: t("monitoring.custom"),
+                    },
+                ],
+            },
+            {
+                href: {name: "audit/logs"},
+                routes: routeStartWith("audit"),
+                title: t("audit.title"),
+                icon: {
+                    element: shallowRef(FileDocumentOutline),
                     class: "menu-icon",
                 },
             },

@@ -58,6 +58,27 @@ export default [
     {name: "admin/triggers", path: "/:tenant?/admin/triggers", component: () => import("../components/admin/Triggers.vue")},
     {name: "admin/stats", path: "/:tenant?/admin/stats", component: () => import("override/components/admin/stats/Stats.vue")},
 
+    // Temporarily disabled enterprise routes for testing
+    // //RBAC Management
+    // {name: "rbac/users", path: "/:tenant?/rbac/users", component: () => import("../components/rbac/UserManagement.vue")},
+    // {name: "rbac/roles", path: "/:tenant?/rbac/roles", component: () => import("../components/rbac/RoleManagement.vue")},
+    // {name: "rbac/groups", path: "/:tenant?/rbac/groups", component: () => import("../components/rbac/GroupManagement.vue")},
+    // {name: "rbac/bindings", path: "/:tenant?/rbac/bindings", component: () => import("../components/rbac/BindingManagement.vue")},
+
+    // //Enterprise Authentication
+    // {name: "auth/sso", path: "/:tenant?/auth/sso", component: () => import("../components/auth/SSOConfiguration.vue")},
+    // {name: "auth/mfa", path: "/:tenant?/auth/mfa", component: () => import("../components/auth/MFAManagement.vue")},
+    // {name: "auth/tokens", path: "/:tenant?/auth/tokens", component: () => import("../components/auth/TokenManagement.vue")},
+
+    // //Multi-Tenant Management
+    // {name: "tenants/list", path: "/:tenant?/tenants", component: () => import("../components/tenants/TenantManagement.vue")},
+    // {name: "tenants/dashboard", path: "/:tenant?/tenants/dashboard", component: () => import("../components/tenants/TenantDashboard.vue")},
+
+    // //Monitoring & Audit
+    // {name: "monitoring/system", path: "/:tenant?/monitoring/system", component: () => import("../components/monitoring/SystemDashboard.vue")},
+    // {name: "monitoring/custom", path: "/:tenant?/monitoring/custom", component: () => import("../components/monitoring/CustomDashboard.vue")},
+    // {name: "audit/logs", path: "/:tenant?/audit/logs", component: () => import("../components/audit/AuditLogViewer.vue")},
+
     //Errors
     {name: "errors/404-wildcard", path: "/:pathMatch(.*)", component: Errors, props: {code: 404}},
 ];
