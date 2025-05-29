@@ -1,7 +1,6 @@
 package io.kestra.webserver.filters;
 
 import io.kestra.core.tenant.TenantContext;
-import io.micronaut.core.order.Ordered;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -11,6 +10,7 @@ import io.micronaut.http.filter.HttpServerFilter;
 import io.micronaut.http.filter.ServerFilterChain;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -21,18 +21,18 @@ import java.util.regex.Pattern;
  */
 @Filter("/**")
 @Slf4j
-public class TenantRoutingFilter implements HttpServerFilter, Ordered {
-    
+public class TenantRoutingFilter implements HttpServerFilter {
+
     private static final int FILTER_ORDER = -100; // Execute early in the filter chain
-    
+
     // Pattern to extract tenant ID from various URL formats
     private static final Pattern TENANT_PATH_PATTERN = Pattern.compile("^/api/v\\d+/tenant/([a-z0-9][a-z0-9-_.]*[a-z0-9])/.*");
     private static final Pattern TENANT_SUBDOMAIN_PATTERN = Pattern.compile("^([a-z0-9][a-z0-9-_.]*[a-z0-9])\\..*");
-    
+
     // Tenant header names
     private static final String TENANT_HEADER = "X-Tenant-ID";
     private static final String TENANT_CONTEXT_HEADER = "X-Tenant-Context";
-    
+
     // Paths that don't require tenant context
     private static final String[] TENANT_EXEMPT_PATHS = {
         "/health",
@@ -45,53 +45,53 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         "/assets",
         "/favicon.ico"
     };
-    
+
     @Override
     public int getOrder() {
         return FILTER_ORDER;
     }
-    
+
     @Override
     public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
         String path = request.getPath();
         String method = request.getMethod().name();
-        
+
         log.debug("Processing request: {} {}", method, path);
-        
+
         // Skip tenant processing for exempt paths
         if (isExemptPath(path)) {
             log.debug("Skipping tenant processing for exempt path: {}", path);
             return chain.proceed(request);
         }
-        
+
         try {
             // Extract tenant ID from request
             Optional<String> tenantId = extractTenantId(request);
-            
+
             if (tenantId.isEmpty()) {
                 log.warn("No tenant ID found in request: {} {}", method, path);
                 return createErrorResponse(HttpStatus.BAD_REQUEST, "Tenant ID is required");
             }
-            
+
             String tenant = tenantId.get();
             log.debug("Extracted tenant ID: {}", tenant);
-            
+
             // Validate tenant ID format
             if (!isValidTenantId(tenant)) {
                 log.warn("Invalid tenant ID format: {}", tenant);
                 return createErrorResponse(HttpStatus.BAD_REQUEST, "Invalid tenant ID format");
             }
-            
+
             // Set tenant context for the request
             TenantContext.setTenant(tenant);
-            
+
             // Add tenant information to response headers
-            return chain.proceed(request)
+            return Mono.from(chain.proceed(request))
                 .map(response -> {
                     response.header(TENANT_CONTEXT_HEADER, tenant);
                     return response;
                 });
-                
+
         } catch (Exception e) {
             log.error("Error processing tenant routing for request: {} {}", method, path, e);
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
@@ -100,7 +100,7 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
             TenantContext.clear();
         }
     }
-    
+
     /**
      * Extract tenant ID from various sources in the request
      */
@@ -110,28 +110,28 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         if (pathTenant.isPresent()) {
             return pathTenant;
         }
-        
+
         // 2. Try to extract from HTTP header
-        Optional<String> headerTenant = request.getHeaders().get(TENANT_HEADER);
-        if (headerTenant.isPresent() && !headerTenant.get().trim().isEmpty()) {
-            return headerTenant;
+        String headerTenant = request.getHeaders().get(TENANT_HEADER);
+        if (headerTenant != null && !headerTenant.trim().isEmpty()) {
+            return Optional.of(headerTenant);
         }
-        
+
         // 3. Try to extract from subdomain (e.g., tenant1.dataflare.io)
         Optional<String> subdomainTenant = extractTenantFromSubdomain(request);
         if (subdomainTenant.isPresent()) {
             return subdomainTenant;
         }
-        
+
         // 4. Try to extract from query parameter
-        Optional<String> queryTenant = request.getParameters().get("tenant");
-        if (queryTenant.isPresent() && !queryTenant.get().trim().isEmpty()) {
-            return queryTenant;
+        String queryTenant = request.getParameters().get("tenant");
+        if (queryTenant != null && !queryTenant.trim().isEmpty()) {
+            return Optional.of(queryTenant);
         }
-        
+
         return Optional.empty();
     }
-    
+
     /**
      * Extract tenant ID from URL path
      */
@@ -142,38 +142,38 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         }
         return Optional.empty();
     }
-    
+
     /**
      * Extract tenant ID from subdomain
      */
     private Optional<String> extractTenantFromSubdomain(HttpRequest<?> request) {
-        Optional<String> host = request.getHeaders().get("Host");
-        if (host.isEmpty()) {
+        String host = request.getHeaders().get("Host");
+        if (host == null) {
             return Optional.empty();
         }
-        
-        String hostname = host.get().toLowerCase();
-        
+
+        String hostname = host.toLowerCase();
+
         // Skip localhost and IP addresses
         if (hostname.startsWith("localhost") || hostname.matches("^\\d+\\.\\d+\\.\\d+\\.\\d+.*")) {
             return Optional.empty();
         }
-        
+
         Matcher matcher = TENANT_SUBDOMAIN_PATTERN.matcher(hostname);
         if (matcher.matches()) {
             String subdomain = matcher.group(1);
-            
+
             // Skip common subdomains that are not tenant IDs
             if (isReservedSubdomain(subdomain)) {
                 return Optional.empty();
             }
-            
+
             return Optional.of(subdomain);
         }
-        
+
         return Optional.empty();
     }
-    
+
     /**
      * Check if the path is exempt from tenant processing
      */
@@ -185,7 +185,7 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         }
         return false;
     }
-    
+
     /**
      * Validate tenant ID format
      */
@@ -193,17 +193,17 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         if (tenantId == null || tenantId.trim().isEmpty()) {
             return false;
         }
-        
+
         // Check length constraints
         if (tenantId.length() < 2 || tenantId.length() > 63) {
             return false;
         }
-        
+
         // Check format: lowercase alphanumeric with hyphens, dots, and underscores
         // Must start and end with alphanumeric character
         return tenantId.matches("^[a-z0-9][a-z0-9-_.]*[a-z0-9]$");
     }
-    
+
     /**
      * Check if subdomain is reserved and should not be treated as tenant ID
      */
@@ -216,16 +216,16 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
             "cdn", "static", "assets", "media", "images",
             "docs", "help", "support", "status", "health"
         };
-        
+
         for (String reservedName : reserved) {
             if (reservedName.equals(subdomain)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Create error response
      */
@@ -233,9 +233,9 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         MutableHttpResponse<Object> response = HttpResponse.status(status);
         response.body(new ErrorResponse(status.getCode(), message));
         response.contentType("application/json");
-        return Publisher.just(response);
+        return Mono.just(response);
     }
-    
+
     /**
      * Error response model
      */
@@ -243,7 +243,7 @@ public class TenantRoutingFilter implements HttpServerFilter, Ordered {
         public final int code;
         public final String message;
         public final long timestamp;
-        
+
         public ErrorResponse(int code, String message) {
             this.code = code;
             this.message = message;

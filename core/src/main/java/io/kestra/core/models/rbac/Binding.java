@@ -22,52 +22,80 @@ import java.util.Set;
 @Introspected
 @With
 public class Binding implements TenantInterface {
-    
+
+    /**
+     * Enumeration of subject types for role bindings
+     */
+    public enum SubjectType {
+        USER,
+        GROUP
+    }
+
     @NotBlank
     String id;
-    
+
     @NotBlank
     String tenantId;
-    
+
     @NotBlank
     String name;
-    
+
     String description;
-    
+
     /**
      * The role being bound
      */
     @NotBlank
     String roleId;
-    
+
+    /**
+     * Alternative role reference for compatibility
+     */
+    String roleRef;
+
+    /**
+     * Subject type for the binding
+     */
+    SubjectType subjectType;
+
+    /**
+     * Subject name for the binding
+     */
+    String subjectName;
+
+    /**
+     * Scope of the binding (global, namespace, etc.)
+     */
+    String scope;
+
     /**
      * Users bound to this role
      */
     @NotNull
     @Builder.Default
     Set<String> userIds = Set.of();
-    
+
     /**
      * Groups bound to this role
      */
     @NotNull
     @Builder.Default
     Set<String> groupIds = Set.of();
-    
+
     /**
      * Optional namespace scope - if null, binding applies to all namespaces
      */
     String namespace;
-    
+
     @NotNull
     @Builder.Default
     Instant createdAt = Instant.now();
-    
+
     Instant updatedAt;
-    
+
     @Builder.Default
     boolean system = false;
-    
+
     /**
      * Add user to binding
      */
@@ -76,7 +104,7 @@ public class Binding implements TenantInterface {
         newUsers.add(userId);
         return this.withUserIds(newUsers).withUpdatedAt(Instant.now());
     }
-    
+
     /**
      * Remove user from binding
      */
@@ -85,7 +113,7 @@ public class Binding implements TenantInterface {
         newUsers.remove(userId);
         return this.withUserIds(newUsers).withUpdatedAt(Instant.now());
     }
-    
+
     /**
      * Add group to binding
      */
@@ -94,7 +122,7 @@ public class Binding implements TenantInterface {
         newGroups.add(groupId);
         return this.withGroupIds(newGroups).withUpdatedAt(Instant.now());
     }
-    
+
     /**
      * Remove group from binding
      */
@@ -103,89 +131,89 @@ public class Binding implements TenantInterface {
         newGroups.remove(groupId);
         return this.withGroupIds(newGroups).withUpdatedAt(Instant.now());
     }
-    
+
     /**
      * Check if binding contains user
      */
     public boolean containsUser(String userId) {
         return userIds.contains(userId);
     }
-    
+
     /**
      * Check if binding contains group
      */
     public boolean containsGroup(String groupId) {
         return groupIds.contains(groupId);
     }
-    
+
     /**
      * Check if binding applies to namespace
      */
     public boolean appliesTo(String namespace) {
         return this.namespace == null || this.namespace.equals(namespace);
     }
-    
+
     /**
      * Check if this is a global binding (applies to all namespaces)
      */
     public boolean isGlobal() {
         return namespace == null;
     }
-    
+
     /**
      * Check if this is a namespace-scoped binding
      */
     public boolean isNamespaceScoped() {
         return namespace != null;
     }
-    
+
     /**
      * Check if this is a system binding (cannot be deleted)
      */
     public boolean isSystemBinding() {
         return system;
     }
-    
+
     /**
      * Get number of users in binding
      */
     public int getUserCount() {
         return userIds.size();
     }
-    
+
     /**
      * Get number of groups in binding
      */
     public int getGroupCount() {
         return groupIds.size();
     }
-    
+
     /**
      * Get total number of subjects (users + groups) in binding
      */
     public int getSubjectCount() {
         return userIds.size() + groupIds.size();
     }
-    
+
     /**
      * Check if binding has any subjects
      */
     public boolean hasSubjects() {
         return !userIds.isEmpty() || !groupIds.isEmpty();
     }
-    
+
     /**
      * Create a copy with updated timestamp
      */
     public Binding touch() {
         return this.withUpdatedAt(Instant.now());
     }
-    
+
     /**
      * Predefined system bindings
      */
     public static class SystemBindings {
-        
+
         /**
          * Create global admin binding
          */
@@ -201,7 +229,7 @@ public class Binding implements TenantInterface {
                 .system(true)
                 .build();
         }
-        
+
         /**
          * Create default developers binding for a namespace
          */
@@ -217,7 +245,7 @@ public class Binding implements TenantInterface {
                 .system(true)
                 .build();
         }
-        
+
         /**
          * Create default viewers binding for a namespace
          */
