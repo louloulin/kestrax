@@ -34,24 +34,24 @@ class RoleServiceTest {
 
     @Test
     void testFindRoleById() {
-        Optional<Role> adminRole = roleService.findById("admin");
+        Optional<Role> adminRole = roleService.findById("ADMIN");
 
         assertTrue(adminRole.isPresent());
-        assertEquals("admin", adminRole.get().getName());
+        assertEquals("Administrator", adminRole.get().getName());
     }
 
     @Test
     void testSearchRoles() {
-        PagedResults<Role> results = roleService.findRoles("admin", 0, 10, "default");
+        PagedResults<Role> results = roleService.findRoles("Administrator", 0, 10, "default");
 
         assertNotNull(results);
         assertTrue(results.getResults().stream()
-            .anyMatch(role -> role.getName().contains("admin")));
+            .anyMatch(role -> role.getName().contains("Administrator")));
     }
 
     @Test
     void testGetRolePermissions() {
-        var permissions = roleService.getRolePermissions("admin");
+        var permissions = roleService.getRolePermissions("ADMIN");
 
         assertNotNull(permissions);
         assertFalse(permissions.isEmpty());
@@ -60,10 +60,10 @@ class RoleServiceTest {
     @Test
     void testHasPermission() {
         // Admin should have all permissions
-        assertTrue(roleService.hasPermission("admin", "FLOW_READ"));
+        assertTrue(roleService.hasPermission("ADMIN", "flow:read"));
 
         // Viewer should have read permissions
-        assertTrue(roleService.hasPermission("viewer", "FLOW_READ"));
+        assertTrue(roleService.hasPermission("VIEWER", "flow:read"));
     }
 
     @Test
