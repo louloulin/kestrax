@@ -1,0 +1,267 @@
+package io.kestra.blueprint.controller
+
+import io.kestra.blueprint.dto.*
+import io.kestra.blueprint.models.BlueprintVersion
+import io.kestra.blueprint.security.RequirePermission
+import io.kestra.blueprint.service.BlueprintService
+import io.micronaut.data.model.Page
+import io.micronaut.data.model.Pageable
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
+import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
+
+/**
+ * 蓝图控制器
+ * 基于Kotlin + Micronaut实现的RESTful API
+ */
+@Controller("/api/v1/blueprints")
+@Secured(SecurityRule.IS_AUTHENTICATED)
+@Validated
+@Tag(name = "Blueprint", description = "蓝图管理API")
+class BlueprintController(
+    private val blueprintService: BlueprintService
+) {
+    
+    /**
+     * 获取蓝图列表
+     */
+    @Get
+    @RequirePermission(["blueprint:read"])
+    @Operation(
+        summary = "获取蓝图列表",
+        description = "支持分页、搜索和过滤的蓝图列表查询"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "成功获取蓝图列表",
+            content = [Content(schema = Schema(implementation = BlueprintListResponse::class))]
+        ),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun getBlueprints(
+        @Parameter(description = "页码", example = "0")
+        @QueryValue(defaultValue = "0") @Min(0) page: Int,
+        
+        @Parameter(description = "每页大小", example = "20")
+        @QueryValue(defaultValue = "20") @Min(1) size: Int,
+        
+        @Parameter(description = "搜索关键词")
+        @QueryValue keyword: String?,
+        
+        @Parameter(description = "标签过滤")
+        @QueryValue tags: List<String>?,
+        
+        @Parameter(description = "类型过滤")
+        @QueryValue kind: String?,
+        
+        @Parameter(description = "是否公开")
+        @QueryValue isPublic: Boolean?,
+        
+        @Parameter(description = "是否为模板")
+        @QueryValue isTemplate: Boolean?,
+        
+        @Parameter(description = "创建者过滤")
+        @QueryValue createdBy: String?
+    ): HttpResponse<BlueprintListResponse> {
+        val pageable = Pageable.from(page, size)
+        val response = blueprintService.getBlueprints(
+            pageable = pageable,
+            keyword = keyword,
+            tags = tags,
+            kind = kind,
+            isPublic = isPublic,
+            isTemplate = isTemplate,
+            createdBy = createdBy
+        )
+        return HttpResponse.ok(response)
+    }
+    
+    /**
+     * 根据ID获取蓝图
+     */
+    @Get("/{id}")
+    @RequirePermission(["blueprint:read"])
+    @Operation(
+        summary = "获取蓝图详情",
+        description = "根据ID获取指定蓝图的详细信息"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "成功获取蓝图详情",
+            content = [Content(schema = Schema(implementation = BlueprintDto::class))]
+        ),
+        ApiResponse(responseCode = "404", description = "蓝图不存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun getBlueprintById(
+        @Parameter(description = "蓝图ID", required = true)
+        @PathVariable @NotBlank id: String
+    ): HttpResponse<BlueprintDto> {
+        val blueprint = blueprintService.getBlueprintById(id)
+        return HttpResponse.ok(blueprint)
+    }
+    
+    /**
+     * 创建蓝图
+     */
+    @Post
+    @RequirePermission(["blueprint:write"])
+    @Operation(
+        summary = "创建蓝图",
+        description = "创建新的蓝图"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "201",
+            description = "成功创建蓝图",
+            content = [Content(schema = Schema(implementation = BlueprintDto::class))]
+        ),
+        ApiResponse(responseCode = "400", description = "请求参数错误"),
+        ApiResponse(responseCode = "409", description = "蓝图标题已存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun createBlueprint(
+        @Parameter(description = "创建蓝图请求", required = true)
+        @Body @Valid request: CreateBlueprintRequest
+    ): HttpResponse<BlueprintDto> {
+        val blueprint = blueprintService.createBlueprint(request)
+        return HttpResponse.status<BlueprintDto>(HttpStatus.CREATED).body(blueprint)
+    }
+    
+    /**
+     * 更新蓝图
+     */
+    @Put("/{id}")
+    @RequirePermission(["blueprint:write"])
+    @Operation(
+        summary = "更新蓝图",
+        description = "更新指定ID的蓝图信息"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "成功更新蓝图",
+            content = [Content(schema = Schema(implementation = BlueprintDto::class))]
+        ),
+        ApiResponse(responseCode = "400", description = "请求参数错误"),
+        ApiResponse(responseCode = "404", description = "蓝图不存在"),
+        ApiResponse(responseCode = "409", description = "蓝图标题已存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun updateBlueprint(
+        @Parameter(description = "蓝图ID", required = true)
+        @PathVariable @NotBlank id: String,
+        
+        @Parameter(description = "更新蓝图请求", required = true)
+        @Body @Valid request: UpdateBlueprintRequest
+    ): HttpResponse<BlueprintDto> {
+        val blueprint = blueprintService.updateBlueprint(id, request)
+        return HttpResponse.ok(blueprint)
+    }
+    
+    /**
+     * 删除蓝图
+     */
+    @Delete("/{id}")
+    @RequirePermission(["blueprint:delete"])
+    @Operation(
+        summary = "删除蓝图",
+        description = "删除指定ID的蓝图"
+    )
+    @ApiResponses(
+        ApiResponse(responseCode = "204", description = "成功删除蓝图"),
+        ApiResponse(responseCode = "404", description = "蓝图不存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun deleteBlueprint(
+        @Parameter(description = "蓝图ID", required = true)
+        @PathVariable @NotBlank id: String
+    ): HttpResponse<Void> {
+        blueprintService.deleteBlueprint(id)
+        return HttpResponse.noContent()
+    }
+    
+    /**
+     * 获取蓝图版本列表
+     */
+    @Get("/{id}/versions")
+    @RequirePermission(["blueprint:read"])
+    @Operation(
+        summary = "获取蓝图版本列表",
+        description = "获取指定蓝图的所有版本列表"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "成功获取版本列表",
+            content = [Content(schema = Schema(implementation = Page::class))]
+        ),
+        ApiResponse(responseCode = "404", description = "蓝图不存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun getBlueprintVersions(
+        @Parameter(description = "蓝图ID", required = true)
+        @PathVariable @NotBlank id: String,
+        
+        @Parameter(description = "页码", example = "0")
+        @QueryValue(defaultValue = "0") @Min(0) page: Int,
+        
+        @Parameter(description = "每页大小", example = "20")
+        @QueryValue(defaultValue = "20") @Min(1) size: Int
+    ): HttpResponse<Page<BlueprintVersion>> {
+        val pageable = Pageable.from(page, size)
+        val versions = blueprintService.getBlueprintVersions(id, pageable)
+        return HttpResponse.ok(versions)
+    }
+    
+    /**
+     * 获取指定版本的蓝图
+     */
+    @Get("/{id}/versions/{versionNumber}")
+    @RequirePermission(["blueprint:read"])
+    @Operation(
+        summary = "获取指定版本的蓝图",
+        description = "获取蓝图的指定版本内容"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "成功获取蓝图版本",
+            content = [Content(schema = Schema(implementation = BlueprintVersion::class))]
+        ),
+        ApiResponse(responseCode = "404", description = "蓝图或版本不存在"),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足")
+    )
+    fun getBlueprintVersion(
+        @Parameter(description = "蓝图ID", required = true)
+        @PathVariable @NotBlank id: String,
+        
+        @Parameter(description = "版本号", required = true)
+        @PathVariable @Min(1) versionNumber: Int
+    ): HttpResponse<BlueprintVersion> {
+        val version = blueprintService.getBlueprintVersion(id, versionNumber)
+        return HttpResponse.ok(version)
+    }
+}

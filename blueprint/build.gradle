@@ -1,0 +1,96 @@
+plugins {
+    id "java-library"
+    id "org.jetbrains.kotlin.jvm"
+    id "org.jetbrains.kotlin.kapt"
+    id "org.jetbrains.kotlin.plugin.allopen"
+    id "io.micronaut.library"
+}
+
+dependencies {
+    // Micronaut Core
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut:micronaut-jackson-databind"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut:micronaut-runtime"
+    
+    // Micronaut Security
+    implementation "io.micronaut.security:micronaut-security"
+    implementation "io.micronaut.security:micronaut-security-jwt"
+    
+    // Micronaut Data
+    implementation "io.micronaut.data:micronaut-data-hibernate-jpa"
+    implementation "io.micronaut.sql:micronaut-hibernate-jpa"
+    implementation "io.micronaut.sql:micronaut-jdbc-hikari"
+    
+    // Micronaut Cache
+    implementation "io.micronaut.cache:micronaut-cache-caffeine"
+    
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor"
+    
+    // Database
+    runtimeOnly "com.h2database:h2"
+    runtimeOnly "org.postgresql:postgresql"
+    
+    // Template Engine
+    implementation "io.pebbletemplates:pebble:3.2.2"
+    
+    // Validation
+    implementation "jakarta.validation:jakarta.validation-api"
+    
+    // Metrics
+    implementation "io.micronaut.micrometer:micronaut-micrometer-core"
+    implementation "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus"
+    
+    // Logging
+    implementation "ch.qos.logback:logback-classic"
+    
+    // Project dependencies
+    implementation project(":core")
+    implementation project(":model")
+    
+    // Test dependencies
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.mockito.kotlin:mockito-kotlin"
+    testImplementation "io.micronaut:micronaut-http-client"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:postgresql"
+    
+    // Annotation processors
+    kapt "io.micronaut:micronaut-http-validation"
+    kapt "io.micronaut.data:micronaut-data-processor"
+    kapt "io.micronaut.security:micronaut-security-annotations"
+}
+
+allOpen {
+    annotation("io.micronaut.aop.Around")
+    annotation("jakarta.inject.Singleton")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+        javaParameters = true
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+        javaParameters = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
