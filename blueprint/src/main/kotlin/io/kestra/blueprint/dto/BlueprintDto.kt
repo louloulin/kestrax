@@ -139,3 +139,38 @@ data class BlueprintListResponse(
     @Schema(description = "每页大小")
     val size: Int
 )
+
+/**
+ * 同步蓝图响应对象
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "同步蓝图响应对象")
+data class SyncBlueprintResponse(
+    @Schema(description = "是否成功", example = "true")
+    val success: Boolean,
+    
+    @Schema(description = "响应消息", example = "官网蓝图同步完成")
+    val message: String,
+    
+    @Schema(description = "成功同步数量", example = "5")
+    val syncedCount: Int,
+    
+    @Schema(description = "失败数量", example = "0")
+    val failedCount: Int,
+    
+    @Schema(description = "失败的蓝图信息")
+    val failedBlueprints: List<FailedBlueprintInfo>
+)
+
+/**
+ * 失败的蓝图信息
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "失败的蓝图信息")
+data class FailedBlueprintInfo(
+    @Schema(description = "蓝图名称", example = "business-process")
+    val name: String,
+    
+    @Schema(description = "失败原因", example = "网络连接超时")
+    val reason: String
+)

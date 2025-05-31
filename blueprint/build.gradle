@@ -1,17 +1,40 @@
 plugins {
-    id "java-library"
-    id "org.jetbrains.kotlin.jvm"
-    id "org.jetbrains.kotlin.kapt"
-    id "org.jetbrains.kotlin.plugin.allopen"
-    id "io.micronaut.library"
+    id 'java-library'
+    id "idea"
+    id "com.gradleup.shadow" version "8.3.6"
+    id "application"
 }
 
+application {
+    mainClass = "io.kestra.blueprint.Application"
+}
+
+configurations {
+    micronaut
+    tests
+    implementation.extendsFrom(micronaut)
+}
+
+tasks.register('copyGradleProperties', Copy) {
+    group = "build"
+    shouldRunAfter compileJava
+
+    from '../gradle.properties'
+    into 'src/main/resources'
+}
+
+processResources.dependsOn copyGradleProperties
+
 dependencies {
+    // Kestra
+    api project(':model')
+    api project(':core')
+    annotationProcessor project(':processor')
+    
     // Micronaut Core
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-jackson-databind"
-    implementation "io.micronaut:micronaut-validation"
     implementation "io.micronaut:micronaut-runtime"
     
     // Micronaut Security
@@ -24,17 +47,8 @@ dependencies {
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
     
     // Micronaut Cache
+    implementation "io.micronaut.cache:micronaut-cache-core"
     implementation "io.micronaut.cache:micronaut-cache-caffeine"
-    
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor"
-    
-    // Database
-    runtimeOnly "com.h2database:h2"
-    runtimeOnly "org.postgresql:postgresql"
     
     // Template Engine
     implementation "io.pebbletemplates:pebble:3.2.2"
@@ -49,9 +63,9 @@ dependencies {
     // Logging
     implementation "ch.qos.logback:logback-classic"
     
-    // Project dependencies
-    implementation project(":core")
-    implementation project(":model")
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
     
     // Test dependencies
     testImplementation "io.micronaut.test:micronaut-test-junit5"
@@ -60,37 +74,39 @@ dependencies {
     testImplementation "org.mockito:mockito-core"
     testImplementation "org.mockito.kotlin:mockito-kotlin"
     testImplementation "io.micronaut:micronaut-http-client"
-    testImplementation "org.testcontainers:junit-jupiter"
-    testImplementation "org.testcontainers:postgresql"
     
     // Annotation processors
-    kapt "io.micronaut:micronaut-http-validation"
-    kapt "io.micronaut.data:micronaut-data-processor"
-    kapt "io.micronaut.security:micronaut-security-annotations"
-}
-
-allOpen {
-    annotation("io.micronaut.aop.Around")
-    annotation("jakarta.inject.Singleton")
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-        javaParameters = true
-    }
-}
-
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-        javaParameters = true
-    }
+    annotationProcessor "io.micronaut:micronaut-http-validation"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor"
+    annotationProcessor "io.micronaut.security:micronaut-security-annotations"
+    
+    // Kotlin annotation processing
+    kapt "io.micronaut:micronaut-inject-java:4.8.2"
+    kapt "io.micronaut.validation:micronaut-validation-processor:4.9.0"
 }
 
 test {
     useJUnitPlatform()
+}
+
+// Configure Kotlin compilation to use highest supported JVM target
+// Kotlin 2.0 supports maximum JVM target 22
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "22"  // Use JVM 22 target (highest supported by Kotlin 2.0)
+    }
+}
+
+// Configure KAPT to use same JVM target as Kotlin
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs).configureEach {
+    kotlinOptions {
+        jvmTarget = "22"  // Match Kotlin compilation target
+    }
+}
+
+// Keep Java at version 23 to match dependencies, but set Kotlin to 22
+// This creates a mixed environment but should work for compilation
+java {
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
 }

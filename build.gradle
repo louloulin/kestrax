@@ -18,6 +18,8 @@ plugins {
     id "idea"
     id "com.gradleup.shadow" version "8.3.6"
     id "application"
+    id 'org.jetbrains.kotlin.jvm' version '2.0.0' apply false
+    id 'org.jetbrains.kotlin.kapt' version '2.0.0' apply false
 
     // test
     id "com.adarshr.test-logger" version "4.0.0"
@@ -288,6 +290,12 @@ subprojects {
  **********************************************************************************************************************/
 subprojects {
     if (it.name != 'platform' && it.name != 'jmh-benchmarks') {
+        // Apply Kotlin plugin for blueprint module
+        if (it.name == 'blueprint') {
+            apply plugin: 'org.jetbrains.kotlin.jvm'
+            apply plugin: 'org.jetbrains.kotlin.kapt'
+        }
+        
         dependencies {
             testImplementation platform("io.qameta.allure:allure-bom")
             testImplementation "io.qameta.allure:allure-junit5"

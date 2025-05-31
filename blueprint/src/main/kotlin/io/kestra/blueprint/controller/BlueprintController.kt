@@ -4,6 +4,7 @@ import io.kestra.blueprint.dto.*
 import io.kestra.blueprint.models.BlueprintVersion
 import io.kestra.blueprint.security.RequirePermission
 import io.kestra.blueprint.service.BlueprintService
+import io.kestra.blueprint.service.OfficialBlueprintSyncService
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
@@ -31,8 +32,9 @@ import jakarta.validation.constraints.NotBlank
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Validated
 @Tag(name = "Blueprint", description = "蓝图管理API")
-class BlueprintController(
-    private val blueprintService: BlueprintService
+open class BlueprintController(
+    private val blueprintService: BlueprintService,
+    private val officialBlueprintSyncService: OfficialBlueprintSyncService
 ) {
     
     /**
@@ -53,7 +55,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun getBlueprints(
+    open fun getBlueprints(
         @Parameter(description = "页码", example = "0")
         @QueryValue(defaultValue = "0") @Min(0) page: Int,
         
@@ -110,7 +112,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun getBlueprintById(
+    open fun getBlueprintById(
         @Parameter(description = "蓝图ID", required = true)
         @PathVariable @NotBlank id: String
     ): HttpResponse<BlueprintDto> {
@@ -138,7 +140,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun createBlueprint(
+    open fun createBlueprint(
         @Parameter(description = "创建蓝图请求", required = true)
         @Body @Valid request: CreateBlueprintRequest
     ): HttpResponse<BlueprintDto> {
@@ -167,7 +169,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun updateBlueprint(
+    open fun updateBlueprint(
         @Parameter(description = "蓝图ID", required = true)
         @PathVariable @NotBlank id: String,
         
@@ -193,7 +195,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun deleteBlueprint(
+    open fun deleteBlueprint(
         @Parameter(description = "蓝图ID", required = true)
         @PathVariable @NotBlank id: String
     ): HttpResponse<Void> {
@@ -220,7 +222,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun getBlueprintVersions(
+    open fun getBlueprintVersions(
         @Parameter(description = "蓝图ID", required = true)
         @PathVariable @NotBlank id: String,
         
@@ -254,7 +256,7 @@ class BlueprintController(
         ApiResponse(responseCode = "401", description = "未认证"),
         ApiResponse(responseCode = "403", description = "权限不足")
     )
-    fun getBlueprintVersion(
+    open fun getBlueprintVersion(
         @Parameter(description = "蓝图ID", required = true)
         @PathVariable @NotBlank id: String,
         
@@ -263,5 +265,49 @@ class BlueprintController(
     ): HttpResponse<BlueprintVersion> {
         val version = blueprintService.getBlueprintVersion(id, versionNumber)
         return HttpResponse.ok(version)
+    }
+    
+    /**
+     * 同步官网蓝图
+     */
+    @Post("/sync/official")
+    @RequirePermission(["blueprint:admin"])
+    @Operation(
+        summary = "同步官网蓝图",
+        description = "从Kestra官网同步最新的蓝图模板"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "同步成功",
+            content = [Content(schema = Schema(implementation = SyncBlueprintResponse::class))]
+        ),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足"),
+        ApiResponse(responseCode = "500", description = "同步失败")
+    )
+    open suspend fun syncOfficialBlueprints(): HttpResponse<SyncBlueprintResponse> {
+        return try {
+            val syncResult = officialBlueprintSyncService.syncAllBlueprints()
+            val response = SyncBlueprintResponse(
+                success = true,
+                message = "官网蓝图同步完成",
+                syncedCount = syncResult.successCount,
+                failedCount = syncResult.failureCount,
+                failedBlueprints = syncResult.failedBlueprints.map { 
+                    FailedBlueprintInfo(it.first, it.second ?: "未知错误")
+                }
+            )
+            HttpResponse.ok(response)
+        } catch (e: Exception) {
+            val response = SyncBlueprintResponse(
+                success = false,
+                message = "同步失败: ${e.message}",
+                syncedCount = 0,
+                failedCount = 0,
+                failedBlueprints = emptyList()
+            )
+            HttpResponse.status<SyncBlueprintResponse>(HttpStatus.INTERNAL_SERVER_ERROR).body(response)
+        }
     }
 }

@@ -24,7 +24,7 @@ import java.util.*
  */
 @Singleton
 @Transactional
-class BlueprintService(
+open class BlueprintService(
     private val blueprintRepository: BlueprintRepository,
     private val blueprintVersionRepository: BlueprintVersionRepository,
     private val tenantContext: TenantContext
@@ -36,7 +36,7 @@ class BlueprintService(
      * 获取蓝图列表（支持分页和搜索）
      */
     @Cacheable("blueprints")
-    fun getBlueprints(
+    open fun getBlueprints(
         pageable: Pageable,
         keyword: String? = null,
         tags: List<String>? = null,
@@ -71,7 +71,7 @@ class BlueprintService(
      * 根据ID获取蓝图
      */
     @Cacheable("blueprint")
-    fun getBlueprintById(id: String): BlueprintDto {
+    open fun getBlueprintById(id: String): BlueprintDto {
         val namespaceId = getCurrentNamespaceId()
         val blueprint = blueprintRepository.findByIdAndNamespaceId(id, namespaceId)
             .orElseThrow { HttpStatusException(HttpStatus.NOT_FOUND, "蓝图不存在") }
@@ -83,7 +83,7 @@ class BlueprintService(
      * 创建蓝图
      */
     @CacheInvalidate("blueprints")
-    fun createBlueprint(request: CreateBlueprintRequest): BlueprintDto {
+    open fun createBlueprint(request: CreateBlueprintRequest): BlueprintDto {
         val namespaceId = getCurrentNamespaceId()
         val userId = getCurrentUserId()
         
@@ -119,7 +119,7 @@ class BlueprintService(
      * 更新蓝图
      */
     @CacheInvalidate("blueprint", "blueprints")
-    fun updateBlueprint(id: String, request: UpdateBlueprintRequest): BlueprintDto {
+    open fun updateBlueprint(id: String, request: UpdateBlueprintRequest): BlueprintDto {
         val namespaceId = getCurrentNamespaceId()
         val userId = getCurrentUserId()
         
@@ -162,7 +162,7 @@ class BlueprintService(
      * 删除蓝图
      */
     @CacheInvalidate("blueprint", "blueprints")
-    fun deleteBlueprint(id: String) {
+    open fun deleteBlueprint(id: String) {
         val namespaceId = getCurrentNamespaceId()
         val userId = getCurrentUserId()
         
