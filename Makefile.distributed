@@ -1,0 +1,184 @@
+# DataFlare 分布式部署 Makefile
+# 使用方法: make [target]
+
+.PHONY: help start stop restart status logs clean backup restore scale health
+
+# 默认目标
+.DEFAULT_GOAL := help
+
+# 配置变量
+COMPOSE_FILE := docker-compose-distributed.yml
+PROJECT_NAME := dataflare-distributed
+BACKUP_DIR := ./backups
+
+# 颜色定义
+BLUE := \033[36m
+GREEN := \033[32m
+YELLOW := \033[33m
+RED := \033[31m
+NC := \033[0m
+
+# 帮助信息
+help: ## 显示帮助信息
+	@echo "$(BLUE)DataFlare 分布式部署管理$(NC)"
+	@echo ""
+	@echo "$(GREEN)可用命令:$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(YELLOW)%-15s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@echo ""
+
+# 环境检查
+check-env: ## 检查环境依赖
+	@echo "$(BLUE)检查环境依赖...$(NC)"
+	@command -v docker >/dev/null 2>&1 || { echo "$(RED)错误: Docker 未安装$(NC)"; exit 1; }
+	@command -v docker-compose >/dev/null 2>&1 || { echo "$(RED)错误: Docker Compose 未安装$(NC)"; exit 1; }
+	@test -f $(COMPOSE_FILE) || { echo "$(RED)错误: $(COMPOSE_FILE) 文件不存在$(NC)"; exit 1; }
+	@echo "$(GREEN)环境检查通过$(NC)"
+
+# 创建必要目录
+setup: check-env ## 初始化环境
+	@echo "$(BLUE)初始化环境...$(NC)"
+	@mkdir -p ssl data/postgres data/dataflare-storage data/grafana $(BACKUP_DIR)
+	@chmod 755 ssl data $(BACKUP_DIR)
+	@if [ ! -f .env ]; then cp .env.example .env; echo "$(YELLOW)已创建 .env 文件，请根据需要修改配置$(NC)"; fi
+	@echo "$(GREEN)环境初始化完成$(NC)"
+
+# 启动所有服务
+start: setup ## 启动所有服务
+	@echo "$(BLUE)启动 DataFlare 分布式服务...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d postgres redis
+	@echo "$(BLUE)等待数据库就绪...$(NC)"
+	@sleep 30
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d dataflare-webserver dataflare-executor dataflare-scheduler dataflare-indexer
+	@sleep 20
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d dataflare-worker-1 dataflare-worker-2
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d nginx prometheus grafana
+	@echo "$(GREEN)所有服务已启动$(NC)"
+	@make access-info
+
+# 仅启动核心服务
+start-core: setup ## 启动核心服务（不包括监控）
+	@echo "$(BLUE)启动 DataFlare 核心服务...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d postgres redis
+	@sleep 30
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d dataflare-webserver dataflare-executor dataflare-scheduler dataflare-indexer dataflare-worker-1 dataflare-worker-2
+	@echo "$(GREEN)核心服务已启动$(NC)"
+
+# 停止所有服务
+stop: ## 停止所有服务
+	@echo "$(BLUE)停止所有服务...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down
+	@echo "$(GREEN)所有服务已停止$(NC)"
+
+# 重启服务
+restart: stop start ## 重启所有服务
+
+# 查看服务状态
+status: ## 查看服务状态
+	@echo "$(BLUE)服务状态:$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps
+
+# 健康检查
+health: ## 执行健康检查
+	@echo "$(BLUE)执行健康检查...$(NC)"
+	@echo "$(YELLOW)检查 DataFlare WebServer...$(NC)"
+	@curl -f -s http://localhost:8080/health >/dev/null && echo "$(GREEN)✓ DataFlare WebServer 正常$(NC)" || echo "$(RED)✗ DataFlare WebServer 异常$(NC)"
+	@echo "$(YELLOW)检查 Prometheus...$(NC)"
+	@curl -f -s http://localhost:9090/-/healthy >/dev/null && echo "$(GREEN)✓ Prometheus 正常$(NC)" || echo "$(RED)✗ Prometheus 异常$(NC)"
+	@echo "$(YELLOW)检查 Grafana...$(NC)"
+	@curl -f -s http://localhost:3000/api/health >/dev/null && echo "$(GREEN)✓ Grafana 正常$(NC)" || echo "$(RED)✗ Grafana 异常$(NC)"
+
+# 查看日志
+logs: ## 查看所有服务日志
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f
+
+# 查看特定服务日志
+logs-webserver: ## 查看 WebServer 日志
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f dataflare-webserver
+
+logs-executor: ## 查看 Executor 日志
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f dataflare-executor
+
+logs-scheduler: ## 查看 Scheduler 日志
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f dataflare-scheduler
+
+logs-worker: ## 查看 Worker 日志
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f dataflare-worker-1 dataflare-worker-2
+
+# 扩展 Worker 节点
+scale-workers: ## 扩展 Worker 节点数量 (使用: make scale-workers WORKERS=3)
+	@echo "$(BLUE)扩展 Worker 节点到 $(WORKERS) 个...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d --scale dataflare-worker-2=$(WORKERS)
+	@echo "$(GREEN)Worker 节点扩展完成$(NC)"
+
+# 数据库备份
+backup: ## 备份数据库
+	@echo "$(BLUE)备份数据库...$(NC)"
+	@mkdir -p $(BACKUP_DIR)
+	@docker exec $$(docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps -q postgres) pg_dump -U dataflare dataflare > $(BACKUP_DIR)/dataflare_backup_$$(date +%Y%m%d_%H%M%S).sql
+	@echo "$(GREEN)数据库备份完成$(NC)"
+
+# 数据库恢复
+restore: ## 恢复数据库 (使用: make restore BACKUP_FILE=backup.sql)
+	@echo "$(BLUE)恢复数据库...$(NC)"
+	@test -f $(BACKUP_FILE) || { echo "$(RED)错误: 备份文件 $(BACKUP_FILE) 不存在$(NC)"; exit 1; }
+	@docker exec -i $$(docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps -q postgres) psql -U dataflare dataflare < $(BACKUP_FILE)
+	@echo "$(GREEN)数据库恢复完成$(NC)"
+
+# 清理资源
+clean: ## 清理所有资源（包括数据卷）
+	@echo "$(YELLOW)警告: 此操作将删除所有数据！$(NC)"
+	@read -p "确认继续? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
+	@echo "$(BLUE)清理资源...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down -v
+	@docker system prune -f
+	@echo "$(GREEN)资源清理完成$(NC)"
+
+# 更新镜像
+update: ## 更新所有镜像
+	@echo "$(BLUE)更新镜像...$(NC)"
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) pull
+	@echo "$(GREEN)镜像更新完成$(NC)"
+
+# 重新部署
+redeploy: update stop start ## 重新部署（更新镜像并重启）
+
+# 显示访问信息
+access-info: ## 显示访问信息
+	@echo ""
+	@echo "$(GREEN)=== DataFlare 分布式部署访问信息 ===$(NC)"
+	@echo ""
+	@echo "$(BLUE)Web 界面:$(NC)"
+	@echo "  🌐 DataFlare UI: http://localhost:8080"
+	@echo "  📊 Prometheus:   http://localhost:9090"
+	@echo "  📈 Grafana:      http://localhost:3000 (admin/admin)"
+	@echo ""
+	@echo "$(BLUE)API 端点:$(NC)"
+	@echo "  🔗 REST API:     http://localhost:8080/api/v1/"
+	@echo "  📋 Health:       http://localhost:8080/health"
+	@echo "  📊 Metrics:      http://localhost:8081/prometheus"
+	@echo ""
+
+# 开发模式
+dev: ## 启动开发模式（启用调试和热重载）
+	@echo "$(BLUE)启动开发模式...$(NC)"
+	@DATAFLARE_DEV_MODE=true docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d
+	@echo "$(GREEN)开发模式已启动$(NC)"
+
+# 生产模式配置检查
+prod-check: ## 检查生产环境配置
+	@echo "$(BLUE)检查生产环境配置...$(NC)"
+	@echo "$(YELLOW)检查认证配置...$(NC)"
+	@grep -q "basic-auth:" $(COMPOSE_FILE) && echo "$(GREEN)✓ 认证配置存在$(NC)" || echo "$(RED)✗ 建议启用认证$(NC)"
+	@echo "$(YELLOW)检查 HTTPS 配置...$(NC)"
+	@test -f ssl/cert.pem && echo "$(GREEN)✓ SSL 证书存在$(NC)" || echo "$(RED)✗ 建议配置 HTTPS$(NC)"
+	@echo "$(YELLOW)检查备份配置...$(NC)"
+	@test -d $(BACKUP_DIR) && echo "$(GREEN)✓ 备份目录存在$(NC)" || echo "$(RED)✗ 建议配置备份$(NC)"
+
+# 监控服务
+monitor: ## 启动监控服务
+	@docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d prometheus grafana
+	@echo "$(GREEN)监控服务已启动$(NC)"
+
+# 变量默认值
+WORKERS ?= 2
+BACKUP_FILE ?= $(BACKUP_DIR)/latest.sql

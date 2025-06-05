@@ -1,0 +1,372 @@
+version: '3.8'
+
+volumes:
+  postgres-data:
+    driver: local
+  dataflare-storage:
+    driver: local
+  redis-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+networks:
+  dataflare-network:
+    driver: bridge
+
+services:
+  # Database
+  postgres:
+    image: postgres:15
+    container_name: dataflare-postgres
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dataflare
+      POSTGRES_USER: dataflare
+      POSTGRES_PASSWORD: d4t4fl4r3
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    networks:
+      - dataflare-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Redis for caching and session management (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: dataflare-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - dataflare-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DataFlare WebServer - Web UI and API
+  dataflare-webserver:
+    image: kestra/kestra:latest
+    container_name: dataflare-webserver
+    restart: unless-stopped
+    command: server webserver
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: WEBSERVER
+          server:
+            basic-auth:
+              enabled: false
+              username: "admin@dataflare.io"
+              password: dataflare
+            access-log:
+              enabled: true
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          url: http://localhost:8080/
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # DataFlare Executor - Execution Engine
+  dataflare-executor:
+    image: kestra/kestra:latest
+    container_name: dataflare-executor
+    restart: unless-stopped
+    command: server executor
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: EXECUTOR
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # DataFlare Scheduler - Trigger Management
+  dataflare-scheduler:
+    image: kestra/kestra:latest
+    container_name: dataflare-scheduler
+    restart: unless-stopped
+    command: server scheduler
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: SCHEDULER
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # DataFlare Worker Node 1 - Task Execution
+  dataflare-worker-1:
+    image: kestra/kestra:latest
+    container_name: dataflare-worker-1
+    restart: unless-stopped
+    command: server worker --worker-thread 4
+    user: "root"  # Required for Docker socket access
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: WORKER
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          tasks:
+            tmp-dir:
+              path: /tmp/dataflare-wd/tmp
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/dataflare-wd:/tmp/dataflare-wd
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # DataFlare Worker Node 2 - Task Execution (Scalable)
+  dataflare-worker-2:
+    image: kestra/kestra:latest
+    container_name: dataflare-worker-2
+    restart: unless-stopped
+    command: server worker --worker-thread 4
+    user: "root"
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: WORKER
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          tasks:
+            tmp-dir:
+              path: /tmp/dataflare-wd/tmp
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/dataflare-wd:/tmp/dataflare-wd
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # DataFlare Indexer - Search and Indexing
+  dataflare-indexer:
+    image: kestra/kestra:latest
+    container_name: dataflare-indexer
+    restart: unless-stopped
+    command: server indexer
+    networks:
+      - dataflare-network
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: d4t4fl4r3
+        kestra:
+          server-type: INDEXER
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          queue:
+            type: postgres
+          anonymous-usage-report:
+            enabled: false
+    volumes:
+      - dataflare-storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # Nginx Load Balancer (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: dataflare-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - dataflare-network
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - dataflare-webserver
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus for Metrics (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dataflare-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    networks:
+      - dataflare-network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+
+  # Grafana for Visualization (Optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dataflare-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - dataflare-network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana

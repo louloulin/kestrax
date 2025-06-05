@@ -1,0 +1,75 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # DataFlare WebServer metrics
+  - job_name: 'dataflare-webserver'
+    static_configs:
+      - targets: ['dataflare-webserver:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # DataFlare Executor metrics
+  - job_name: 'dataflare-executor'
+    static_configs:
+      - targets: ['dataflare-executor:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # DataFlare Scheduler metrics
+  - job_name: 'dataflare-scheduler'
+    static_configs:
+      - targets: ['dataflare-scheduler:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # DataFlare Worker metrics
+  - job_name: 'dataflare-worker-1'
+    static_configs:
+      - targets: ['dataflare-worker-1:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  - job_name: 'dataflare-worker-2'
+    static_configs:
+      - targets: ['dataflare-worker-2:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # DataFlare Indexer metrics
+  - job_name: 'dataflare-indexer'
+    static_configs:
+      - targets: ['dataflare-indexer:8081']
+    metrics_path: '/prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # PostgreSQL metrics (if postgres_exporter is used)
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+
+  # Redis metrics (if redis_exporter is used)
+  # - job_name: 'redis'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+
+  # Node exporter for system metrics (if deployed)
+  # - job_name: 'node'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
+
+  # Nginx metrics (if nginx-prometheus-exporter is used)
+  # - job_name: 'nginx'
+  #   static_configs:
+  #     - targets: ['nginx-exporter:9113']
