@@ -1,6 +1,7 @@
 package io.kestra.blueprint.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import io.kestra.blueprint.models.Blueprint
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -55,7 +56,31 @@ data class BlueprintDto(
     
     @Schema(description = "版本号")
     val version: Long? = null
-)
+) {
+    companion object {
+        /**
+         * 从Blueprint实体创建DTO
+         */
+        fun from(blueprint: Blueprint, tags: List<String> = emptyList(), tasks: List<String> = emptyList()): BlueprintDto {
+            return BlueprintDto(
+                id = blueprint.id,
+                namespaceId = blueprint.namespaceId,
+                title = blueprint.title,
+                description = blueprint.description,
+                content = blueprint.content,
+                kind = blueprint.kind,
+                isPublic = blueprint.isPublic,
+                isTemplate = blueprint.isTemplate,
+                createdBy = blueprint.createdBy,
+                createdAt = blueprint.createdAt,
+                updatedAt = blueprint.updatedAt,
+                version = blueprint.version,
+                tags = tags,
+                includedTasks = tasks
+            )
+        }
+    }
+}
 
 /**
  * 创建蓝图请求对象

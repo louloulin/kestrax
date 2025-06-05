@@ -41,9 +41,8 @@ dependencies {
     implementation "io.micronaut.security:micronaut-security"
     implementation "io.micronaut.security:micronaut-security-jwt"
     
-    // Micronaut Data
-    implementation "io.micronaut.data:micronaut-data-hibernate-jpa"
-    implementation "io.micronaut.sql:micronaut-hibernate-jpa"
+    // Micronaut Data JDBC
+    implementation "io.micronaut.data:micronaut-data-jdbc"
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
 
     // Database drivers

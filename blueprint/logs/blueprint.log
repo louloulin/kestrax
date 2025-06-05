@@ -183,3 +183,141 @@ Caused by: io.micronaut.context.exceptions.NoSuchBeanException: No bean of type 
 2025-06-05 18:51:13.679 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /swagger-ui/index.html
 2025-06-05 18:51:13.680 [default-nioEventLoopGroup-1-5] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /swagger-ui/index.html
 2025-06-05 18:51:13.686 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /swagger-ui/index.html
+2025-06-05 21:20:49.976 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-05 21:20:50.064 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.9.Final
+2025-06-05 21:20:50.079 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-05 21:20:50.173 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-05 21:20:50.173 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-05 21:20:50.235 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-06-05 21:20:50.286 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-05 21:20:50.295 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-05 21:20:50.817 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.SQL'
+2025-06-05 21:20:50.817 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.sql'
+2025-06-05 21:20:50.817 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-05 21:20:50.817 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.BasicBinder'
+2025-06-05 21:20:50.817 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.basic-binder'
+2025-06-05 21:20:51.251 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-05 21:20:51.254 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1567ms. Server Running: http://localhost:8084
+2025-06-05 21:21:10.783 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /
+2025-06-05 21:21:10.830 [default-nioEventLoopGroup-1-2] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /
+2025-06-05 21:21:10.850 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /
+2025-06-05 21:28:14.698 [default-nioEventLoopGroup-1-4] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request POST /api/v1/blueprints/sync/official
+2025-06-05 21:28:14.708 [default-nioEventLoopGroup-1-4] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 开始同步官方蓝图...
+2025-06-05 21:28:14.796 [default-nioEventLoopGroup-1-4] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 创建官方命名空间: official
+2025-06-05 21:28:14.802 [default-nioEventLoopGroup-1-4] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 准备同步 5 个示例蓝图
+2025-06-05 21:28:14.839 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 数据ETL流水线
+2025-06-05 21:28:14.839 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 数据ETL流水线
+2025-06-05 21:28:14.841 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: API数据同步
+2025-06-05 21:28:14.842 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: API数据同步
+2025-06-05 21:28:14.844 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 文件处理流水线
+2025-06-05 21:28:14.844 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 文件处理流水线
+2025-06-05 21:28:14.846 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 定时报告生成
+2025-06-05 21:28:14.846 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 定时报告生成
+2025-06-05 21:28:14.847 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 数据质量检查
+2025-06-05 21:28:14.847 [default-nioEventLoopGroup-1-4] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 数据质量检查
+2025-06-05 21:28:14.848 [default-nioEventLoopGroup-1-4] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 蓝图同步完成 - 成功: 5, 失败: 0, 耗时: 140ms
+2025-06-05 21:28:14.870 [default-nioEventLoopGroup-1-4] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - POST /api/v1/blueprints/sync/official
+2025-06-05 21:28:58.899 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints
+2025-06-05 21:28:58.924 [default-nioEventLoopGroup-1-5] ERROR io.micronaut.http.server.RouteExecutor - Unexpected error occurred: failed to lazily initialize a collection of role: io.kestra.blueprint.models.Blueprint.tags: could not initialize proxy - no Session
+org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: io.kestra.blueprint.models.Blueprint.tags: could not initialize proxy - no Session
+	at org.hibernate.collection.spi.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:635)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:219)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:614)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.read(AbstractPersistentCollection.java:138)
+	at org.hibernate.collection.spi.PersistentBag.toString(PersistentBag.java:587)
+	at java.base/java.lang.StringConcatHelper.stringOf(StringConcatHelper.java:467)
+	at io.kestra.blueprint.dto.BlueprintDto.toString(BlueprintDto.kt)
+	at java.base/java.lang.String.valueOf(String.java:4465)
+	at java.base/java.lang.StringBuilder.append(StringBuilder.java:173)
+	at java.base/java.util.AbstractCollection.toString(AbstractCollection.java:459)
+	at java.base/java.lang.StringConcatHelper.stringOf(StringConcatHelper.java:467)
+	at io.kestra.blueprint.dto.BlueprintListResponse.toString(BlueprintDto.kt)
+	at java.base/java.lang.String.valueOf(String.java:4465)
+	at io.micronaut.json.body.JsonMessageHandler.writePiece(JsonMessageHandler.java:165)
+	at io.micronaut.json.body.JsonMessageHandler.write(JsonMessageHandler.java:157)
+	at io.micronaut.http.netty.body.NettyJsonHandler.write(NettyJsonHandler.java:132)
+	at io.micronaut.http.server.ResponseLifecycle.buildFinalResponse(ResponseLifecycle.java:331)
+	at io.micronaut.http.server.ResponseLifecycle.encodeHttpResponse(ResponseLifecycle.java:177)
+	at io.micronaut.http.server.ResponseLifecycle.encodeHttpResponseSafe(ResponseLifecycle.java:108)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.writeResponse(RoutingInBoundHandler.java:216)
+	at io.micronaut.http.server.netty.NettyRequestLifecycle.lambda$handleNormal$0(NettyRequestLifecycle.java:107)
+	at io.micronaut.http.reactive.execution.ReactorExecutionFlowImpl$2.onComplete(ReactorExecutionFlowImpl.java:269)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:159)
+	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:122)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:82)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:82)
+	at io.micronaut.core.async.propagation.ReactivePropagation$2.onNext(ReactivePropagation.java:122)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107)
+	at reactor.core.publisher.MonoPeekTerminal$MonoTerminalPeekSubscriber.onNext(MonoPeekTerminal.java:180)
+	at reactor.core.publisher.FluxPeekFuseable$PeekFuseableConditionalSubscriber.onNext(FluxPeekFuseable.java:503)
+	at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2571)
+	at reactor.core.publisher.FluxPeekFuseable$PeekFuseableConditionalSubscriber.request(FluxPeekFuseable.java:437)
+	at reactor.core.publisher.MonoPeekTerminal$MonoTerminalPeekSubscriber.request(MonoPeekTerminal.java:139)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136)
+	at reactor.core.publisher.MonoNext$NextSubscriber.request(MonoNext.java:108)
+	at reactor.core.publisher.MonoNext$NextSubscriber.request(MonoNext.java:108)
+	at reactor.core.publisher.FluxMap$MapSubscriber.request(FluxMap.java:164)
+	at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.set(Operators.java:2367)
+	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onSubscribe(FluxOnErrorResume.java:74)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onSubscribe(FluxMap.java:92)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onSubscribe(MonoNext.java:70)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onSubscribe(MonoNext.java:70)
+	at io.micronaut.core.async.propagation.ReactivePropagation$2.onSubscribe(ReactivePropagation.java:115)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onSubscribe(FluxContextWrite.java:101)
+	at reactor.core.publisher.MonoPeekTerminal$MonoTerminalPeekSubscriber.onSubscribe(MonoPeekTerminal.java:152)
+	at reactor.core.publisher.FluxPeekFuseable$PeekFuseableConditionalSubscriber.onSubscribe(FluxPeekFuseable.java:471)
+	at reactor.core.publisher.MonoJust.subscribe(MonoJust.java:55)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at io.micronaut.core.async.propagation.ReactivePropagation$1.subscribe(ReactivePropagation.java:72)
+	at io.micronaut.core.async.propagation.ReactivePropagation$1.subscribe(ReactivePropagation.java:79)
+	at reactor.core.publisher.MonoFromPublisher.subscribe(MonoFromPublisher.java:64)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at io.micronaut.http.reactive.execution.ReactorExecutionFlowImpl.onComplete(ReactorExecutionFlowImpl.java:233)
+	at io.micronaut.http.server.netty.NettyRequestLifecycle.handleNormal(NettyRequestLifecycle.java:107)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.accept(RoutingInBoundHandler.java:203)
+	at io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler.accept(NettyServerWebSocketUpgradeHandler.java:156)
+	at io.micronaut.http.server.netty.handler.PipeliningServerHandler$MessageInboundHandler.read(PipeliningServerHandler.java:400)
+	at io.micronaut.http.server.netty.handler.PipeliningServerHandler.channelRead(PipeliningServerHandler.java:221)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelRead(ChannelInboundHandlerAdapter.java:93)
+	at io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler.onHttpRequestChannelRead(WebSocketServerExtensionHandler.java:158)
+	at io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler.channelRead(WebSocketServerExtensionHandler.java:82)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:289)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-05 21:28:58.930 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 500 - GET /api/v1/blueprints
+2025-06-05 21:45:52.398 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m31s970ms).
