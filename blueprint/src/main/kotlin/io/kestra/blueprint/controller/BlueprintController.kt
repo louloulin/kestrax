@@ -4,7 +4,7 @@ import io.kestra.blueprint.dto.*
 import io.kestra.blueprint.models.BlueprintVersion
 import io.kestra.blueprint.security.RequirePermission
 import io.kestra.blueprint.service.BlueprintService
-import io.kestra.blueprint.service.OfficialBlueprintSyncService
+import io.kestra.blueprint.service.SimpleBlueprintSyncService
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
@@ -34,7 +34,7 @@ import jakarta.validation.constraints.NotBlank
 @Tag(name = "Blueprint", description = "蓝图管理API")
 open class BlueprintController(
     private val blueprintService: BlueprintService,
-    private val officialBlueprintSyncService: OfficialBlueprintSyncService
+    private val simpleBlueprintSyncService: SimpleBlueprintSyncService
 ) {
     
     /**
@@ -286,18 +286,9 @@ open class BlueprintController(
         ApiResponse(responseCode = "403", description = "权限不足"),
         ApiResponse(responseCode = "500", description = "同步失败")
     )
-    open suspend fun syncOfficialBlueprints(): HttpResponse<SyncBlueprintResponse> {
+    open fun syncOfficialBlueprints(): HttpResponse<SyncBlueprintResponse> {
         return try {
-            val syncResult = officialBlueprintSyncService.syncAllBlueprints()
-            val response = SyncBlueprintResponse(
-                success = true,
-                message = "官网蓝图同步完成",
-                syncedCount = syncResult.successCount,
-                failedCount = syncResult.failureCount,
-                failedBlueprints = syncResult.failedBlueprints.map { 
-                    FailedBlueprintInfo(it.first, it.second ?: "未知错误")
-                }
-            )
+            val response = simpleBlueprintSyncService.syncOfficialBlueprints()
             HttpResponse.ok(response)
         } catch (e: Exception) {
             val response = SyncBlueprintResponse(
@@ -305,7 +296,7 @@ open class BlueprintController(
                 message = "同步失败: ${e.message}",
                 syncedCount = 0,
                 failedCount = 0,
-                failedBlueprints = emptyList()
+                failedBlueprints = listOf(FailedBlueprintInfo("unknown", e.message ?: "未知错误"))
             )
             HttpResponse.status<SyncBlueprintResponse>(HttpStatus.INTERNAL_SERVER_ERROR).body(response)
         }

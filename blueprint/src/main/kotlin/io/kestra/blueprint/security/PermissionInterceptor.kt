@@ -37,7 +37,7 @@ class PermissionInterceptor(
      */
     private fun setDefaultTenantContext() {
         tenantContext.setUserId("default-user")
-        tenantContext.setNamespaceId("default-namespace")
+        tenantContext.setNamespaceId("official")
         tenantContext.setTenantId("default-tenant")
     }
     

@@ -28,7 +28,7 @@ class OfficialBlueprintSyncService(
     /**
      * 同步所有官网蓝图
      */
-    suspend fun syncAllBlueprints(): SyncResult {
+    fun syncAllBlueprints(): SyncResult {
         logger.info("开始同步官网蓝图")
         
         val syncResult = SyncResult()
@@ -61,7 +61,7 @@ class OfficialBlueprintSyncService(
     /**
      * 同步单个蓝图
      */
-    private suspend fun syncBlueprint(officialBlueprint: OfficialBlueprint) {
+    private fun syncBlueprint(officialBlueprint: OfficialBlueprint) {
         logger.debug("同步蓝图: ${officialBlueprint.id}")
         
         // 检查蓝图是否已存在
@@ -118,7 +118,7 @@ class OfficialBlueprintSyncService(
     /**
      * 获取官网蓝图列表
      */
-    private suspend fun getOfficialBlueprints(): List<OfficialBlueprint> {
+    private fun getOfficialBlueprints(): List<OfficialBlueprint> {
         // 这里返回一些预定义的官网蓝图
         // 在实际实现中，可以通过API或爬虫获取
         return listOf(
@@ -405,7 +405,7 @@ tasks:
     /**
      * 生成下一个版本号
      */
-    private suspend fun generateNextVersionNumber(blueprintId: String): Int {
+    private fun generateNextVersionNumber(blueprintId: String): Int {
         val maxVersionNumber = blueprintVersionRepository.findMaxVersionNumberByBlueprintId(blueprintId)
         return if (maxVersionNumber.isPresent) {
             maxVersionNumber.get() + 1
