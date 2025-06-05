@@ -23,16 +23,7 @@ micronaut:
             - "*"
           allow-credentials: true
   security:
-    authentication: bearer
-    token:
-      jwt:
-        signatures:
-          secret:
-            generator:
-              secret: "${JWT_SECRET:pleaseChangeThisSecretForProductionUse}"
-        generator:
-          access-token:
-            expiration: 3600 # 1 hour
+    enabled: false  # 暂时禁用安全认证，便于测试
   data:
     pageable:
       default-page-size: 20

@@ -1,0 +1,185 @@
+2025-06-05 18:46:53.431 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-05 18:46:53.498 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.9.Final
+2025-06-05 18:46:53.512 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-05 18:46:53.594 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-05 18:46:53.595 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-05 18:46:53.639 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-06-05 18:46:53.685 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-05 18:46:53.693 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-05 18:46:54.189 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.SQL'
+2025-06-05 18:46:54.189 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.sql'
+2025-06-05 18:46:54.189 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-05 18:46:54.189 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.BasicBinder'
+2025-06-05 18:46:54.189 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.basic-binder'
+2025-06-05 18:46:54.601 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-05 18:46:54.603 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1456ms. Server Running: http://localhost:8084
+2025-06-05 18:47:27.688 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /health
+2025-06-05 18:47:27.745 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 401 - GET /health
+2025-06-05 18:47:39.763 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /health
+2025-06-05 18:47:39.765 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 401 - GET /health
+2025-06-05 18:47:43.143 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /health
+2025-06-05 18:47:43.143 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 401 - GET /health
+2025-06-05 18:47:49.354 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /
+2025-06-05 18:47:49.355 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /
+2025-06-05 18:47:49.367 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /
+2025-06-05 18:47:49.395 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /favicon.ico
+2025-06-05 18:47:49.395 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /favicon.ico
+2025-06-05 18:47:49.406 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /favicon.ico
+2025-06-05 18:47:53.042 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /
+2025-06-05 18:47:53.042 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /
+2025-06-05 18:47:53.045 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /
+2025-06-05 18:47:55.357 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/auth/api-keys
+2025-06-05 18:47:55.365 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/auth/api-keys
+2025-06-05 18:48:10.573 [default-nioEventLoopGroup-1-6] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/auth/status
+2025-06-05 18:48:10.575 [default-nioEventLoopGroup-1-6] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/auth/status
+2025-06-05 18:48:25.175 [default-nioEventLoopGroup-1-7] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints
+2025-06-05 18:48:25.302 [default-nioEventLoopGroup-1-7] ERROR io.micronaut.http.server.RouteExecutor - Unexpected error occurred: Failed to inject value for parameter [securityService] of class: io.kestra.blueprint.security.PermissionInterceptor
+
+Message: No bean of type [io.micronaut.security.utils.SecurityService] exists. 
+* [SecurityService] is disabled because it is within the package [io.micronaut.security] which is disabled due to bean requirements: 
+ - Property [micronaut.security.enabled] with value [false] should not equal: false
+Path Taken: 
+new i.k.b.c.BlueprintController(BlueprintService blueprintService, OfficialBlueprintSyncService officialBlueprintSyncService)
+\---> new i.k.b.c.BlueprintController(BlueprintService blueprintService, OfficialBlueprintSyncService officialBlueprintSyncService)
+      \---> new @j.i.Singleton i.k.b.s.PermissionInterceptor([SecurityService securityService], TenantContext tenantContext)
+io.micronaut.context.exceptions.DependencyInjectionException: Failed to inject value for parameter [securityService] of class: io.kestra.blueprint.security.PermissionInterceptor
+
+Message: No bean of type [io.micronaut.security.utils.SecurityService] exists. 
+* [SecurityService] is disabled because it is within the package [io.micronaut.security] which is disabled due to bean requirements: 
+ - Property [micronaut.security.enabled] with value [false] should not equal: false
+Path Taken: 
+new i.k.b.c.BlueprintController(BlueprintService blueprintService, OfficialBlueprintSyncService officialBlueprintSyncService)
+\---> new i.k.b.c.BlueprintController(BlueprintService blueprintService, OfficialBlueprintSyncService officialBlueprintSyncService)
+      \---> new @j.i.Singleton i.k.b.s.PermissionInterceptor([SecurityService securityService], TenantContext tenantContext)
+	at io.micronaut.context.AbstractInitializableBeanDefinition.resolveBean(AbstractInitializableBeanDefinition.java:2139)
+	at io.micronaut.context.AbstractInitializableBeanDefinition.getBeanForConstructorArgument(AbstractInitializableBeanDefinition.java:1352)
+	at io.kestra.blueprint.security.$PermissionInterceptor$Definition.instantiate(Unknown Source)
+	at io.micronaut.context.DefaultBeanContext.resolveByBeanFactory(DefaultBeanContext.java:2335)
+	at io.micronaut.context.DefaultBeanContext.createRegistration(DefaultBeanContext.java:3146)
+	at io.micronaut.context.SingletonScope.getOrCreate(SingletonScope.java:80)
+	at io.micronaut.context.DefaultBeanContext.resolveBeanRegistration(DefaultBeanContext.java:2996)
+	at io.micronaut.context.DefaultBeanContext.addCandidateToList(DefaultBeanContext.java:3605)
+	at io.micronaut.context.DefaultBeanContext.resolveBeanRegistrations(DefaultBeanContext.java:3560)
+	at io.micronaut.context.DefaultBeanContext.getBeanRegistrations(DefaultBeanContext.java:3534)
+	at io.micronaut.context.AbstractBeanResolutionContext.getBeanRegistrations(AbstractBeanResolutionContext.java:316)
+	at io.micronaut.context.AbstractInitializableBeanDefinition.resolveBeanRegistrations(AbstractInitializableBeanDefinition.java:2279)
+	at io.micronaut.context.AbstractInitializableBeanDefinition.getBeanRegistrationsForConstructorArgument(AbstractInitializableBeanDefinition.java:1524)
+	at io.kestra.blueprint.controller.$BlueprintController$Definition$Intercepted$Definition.instantiate(Unknown Source)
+	at io.micronaut.context.DefaultBeanContext.resolveByBeanFactory(DefaultBeanContext.java:2335)
+	at io.micronaut.context.DefaultBeanContext.createRegistration(DefaultBeanContext.java:3146)
+	at io.micronaut.context.SingletonScope.getOrCreate(SingletonScope.java:80)
+	at io.micronaut.context.DefaultBeanContext.resolveBeanRegistration(DefaultBeanContext.java:2996)
+	at io.micronaut.context.DefaultBeanContext.resolveBeanRegistration(DefaultBeanContext.java:2965)
+	at io.micronaut.context.DefaultBeanContext.getBean(DefaultBeanContext.java:1745)
+	at io.micronaut.context.DefaultBeanContext$BeanContextExecutionHandle.getTarget(DefaultBeanContext.java:4452)
+	at io.micronaut.context.DefaultBeanContext$BeanContextUnsafeExecutionHandle.invokeUnsafe(DefaultBeanContext.java:4419)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:272)
+	at io.micronaut.web.router.DefaultUriRouteMatch.execute(DefaultUriRouteMatch.java:38)
+	at io.micronaut.http.server.RouteExecutor.executeRouteAndConvertBody(RouteExecutor.java:493)
+	at io.micronaut.http.server.RouteExecutor.callRoute(RouteExecutor.java:483)
+	at io.micronaut.http.server.RequestLifecycle.callRoute(RequestLifecycle.java:187)
+	at io.micronaut.http.server.RequestLifecycle.executeRoute(RequestLifecycle.java:175)
+	at io.micronaut.http.server.RequestLifecycle$2.provideResponse(RequestLifecycle.java:395)
+	at io.micronaut.http.filter.FilterRunner.provideResponseAndHandleErrors(FilterRunner.java:372)
+	at io.micronaut.http.filter.FilterRunner.filterRequest(FilterRunner.java:307)
+	at io.micronaut.http.filter.FilterRunner.lambda$filterRequest$2(FilterRunner.java:280)
+	at io.micronaut.http.filter.AroundLegacyFilter$FilterChainImpl.proceed(AroundLegacyFilter.java:122)
+	at io.micronaut.tracing.opentelemetry.instrument.http.server.OpenTelemetryServerFilter.doFilter(OpenTelemetryServerFilter.java:93)
+	at io.micronaut.http.filter.HttpServerFilter.doFilter(HttpServerFilter.java:48)
+	at io.micronaut.http.filter.AroundLegacyFilter.processRequestFilter(AroundLegacyFilter.java:75)
+	at io.micronaut.http.filter.FilterRunner.filterRequest(FilterRunner.java:276)
+	at io.micronaut.http.filter.FilterRunner.run(FilterRunner.java:247)
+	at io.micronaut.http.server.RequestLifecycle.runServerFilters(RequestLifecycle.java:427)
+	at io.micronaut.http.server.RequestLifecycle.normalFlow(RequestLifecycle.java:165)
+	at io.micronaut.http.server.netty.NettyRequestLifecycle.handleNormal(NettyRequestLifecycle.java:93)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.accept(RoutingInBoundHandler.java:203)
+	at io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler.accept(NettyServerWebSocketUpgradeHandler.java:156)
+	at io.micronaut.http.server.netty.handler.PipeliningServerHandler$MessageInboundHandler.read(PipeliningServerHandler.java:400)
+	at io.micronaut.http.server.netty.handler.PipeliningServerHandler.channelRead(PipeliningServerHandler.java:221)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelRead(ChannelInboundHandlerAdapter.java:93)
+	at io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler.onHttpRequestChannelRead(WebSocketServerExtensionHandler.java:158)
+	at io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler.channelRead(WebSocketServerExtensionHandler.java:82)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:289)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: io.micronaut.context.exceptions.NoSuchBeanException: No bean of type [io.micronaut.security.utils.SecurityService] exists. 
+* [SecurityService] is disabled because it is within the package [io.micronaut.security] which is disabled due to bean requirements: 
+ - Property [micronaut.security.enabled] with value [false] should not equal: false
+	at io.micronaut.context.DefaultBeanContext.newNoSuchBeanException(DefaultBeanContext.java:2800)
+	at io.micronaut.context.DefaultApplicationContext.newNoSuchBeanException(DefaultApplicationContext.java:338)
+	at io.micronaut.context.DefaultBeanContext.resolveBeanRegistration(DefaultBeanContext.java:2763)
+	at io.micronaut.context.DefaultBeanContext.getBean(DefaultBeanContext.java:1779)
+	at io.micronaut.context.AbstractBeanResolutionContext.getBean(AbstractBeanResolutionContext.java:210)
+	at io.micronaut.context.AbstractInitializableBeanDefinition.resolveBean(AbstractInitializableBeanDefinition.java:2122)
+	... 77 common frames omitted
+2025-06-05 18:48:25.304 [default-nioEventLoopGroup-1-7] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 500 - GET /api/v1/blueprints
+2025-06-05 18:50:01.085 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-05 18:50:01.110 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-05 18:50:01.112 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-05 18:50:14.656 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-05 18:50:14.719 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.9.Final
+2025-06-05 18:50:14.732 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-05 18:50:14.816 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-05 18:50:14.817 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-05 18:50:14.859 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-06-05 18:50:14.900 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-05 18:50:14.909 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-05 18:50:15.352 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.SQL'
+2025-06-05 18:50:15.352 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'org.hibernate.sql'
+2025-06-05 18:50:15.352 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-05 18:50:15.352 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.BasicBinder'
+2025-06-05 18:50:15.352 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'WARN' for logger: 'org.hibernate.type.descriptor.sql.basic-binder'
+2025-06-05 18:50:15.775 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-05 18:50:15.777 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1393ms. Server Running: http://localhost:8084
+2025-06-05 18:50:29.402 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints
+2025-06-05 18:50:29.607 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints
+2025-06-05 18:50:44.489 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/namespaces
+2025-06-05 18:50:44.490 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /api/v1/namespaces
+2025-06-05 18:50:44.499 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /api/v1/namespaces
+2025-06-05 18:50:57.210 [default-nioEventLoopGroup-1-4] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /swagger-ui/index.html
+2025-06-05 18:50:57.210 [default-nioEventLoopGroup-1-4] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /swagger-ui/index.html
+2025-06-05 18:50:57.211 [default-nioEventLoopGroup-1-4] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /swagger-ui/index.html
+2025-06-05 18:51:13.679 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /swagger-ui/index.html
+2025-06-05 18:51:13.680 [default-nioEventLoopGroup-1-5] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /swagger-ui/index.html
+2025-06-05 18:51:13.686 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /swagger-ui/index.html
