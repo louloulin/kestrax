@@ -84,21 +84,21 @@ class BlueprintMetrics(
             .register(meterRegistry)
         
         // 初始化Gauge
-        Gauge.builder("blueprint.active.count")
+        Gauge.builder("blueprint.active.count", activeBlueprintsCount) { it.get().toDouble() }
             .description("Current number of active blueprints")
-            .register(meterRegistry) { activeBlueprintsCount.get().toDouble() }
-            
-        Gauge.builder("blueprint.namespace.count")
+            .register(meterRegistry)
+
+        Gauge.builder("blueprint.namespace.count", activeNamespacesCount) { it.get().toDouble() }
             .description("Current number of active namespaces")
-            .register(meterRegistry) { activeNamespacesCount.get().toDouble() }
-            
-        Gauge.builder("blueprint.public.count")
+            .register(meterRegistry)
+
+        Gauge.builder("blueprint.public.count", publicBlueprintsCount) { it.get().toDouble() }
             .description("Current number of public blueprints")
-            .register(meterRegistry) { publicBlueprintsCount.get().toDouble() }
-            
-        Gauge.builder("blueprint.template.count")
+            .register(meterRegistry)
+
+        Gauge.builder("blueprint.template.count", templateBlueprintsCount) { it.get().toDouble() }
             .description("Current number of template blueprints")
-            .register(meterRegistry) { templateBlueprintsCount.get().toDouble() }
+            .register(meterRegistry)
     }
     
     override fun onApplicationEvent(event: ApplicationStartupEvent) {
@@ -111,48 +111,53 @@ class BlueprintMetrics(
      * 记录蓝图创建事件
      */
     fun recordBlueprintCreated(namespaceId: String) {
-        blueprintCreatedCounter.increment(
-            "namespace", namespaceId
-        )
+        Counter.builder("blueprint.created")
+            .tag("namespace", namespaceId)
+            .register(meterRegistry)
+            .increment()
         updateGaugeMetrics()
     }
-    
+
     /**
      * 记录蓝图更新事件
      */
     fun recordBlueprintUpdated(namespaceId: String) {
-        blueprintUpdatedCounter.increment(
-            "namespace", namespaceId
-        )
+        Counter.builder("blueprint.updated")
+            .tag("namespace", namespaceId)
+            .register(meterRegistry)
+            .increment()
     }
-    
+
     /**
      * 记录蓝图删除事件
      */
     fun recordBlueprintDeleted(namespaceId: String) {
-        blueprintDeletedCounter.increment(
-            "namespace", namespaceId
-        )
+        Counter.builder("blueprint.deleted")
+            .tag("namespace", namespaceId)
+            .register(meterRegistry)
+            .increment()
         updateGaugeMetrics()
     }
-    
+
     /**
      * 记录蓝图查看事件
      */
     fun recordBlueprintViewed(blueprintId: String, namespaceId: String) {
-        blueprintViewedCounter.increment(
-            "blueprint", blueprintId,
-            "namespace", namespaceId
-        )
+        Counter.builder("blueprint.viewed")
+            .tag("blueprint", blueprintId)
+            .tag("namespace", namespaceId)
+            .register(meterRegistry)
+            .increment()
     }
-    
+
     /**
      * 记录模板渲染事件
      */
     fun recordTemplateRendered(success: Boolean) {
-        templateRenderedCounter.increment(
-            "success", success.toString()
-        )
+        Counter.builder("template.rendered")
+            .tag("success", success.toString())
+            .register(meterRegistry)
+            .increment()
     }
     
     /**

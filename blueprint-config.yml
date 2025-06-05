@@ -1,0 +1,65 @@
+kestra:
+  # 蓝图功能配置
+  blueprint:
+    enabled: true
+    
+    # 官方蓝图同步配置
+    official-sync:
+      enabled: true
+      url: "https://api.github.com/repos/kestrahq/blueprints"
+      interval: "PT1H" # 每小时同步一次
+      
+    # 模板引擎配置
+    template:
+      engine: "mustache"
+      cache-enabled: true
+      cache-size: 1000
+      
+    # 权限配置
+    security:
+      enabled: true
+      default-permissions:
+        - "blueprint:read"
+      admin-permissions:
+        - "blueprint:*"
+        
+    # 存储配置
+    storage:
+      type: "database"
+      
+    # 指标配置
+    metrics:
+      enabled: true
+      
+  # 数据库配置
+  datasources:
+    default:
+      url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+      driverClassName: org.h2.Driver
+      username: sa
+      password: ''
+      
+  # JPA配置
+  jpa:
+    default:
+      packages-to-scan:
+        - "io.kestra.blueprint.models"
+      properties:
+        hibernate:
+          hbm2ddl:
+            auto: update
+          dialect: org.hibernate.dialect.H2Dialect
+          show_sql: false
+          
+  # Micronaut配置
+  micronaut:
+    application:
+      name: dataflare-blueprint
+    server:
+      port: 8080
+      
+# 日志配置
+logger:
+  levels:
+    io.kestra.blueprint: DEBUG
+    com.github.mustachejava: INFO

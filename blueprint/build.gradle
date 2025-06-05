@@ -50,8 +50,8 @@ dependencies {
     implementation "io.micronaut.cache:micronaut-cache-core"
     implementation "io.micronaut.cache:micronaut-cache-caffeine"
     
-    // Template Engine
-    implementation "io.pebbletemplates:pebble:3.2.2"
+    // Template Engine - Mustache (Kotlin friendly)
+    implementation "com.github.spullara.mustache.java:compiler:0.9.11"
     
     // Validation
     implementation "jakarta.validation:jakarta.validation-api"
