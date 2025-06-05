@@ -21,25 +21,11 @@ class PermissionInterceptor(
     private val logger = LoggerFactory.getLogger(PermissionInterceptor::class.java)
     
     override fun intercept(context: MethodInvocationContext<Any, Any>): Any? {
-        // 安全认证已禁用，设置默认租户上下文
-        setDefaultTenantContext()
-
-        try {
-            return context.proceed()
-        } finally {
-            // 清理上下文
-            tenantContext.clear()
-        }
+        // 租户上下文由TenantFilter设置，这里只需要验证权限
+        return context.proceed()
     }
 
-    /**
-     * 设置默认租户上下文（用于无认证模式）
-     */
-    private fun setDefaultTenantContext() {
-        tenantContext.setUserId("default-user")
-        tenantContext.setNamespaceId("official")
-        tenantContext.setTenantId("default-tenant")
-    }
+
     
     /**
      * 检查是否拥有所有权限
