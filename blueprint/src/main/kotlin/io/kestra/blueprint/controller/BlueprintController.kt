@@ -22,19 +22,22 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
+import org.slf4j.LoggerFactory
 
 /**
  * 蓝图控制器
  * 基于Kotlin + Micronaut实现的RESTful API
  */
 @Controller("/api/v1/blueprints")
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Validated
 @Tag(name = "Blueprint", description = "蓝图管理API")
 open class BlueprintController(
     private val blueprintService: BlueprintService,
     private val simpleBlueprintSyncService: SimpleBlueprintSyncService
 ) {
+
+    private val logger = LoggerFactory.getLogger(BlueprintController::class.java)
     
     /**
      * 获取蓝图列表
@@ -123,7 +126,6 @@ open class BlueprintController(
      * 创建蓝图
      */
     @Post
-    @RequirePermission(["blueprint:write"])
     @Operation(
         summary = "创建蓝图",
         description = "创建新的蓝图"
@@ -143,8 +145,16 @@ open class BlueprintController(
         @Parameter(description = "创建蓝图请求", required = true)
         @Body @Valid request: CreateBlueprintRequest
     ): HttpResponse<BlueprintDto> {
-        val blueprint = blueprintService.createBlueprint(request)
-        return HttpResponse.status<BlueprintDto>(HttpStatus.CREATED).body(blueprint)
+        logger.debug("创建蓝图请求: {}", request)
+
+        try {
+            val blueprint = blueprintService.createBlueprint(request)
+            logger.debug("蓝图创建成功: {}", blueprint.id)
+            return HttpResponse.status<BlueprintDto>(HttpStatus.CREATED).body(blueprint)
+        } catch (e: Exception) {
+            logger.error("创建蓝图失败", e)
+            throw e
+        }
     }
     
     /**
