@@ -55,7 +55,7 @@ idea {
  * Main
  **********************************************************************************************************************/
 final mainClassName = "io.kestra.cli.App"
-final targetJavaVersion = JavaVersion.VERSION_23
+final targetJavaVersion = JavaVersion.VERSION_21
 
 application {
     mainClass = mainClassName
@@ -66,7 +66,7 @@ java {
     targetCompatibility = targetJavaVersion
 
     toolchain {
-        languageVersion = JavaLanguageVersion.of(23)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -87,7 +87,7 @@ allprojects {
             targetCompatibility = targetJavaVersion
 
             toolchain {
-                languageVersion = JavaLanguageVersion.of(23)
+                languageVersion = JavaLanguageVersion.of(21)
             }
         }
 
@@ -187,7 +187,7 @@ subprojects {
             targetCompatibility = targetJavaVersion
 
             toolchain {
-                languageVersion = JavaLanguageVersion.of(23)
+                languageVersion = JavaLanguageVersion.of(21)
             }
         }
 

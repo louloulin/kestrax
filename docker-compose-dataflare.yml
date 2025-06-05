@@ -1,0 +1,85 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: dataflare-postgres
+    environment:
+      POSTGRES_DB: dataflare
+      POSTGRES_USER: dataflare
+      POSTGRES_PASSWORD: dataflare123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - dataflare-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataflare"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  dataflare:
+    image: dataflare/dataflare:0.23.0-SNAPSHOT
+    container_name: dataflare-server
+    command: ["server", "standalone"]
+    user: "root"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KESTRA_CONFIGURATION: |
+        micronaut:
+          server:
+            port: 8080
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/dataflare
+            driverClassName: org.postgresql.Driver
+            username: dataflare
+            password: dataflare123
+        kestra:
+          server:
+            basic-auth:
+              enabled: false
+          encryption:
+            secret-key: 3ywuDa/Ec61VHkOX3RlI9gYq7CaD0mv0Pf3DHtAXA6U=
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/tmp/dataflare/storage"
+          queue:
+            type: postgres
+          tenant:
+            enabled: true
+            default-tenant: main
+    ports:
+      - "8080:8080"
+    volumes:
+      - dataflare_storage:/tmp/dataflare/storage
+      - dataflare_logs:/app/logs
+    networks:
+      - dataflare-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  dataflare_storage:
+    driver: local
+  dataflare_logs:
+    driver: local
+
+networks:
+  dataflare-network:
+    driver: bridge

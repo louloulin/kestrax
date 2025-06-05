@@ -20,7 +20,7 @@ DATE := $(shell date --rfc-3339=seconds)
 PLUGIN_GIT_DIR ?= $(pwd)/..
 PLUGIN_JARS_DIR ?= $(pwd)/locals/plugins
 
-DOCKER_IMAGE = kestra/kestra
+DOCKER_IMAGE = dataflare/dataflare
 DOCKER_PATH = ./
 
 .SILENT:
