@@ -25,6 +25,7 @@ micronaut:
   security:
     enabled: false  # 暂时禁用安全认证，便于测试
   data:
+    auto-create-schema: false
     pageable:
       default-page-size: 20
       max-page-size: 100
@@ -32,17 +33,20 @@ micronaut:
 # 数据源配置
 datasources:
   default:
-    url: jdbc:h2:file:./data/blueprint;AUTO_SERVER=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testDb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password: ''
-    schema-generate: UPDATE
     dialect: H2
 
-# Micronaut Data配置
-micronaut:
-  data:
-    auto-create-schema: true
+# Flyway配置
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: classpath:db/migration
+
+# Micronaut Data配置已合并到上面的micronaut配置中
 
 # 缓存配置
 caches:

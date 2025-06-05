@@ -1,4 +1,4 @@
-package io.kestra.blueprint.service
+jipackage io.kestra.blueprint.service
 
 import io.kestra.blueprint.dto.*
 import io.kestra.blueprint.models.Blueprint
