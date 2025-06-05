@@ -64,7 +64,7 @@ import io.swagger.v3.oas.annotations.servers.Server
     ),
     servers = [
         Server(
-            url = "http://localhost:8080",
+            url = "http://localhost:8084",
             description = "开发环境"
         ),
         Server(

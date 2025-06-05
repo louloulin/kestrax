@@ -2,7 +2,7 @@ micronaut:
   application:
     name: kestra-blueprint
   server:
-    port: 8080
+    port: 8084
     cors:
       enabled: true
       configurations:
@@ -10,6 +10,7 @@ micronaut:
           allowed-origins:
             - "http://localhost:3000"
             - "http://localhost:8080"
+            - "http://localhost:8082"
           allowed-methods:
             - GET
             - POST
@@ -59,14 +60,13 @@ jpa:
         dialect: org.hibernate.dialect.H2Dialect
 
 # 缓存配置
-micronaut:
-  caches:
-    blueprints:
-      maximum-size: 1000
-      expire-after-write: 10m
-    blueprint:
-      maximum-size: 500
-      expire-after-write: 5m
+caches:
+  blueprints:
+    maximum-size: 1000
+    expire-after-write: 10m
+  blueprint:
+    maximum-size: 500
+    expire-after-write: 5m
 
 # 日志配置
 logger:

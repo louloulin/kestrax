@@ -45,6 +45,9 @@ dependencies {
     implementation "io.micronaut.data:micronaut-data-hibernate-jpa"
     implementation "io.micronaut.sql:micronaut-hibernate-jpa"
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
+
+    // Database drivers
+    runtimeOnly "com.h2database:h2"
     
     // Micronaut Cache
     implementation "io.micronaut.cache:micronaut-cache-core"
@@ -83,30 +86,29 @@ dependencies {
     // Kotlin annotation processing
     kapt "io.micronaut:micronaut-inject-java:4.8.2"
     kapt "io.micronaut.validation:micronaut-validation-processor:4.9.0"
+    kapt "io.micronaut.data:micronaut-data-processor:4.11.0"
 }
 
 test {
     useJUnitPlatform()
 }
 
-// Configure Kotlin compilation to use highest supported JVM target
-// Kotlin 2.0 supports maximum JVM target 22
+// Configure Kotlin compilation to use JVM 21 for compatibility
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
-        jvmTarget = "22"  // Use JVM 22 target (highest supported by Kotlin 2.0)
+        jvmTarget = "21"  // Use JVM 21 target for compatibility
     }
 }
 
 // Configure KAPT to use same JVM target as Kotlin
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs).configureEach {
     kotlinOptions {
-        jvmTarget = "22"  // Match Kotlin compilation target
+        jvmTarget = "21"  // Match Kotlin compilation target
     }
 }
 
-// Keep Java at version 23 to match dependencies, but set Kotlin to 22
-// This creates a mixed environment but should work for compilation
+// Set Java to version 21 for compatibility
 java {
-    sourceCompatibility = JavaVersion.VERSION_23
-    targetCompatibility = JavaVersion.VERSION_23
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

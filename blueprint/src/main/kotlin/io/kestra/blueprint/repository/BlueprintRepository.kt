@@ -33,7 +33,10 @@ interface BlueprintRepository : JpaRepository<Blueprint, String> {
     /**
      * 根据命名空间ID和标签查找蓝图
      */
-    @Query("SELECT b FROM Blueprint b JOIN b.tags t WHERE b.namespaceId = :namespaceId AND t IN :tags")
+    @Query(
+        value = "SELECT b FROM Blueprint b JOIN b.tags t WHERE b.namespaceId = :namespaceId AND t IN :tags",
+        countQuery = "SELECT COUNT(DISTINCT b) FROM Blueprint b JOIN b.tags t WHERE b.namespaceId = :namespaceId AND t IN :tags"
+    )
     fun findByNamespaceIdAndTagsIn(namespaceId: String, tags: List<String>, pageable: Pageable): Page<Blueprint>
     
     /**
@@ -64,27 +67,44 @@ interface BlueprintRepository : JpaRepository<Blueprint, String> {
     /**
      * 根据命名空间ID和标题模糊搜索蓝图
      */
-    @Query("SELECT b FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))")
+    @Query(
+        value = "SELECT b FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))",
+        countQuery = "SELECT COUNT(b) FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))"
+    )
     fun searchByNamespaceIdAndTitle(namespaceId: String, title: String, pageable: Pageable): Page<Blueprint>
     
     /**
      * 根据命名空间ID和描述模糊搜索蓝图
      */
-    @Query("SELECT b FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.description) LIKE LOWER(CONCAT('%', :description, '%'))")
+    @Query(
+        value = "SELECT b FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.description) LIKE LOWER(CONCAT('%', :description, '%'))",
+        countQuery = "SELECT COUNT(b) FROM Blueprint b WHERE b.namespaceId = :namespaceId AND LOWER(b.description) LIKE LOWER(CONCAT('%', :description, '%'))"
+    )
     fun searchByNamespaceIdAndDescription(namespaceId: String, description: String, pageable: Pageable): Page<Blueprint>
     
     /**
      * 复合搜索：根据命名空间ID、标题、描述、标签进行模糊搜索
      */
-    @Query("""
-        SELECT DISTINCT b FROM Blueprint b LEFT JOIN b.tags t 
-        WHERE b.namespaceId = :namespaceId 
-        AND (
-            LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) 
-            OR LOWER(b.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            OR LOWER(t) LIKE LOWER(CONCAT('%', :keyword, '%'))
-        )
-    """)
+    @Query(
+        value = """
+            SELECT DISTINCT b FROM Blueprint b LEFT JOIN b.tags t
+            WHERE b.namespaceId = :namespaceId
+            AND (
+                LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(b.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(t) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            )
+        """,
+        countQuery = """
+            SELECT COUNT(DISTINCT b) FROM Blueprint b LEFT JOIN b.tags t
+            WHERE b.namespaceId = :namespaceId
+            AND (
+                LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(b.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(t) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            )
+        """
+    )
     fun searchByKeyword(namespaceId: String, keyword: String, pageable: Pageable): Page<Blueprint>
     
     /**

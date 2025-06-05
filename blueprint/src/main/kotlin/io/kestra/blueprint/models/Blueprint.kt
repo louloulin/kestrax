@@ -14,7 +14,6 @@ import java.util.*
 @Table(name = "blueprints", indexes = [
     Index(name = "idx_blueprint_namespace", columnList = "namespaceId"),
     Index(name = "idx_blueprint_created_by", columnList = "createdBy"),
-    Index(name = "idx_blueprint_tags", columnList = "tags"),
     Index(name = "idx_blueprint_kind", columnList = "kind")
 ])
 data class Blueprint(

@@ -186,7 +186,7 @@ open class BlueprintService(
     /**
      * 获取蓝图版本列表
      */
-    fun getBlueprintVersions(blueprintId: String, pageable: Pageable): Page<BlueprintVersion> {
+    open fun getBlueprintVersions(blueprintId: String, pageable: Pageable): Page<BlueprintVersion> {
         val namespaceId = getCurrentNamespaceId()
         
         // 验证蓝图存在
@@ -200,7 +200,7 @@ open class BlueprintService(
     /**
      * 获取指定版本的蓝图
      */
-    fun getBlueprintVersion(blueprintId: String, versionNumber: Int): BlueprintVersion {
+    open fun getBlueprintVersion(blueprintId: String, versionNumber: Int): BlueprintVersion {
         val namespaceId = getCurrentNamespaceId()
         
         // 验证蓝图存在
