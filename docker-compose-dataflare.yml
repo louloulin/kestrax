@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:15
@@ -62,6 +60,7 @@ services:
     volumes:
       - dataflare_storage:/tmp/dataflare/storage
       - dataflare_logs:/app/logs
+      - ./plugins:/app/plugins
     networks:
       - dataflare-network
     healthcheck:

@@ -3,6 +3,8 @@ volumes:
     driver: local
   dataflare-data:
     driver: local
+  plugins:
+    driver: local
 
 services:
   postgres:
@@ -29,7 +31,8 @@ services:
     user: "root"
     command: server standalone
     volumes:
-      - dataflare-data:/app/storage
+      - ./dataflare-data:/app/storage
+      - ./plugins:/app/plugins
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/dataflare-wd:/tmp/dataflare-wd
     environment:

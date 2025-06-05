@@ -47,6 +47,15 @@ docker/app/kestra
 docker/app/confs/*.yml
 docker/app/secrets/*.yml
 
+### Plugins
+plugins/
+plugins/*.jar
+
+### DataFlare specific
+dataflare-data/
+dataflare-image.tar
+*.zip
+
 ### Build
 core/src/main/resources/gradle.properties
 .plugins.override
