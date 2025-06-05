@@ -1,7 +1,6 @@
 package io.kestra.blueprint.metrics
 
 import io.kestra.blueprint.repository.BlueprintRepository
-import io.kestra.blueprint.repository.NamespaceRepository
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry
@@ -19,8 +18,7 @@ import java.util.concurrent.atomic.AtomicLong
 @Singleton
 class BlueprintMetrics(
     private val meterRegistry: MeterRegistry,
-    private val blueprintRepository: BlueprintRepository,
-    private val namespaceRepository: NamespaceRepository
+    private val blueprintRepository: BlueprintRepository
 ) : ApplicationEventListener<ApplicationStartupEvent> {
     
     private val logger = LoggerFactory.getLogger(BlueprintMetrics::class.java)
@@ -40,7 +38,6 @@ class BlueprintMetrics(
     
     // 原子计数器（用于Gauge）
     private val activeBlueprintsCount = AtomicLong(0)
-    private val activeNamespacesCount = AtomicLong(0)
     private val publicBlueprintsCount = AtomicLong(0)
     private val templateBlueprintsCount = AtomicLong(0)
     
@@ -86,10 +83,6 @@ class BlueprintMetrics(
         // 初始化Gauge
         Gauge.builder("blueprint.active.count", activeBlueprintsCount) { it.get().toDouble() }
             .description("Current number of active blueprints")
-            .register(meterRegistry)
-
-        Gauge.builder("blueprint.namespace.count", activeNamespacesCount) { it.get().toDouble() }
-            .description("Current number of active namespaces")
             .register(meterRegistry)
 
         Gauge.builder("blueprint.public.count", publicBlueprintsCount) { it.get().toDouble() }
@@ -194,11 +187,10 @@ class BlueprintMetrics(
     private fun updateGaugeMetrics() {
         try {
             activeBlueprintsCount.set(blueprintRepository.count())
-            activeNamespacesCount.set(namespaceRepository.count())
-            
+
             // 这里可以添加更多复杂的查询来获取公开蓝图和模板蓝图的数量
             // 由于Repository接口限制，暂时使用简化实现
-            
+
         } catch (e: Exception) {
             logger.error("Failed to update gauge metrics", e)
         }

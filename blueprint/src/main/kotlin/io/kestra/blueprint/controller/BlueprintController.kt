@@ -1,7 +1,6 @@
 package io.kestra.blueprint.controller
 
 import io.kestra.blueprint.dto.*
-import io.kestra.blueprint.models.BlueprintVersion
 import io.kestra.blueprint.security.RequirePermission
 import io.kestra.blueprint.service.BlueprintService
 import io.kestra.blueprint.service.SimpleBlueprintSyncService
@@ -202,70 +201,7 @@ open class BlueprintController(
         blueprintService.deleteBlueprint(id)
         return HttpResponse.noContent()
     }
-    
-    /**
-     * 获取蓝图版本列表
-     */
-    @Get("/{id}/versions")
-    @RequirePermission(["blueprint:read"])
-    @Operation(
-        summary = "获取蓝图版本列表",
-        description = "获取指定蓝图的所有版本列表"
-    )
-    @ApiResponses(
-        ApiResponse(
-            responseCode = "200",
-            description = "成功获取版本列表",
-            content = [Content(schema = Schema(implementation = Page::class))]
-        ),
-        ApiResponse(responseCode = "404", description = "蓝图不存在"),
-        ApiResponse(responseCode = "401", description = "未认证"),
-        ApiResponse(responseCode = "403", description = "权限不足")
-    )
-    open fun getBlueprintVersions(
-        @Parameter(description = "蓝图ID", required = true)
-        @PathVariable @NotBlank id: String,
-        
-        @Parameter(description = "页码", example = "0")
-        @QueryValue(defaultValue = "0") @Min(0) page: Int,
-        
-        @Parameter(description = "每页大小", example = "20")
-        @QueryValue(defaultValue = "20") @Min(1) size: Int
-    ): HttpResponse<Page<BlueprintVersion>> {
-        val pageable = Pageable.from(page, size)
-        val versions = blueprintService.getBlueprintVersions(id, pageable)
-        return HttpResponse.ok(versions)
-    }
-    
-    /**
-     * 获取指定版本的蓝图
-     */
-    @Get("/{id}/versions/{versionNumber}")
-    @RequirePermission(["blueprint:read"])
-    @Operation(
-        summary = "获取指定版本的蓝图",
-        description = "获取蓝图的指定版本内容"
-    )
-    @ApiResponses(
-        ApiResponse(
-            responseCode = "200",
-            description = "成功获取蓝图版本",
-            content = [Content(schema = Schema(implementation = BlueprintVersion::class))]
-        ),
-        ApiResponse(responseCode = "404", description = "蓝图或版本不存在"),
-        ApiResponse(responseCode = "401", description = "未认证"),
-        ApiResponse(responseCode = "403", description = "权限不足")
-    )
-    open fun getBlueprintVersion(
-        @Parameter(description = "蓝图ID", required = true)
-        @PathVariable @NotBlank id: String,
-        
-        @Parameter(description = "版本号", required = true)
-        @PathVariable @Min(1) versionNumber: Int
-    ): HttpResponse<BlueprintVersion> {
-        val version = blueprintService.getBlueprintVersion(id, versionNumber)
-        return HttpResponse.ok(version)
-    }
+
     
     /**
      * 同步官网蓝图

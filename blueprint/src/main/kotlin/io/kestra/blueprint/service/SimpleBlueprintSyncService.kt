@@ -3,9 +3,11 @@ package io.kestra.blueprint.service
 import io.kestra.blueprint.dto.SyncBlueprintResponse
 import io.kestra.blueprint.dto.FailedBlueprintInfo
 import io.kestra.blueprint.models.Blueprint
-import io.kestra.blueprint.models.Namespace
+import io.kestra.blueprint.models.BlueprintTag
+import io.kestra.blueprint.models.BlueprintTask
 import io.kestra.blueprint.repository.BlueprintRepository
-import io.kestra.blueprint.repository.NamespaceRepository
+import io.kestra.blueprint.repository.BlueprintTagRepository
+import io.kestra.blueprint.repository.BlueprintTaskRepository
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.time.Instant
@@ -18,7 +20,8 @@ import java.util.*
 @Singleton
 class SimpleBlueprintSyncService(
     private val blueprintRepository: BlueprintRepository,
-    private val namespaceRepository: NamespaceRepository
+    private val blueprintTagRepository: BlueprintTagRepository,
+    private val blueprintTaskRepository: BlueprintTaskRepository
 ) {
     
     private val logger = LoggerFactory.getLogger(SimpleBlueprintSyncService::class.java)
@@ -81,25 +84,11 @@ class SimpleBlueprintSyncService(
     }
     
     /**
-     * 确保官方命名空间存在
+     * 确保官方命名空间存在（简化版本）
      */
     private fun ensureOfficialNamespace() {
-        val officialNamespace = namespaceRepository.findByName("official")
-        if (officialNamespace.isEmpty) {
-            val namespace = Namespace(
-                id = UUID.randomUUID().toString(),
-                name = "official",
-                description = "官方蓝图命名空间",
-                tenantId = "default-tenant",
-                parentId = null,
-                isActive = true,
-                createdAt = Instant.now(),
-                updatedAt = Instant.now(),
-                version = 0L
-            )
-            namespaceRepository.save(namespace)
-            logger.info("创建官方命名空间: official")
-        }
+        // 简化版本：直接使用"official"作为命名空间ID
+        logger.info("使用官方命名空间: official")
     }
     
     /**
@@ -108,21 +97,20 @@ class SimpleBlueprintSyncService(
     private fun syncBlueprint(blueprintData: SampleBlueprintData) {
         // 检查蓝图是否已存在
         val existingBlueprint = blueprintRepository.findByTitleAndNamespaceId(blueprintData.title, "official")
-        
+
         if (existingBlueprint.isPresent) {
             logger.debug("蓝图已存在，跳过: {}", blueprintData.title)
             return
         }
-        
+
         // 创建新蓝图
+        val blueprintId = UUID.randomUUID().toString()
         val blueprint = Blueprint(
-            id = UUID.randomUUID().toString(),
+            id = blueprintId,
             namespaceId = "official",
             title = blueprintData.title,
             description = blueprintData.description,
             content = blueprintData.content,
-            tags = blueprintData.tags,
-            includedTasks = blueprintData.includedTasks,
             kind = blueprintData.kind,
             isPublic = true,
             isTemplate = blueprintData.isTemplate,
@@ -131,8 +119,28 @@ class SimpleBlueprintSyncService(
             updatedAt = Instant.now(),
             version = 0L
         )
-        
+
+        // 保存蓝图
         blueprintRepository.save(blueprint)
+
+        // 保存标签
+        blueprintData.tags.forEach { tag ->
+            val blueprintTag = BlueprintTag(
+                blueprintId = blueprintId,
+                tag = tag
+            )
+            blueprintTagRepository.save(blueprintTag)
+        }
+
+        // 保存任务
+        blueprintData.includedTasks.forEach { task ->
+            val blueprintTask = BlueprintTask(
+                blueprintId = blueprintId,
+                task = task
+            )
+            blueprintTaskRepository.save(blueprintTask)
+        }
+
         logger.debug("创建新蓝图: {}", blueprintData.title)
     }
     

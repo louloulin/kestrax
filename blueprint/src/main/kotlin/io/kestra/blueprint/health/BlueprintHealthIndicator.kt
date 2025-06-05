@@ -1,7 +1,6 @@
 package io.kestra.blueprint.health
 
 import io.kestra.blueprint.repository.BlueprintRepository
-import io.kestra.blueprint.repository.NamespaceRepository
 import io.micronaut.health.HealthStatus
 import io.micronaut.management.health.indicator.HealthIndicator
 import io.micronaut.management.health.indicator.HealthResult
@@ -16,8 +15,7 @@ import java.time.Duration
  */
 @Singleton
 class BlueprintHealthIndicator(
-    private val blueprintRepository: BlueprintRepository,
-    private val namespaceRepository: NamespaceRepository
+    private val blueprintRepository: BlueprintRepository
 ) : HealthIndicator {
     
     override fun getResult(): Publisher<HealthResult> {
@@ -25,12 +23,10 @@ class BlueprintHealthIndicator(
             try {
                 // 检查数据库连接
                 val blueprintCount = blueprintRepository.count()
-                val namespaceCount = namespaceRepository.count()
-                
+
                 // 构建健康检查结果
                 val details = mapOf(
                     "blueprintCount" to blueprintCount,
-                    "namespaceCount" to namespaceCount,
                     "database" to "connected",
                     "timestamp" to System.currentTimeMillis()
                 )
