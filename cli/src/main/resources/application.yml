@@ -55,7 +55,7 @@ micronaut:
       http-version: HTTP_1_1
     services:
       api:
-        url: https://api.kestra.io
+        url: http://localhost:8084  # 重定向到本地蓝图服务
 
       remote-api:
         read-idle-timeout: 180s

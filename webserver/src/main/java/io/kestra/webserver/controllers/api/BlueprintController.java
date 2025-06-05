@@ -104,11 +104,13 @@ public class BlueprintController {
     }
 
     private String getApiBasePath(final Kind kind) {
-        return "/v1/blueprints/kinds/" + kind.val() + "/versions/" + versionProvider.getVersion();
+        // 重定向到本地蓝图服务API，忽略kind参数
+        return "/api/v1/blueprints";
     }
 
     private String getApiBasePath(final String id, final Kind kind) {
-        return "/v1/blueprints/kinds/" + kind.val() + "/" + id + "/versions/" + versionProvider.getVersion();
+        // 重定向到本地蓝图服务API，忽略kind参数
+        return "/api/v1/blueprints/" + id;
     }
 
 
