@@ -2,8 +2,11 @@ package io.kestra.queue.fluvio.serialization
 
 import io.kestra.core.models.executions.Execution
 import io.kestra.core.models.executions.TaskRun
+import io.kestra.core.models.executions.TaskRunAttempt
 import io.kestra.core.models.executions.LogEntry
 import io.kestra.core.models.executions.MetricEntry
+import io.kestra.core.models.executions.ExecutionMetadata
+import io.kestra.core.models.executions.Variables
 import io.kestra.core.models.flows.State
 import io.kestra.core.models.Label
 import io.kestra.queue.fluvio.proto.*
@@ -72,7 +75,7 @@ object ProtobufConverters {
 
         // 时间戳 - 高效时间转换
         execution.scheduleDate?.let { date ->
-            builder.setScheduleDate(date.toEpochMilli().toString())
+            builder.setScheduleDate(date.toEpochMilli())
         }
 
         // 标签 - 批量转换
@@ -93,8 +96,8 @@ object ProtobufConverters {
         execution.metadata?.let { metadata ->
             val metadataBuilder = ExecutionMetadataProto.newBuilder()
             metadata.attemptNumber?.let { metadataBuilder.setAttemptNumber(it) }
-            metadata.originalCreatedDate?.let { 
-                metadataBuilder.setOriginalCreatedDate(it.toEpochMilli())
+            metadata.originalCreatedDate?.let {
+                metadataBuilder.setOriginalCreatedDate(it.toEpochMilli().toString())
             }
             builder.setMetadata(metadataBuilder.build())
         }
@@ -122,7 +125,7 @@ object ProtobufConverters {
 
         // 状态恢复
         if (proto.hasState()) {
-            builder.state(convertStateFromProto(proto.state))
+            builder.state(convertExecutionStateFromProto(proto.state))
         }
 
         // TaskRun列表恢复 - 批量处理优化
@@ -136,12 +139,12 @@ object ProtobufConverters {
 
         // 输入参数恢复
         if (proto.inputsCount > 0) {
-            builder.inputs(HashMap(proto.inputsMap)) // 直接使用HashMap
+            builder.inputs(HashMap(proto.inputsMap) as Map<String, Any>) // 类型转换
         }
 
         // 变量恢复
         if (proto.variablesCount > 0) {
-            builder.variables(HashMap(proto.variablesMap))
+            builder.variables(HashMap(proto.variablesMap) as Map<String, Any>)
         }
 
         // 时间戳恢复
@@ -161,15 +164,15 @@ object ProtobufConverters {
 
         // 元数据恢复
         if (proto.hasMetadata()) {
-            val metadata = Execution.Metadata.builder()
+            val metadataBuilder = ExecutionMetadata.builder()
             if (proto.metadata.attemptNumber != 0) {
-                metadata.attemptNumber(proto.metadata.attemptNumber)
+                metadataBuilder.attemptNumber(proto.metadata.attemptNumber)
             }
-            if (proto.metadata.originalCreatedDate != 0L) {
-                val instant = Instant.ofEpochMilli(proto.metadata.originalCreatedDate)
-                metadata.originalCreatedDate(instant.atZone(ZoneId.systemDefault()))
+            if (proto.metadata.originalCreatedDate.isNotEmpty()) {
+                val instant = Instant.ofEpochMilli(proto.metadata.originalCreatedDate.toLong())
+                metadataBuilder.originalCreatedDate(instant)
             }
-            builder.metadata(metadata.build())
+            builder.metadata(metadataBuilder.build())
         }
 
         return builder.build()
@@ -214,9 +217,7 @@ object ProtobufConverters {
                 attempts.forEach { attempt ->
                     val attemptBuilder = TaskRunAttemptProto.newBuilder()
                     attempt.state?.let { attemptBuilder.setState(convertStateToProto(it)) }
-                    attempt.metrics?.forEach { (key, value) ->
-                        attemptBuilder.putMetrics(key, value?.toString() ?: "")
-                    }
+                    // TaskRunAttempt没有metrics字段，跳过
                     builder.addAttempts(attemptBuilder.build())
                 }
             }
@@ -250,20 +251,18 @@ object ProtobufConverters {
 
         // 输出恢复
         if (proto.outputsCount > 0) {
-            builder.outputs(HashMap(proto.outputsMap))
+            builder.outputs(Variables.inMemory(HashMap(proto.outputsMap) as Map<String, Any>))
         }
 
         // 尝试记录恢复
         if (proto.attemptsCount > 0) {
-            val attempts = ArrayList<TaskRun.TaskRunAttempt>(proto.attemptsCount)
+            val attempts = ArrayList<TaskRunAttempt>(proto.attemptsCount)
             proto.attemptsList.forEach { attemptProto ->
-                val attemptBuilder = TaskRun.TaskRunAttempt.builder()
+                val attemptBuilder = TaskRunAttempt.builder()
                 if (attemptProto.hasState()) {
                     attemptBuilder.state(convertStateFromProto(attemptProto.state))
                 }
-                if (attemptProto.metricsCount > 0) {
-                    attemptBuilder.metrics(HashMap(attemptProto.metricsMap))
-                }
+                // TaskRunAttempt没有metrics字段，跳过
                 attempts.add(attemptBuilder.build())
             }
             builder.attempts(attempts)
@@ -381,8 +380,31 @@ object ProtobufConverters {
     // ========== 高性能状态转换辅助方法 ==========
 
     /**
-     * 将State转换为Protocol Buffers
-     * 优化：直接状态映射，避免中间对象
+     * 将State转换为ExecutionStateProto (用于Execution)
+     */
+    private fun convertStateToExecutionStateProto(state: State): ExecutionStateProto {
+        val builder = ExecutionStateProto.newBuilder()
+            .setCurrent(convertStateTypeToProto(state.current))
+
+        // 历史记录 - 批量处理优化
+        state.histories?.let { histories ->
+            if (histories.isNotEmpty()) {
+                histories.forEach { history ->
+                    builder.addHistories(
+                        StateHistoryProto.newBuilder()
+                            .setState(convertStateTypeToProto(history.state))
+                            .setDate(history.date.toEpochMilli())
+                            .build()
+                    )
+                }
+            }
+        }
+
+        return builder.build()
+    }
+
+    /**
+     * 将State转换为StateProto (用于TaskRun)
      */
     private fun convertStateToProto(state: State): StateProto {
         val builder = StateProto.newBuilder()
@@ -395,7 +417,7 @@ object ProtobufConverters {
                     builder.addHistories(
                         StateHistoryProto.newBuilder()
                             .setState(convertStateTypeToProto(history.state))
-                            .setDate(history.date.toInstant().toEpochMilli())
+                            .setDate(history.date.toEpochMilli())
                             .build()
                     )
                 }
@@ -406,7 +428,32 @@ object ProtobufConverters {
     }
 
     /**
-     * 将Protocol Buffers转换为State
+     * 将ExecutionStateProto转换为State (用于Execution)
+     */
+    private fun convertExecutionStateFromProto(proto: ExecutionStateProto): State {
+        val current = convertStateTypeFromProto(proto.current)
+
+        val histories = if (proto.historiesCount > 0) {
+            val historyList = ArrayList<State.History>(proto.historiesCount) // 预分配容量
+            proto.historiesList.forEach { historyProto ->
+                val instant = Instant.ofEpochMilli(historyProto.date)
+                historyList.add(
+                    State.History(
+                        convertStateTypeFromProto(historyProto.state),
+                        instant
+                    )
+                )
+            }
+            historyList
+        } else {
+            null
+        }
+
+        return State(current, histories)
+    }
+
+    /**
+     * 将StateProto转换为State (用于TaskRun)
      */
     private fun convertStateFromProto(proto: StateProto): State {
         val current = convertStateTypeFromProto(proto.current)
@@ -418,7 +465,7 @@ object ProtobufConverters {
                 historyList.add(
                     State.History(
                         convertStateTypeFromProto(historyProto.state),
-                        instant.atZone(ZoneId.systemDefault())
+                        instant
                     )
                 )
             }
@@ -442,7 +489,12 @@ object ProtobufConverters {
         State.Type.KILLED to StateType.KILLED,
         State.Type.FAILED to StateType.FAILED,
         State.Type.WARNING to StateType.WARNING,
-        State.Type.SUCCESS to StateType.SUCCESS
+        State.Type.SUCCESS to StateType.SUCCESS,
+        State.Type.CANCELLED to StateType.CANCELLED,
+        State.Type.QUEUED to StateType.CREATED, // 映射到最接近的类型
+        State.Type.RETRYING to StateType.RUNNING, // 映射到最接近的类型
+        State.Type.RETRIED to StateType.SUCCESS, // 映射到最接近的类型
+        State.Type.SKIPPED to StateType.SKIPPED
     )
 
     private val protoToStateTypeMap = mapOf(
@@ -455,8 +507,8 @@ object ProtobufConverters {
         StateType.FAILED to State.Type.FAILED,
         StateType.WARNING to State.Type.WARNING,
         StateType.SUCCESS to State.Type.SUCCESS,
-        StateType.CANCELLED to State.Type.KILLED, // 映射到最接近的类型
-        StateType.SKIPPED to State.Type.SUCCESS // 映射到最接近的类型
+        StateType.CANCELLED to State.Type.CANCELLED,
+        StateType.SKIPPED to State.Type.SKIPPED
     )
 
     private fun convertStateTypeToProto(stateType: State.Type): StateType {

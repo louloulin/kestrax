@@ -139,7 +139,7 @@ class FluvioProtobufSerializer {
             if (data.size < 2) return false
 
             // 尝试解析QueueMessage头部
-            QueueMessage.parseFrom(data, 0, minOf(data.size, 100)) // 只解析前100字节进行检测
+            QueueMessage.parseFrom(data) // 完整解析
             true
         } catch (e: Exception) {
             false
