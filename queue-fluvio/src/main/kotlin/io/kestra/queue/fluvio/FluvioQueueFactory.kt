@@ -15,6 +15,7 @@ import io.kestra.core.server.ClusterEvent
 import io.kestra.queue.fluvio.serialization.FluvioProtobufSerializer
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Named
 import jakarta.inject.Singleton
@@ -29,6 +30,7 @@ import jakarta.inject.Singleton
  */
 @Factory
 @Requires(property = "kestra.queue.type", value = "fluvio")
+@Replaces(bean = QueueFactoryInterface::class)
 class FluvioQueueFactory(
     private val clientManager: FluvioClientManager,
     private val serializer: FluvioProtobufSerializer,
@@ -162,16 +164,14 @@ class FluvioQueueFactory(
     @Bean
     @Singleton
     override fun workerJobQueue(): WorkerJobQueueInterface {
-        // Return a wrapper that implements WorkerJobQueueInterface
-        // For now, we'll throw an exception to indicate this needs implementation
-        throw NotImplementedError("WorkerJobQueueInterface implementation pending")
+        val fluvioQueue = createFluvioQueue(WorkerJob::class.java, "worker-jobs")
+        return FluvioWorkerJobQueue(fluvioQueue)
     }
 
     @Bean
     @Singleton
     override fun workerTriggerResultQueue(): WorkerTriggerResultQueueInterface {
-        // Return a wrapper that implements WorkerTriggerResultQueueInterface
-        // For now, we'll throw an exception to indicate this needs implementation
-        throw NotImplementedError("WorkerTriggerResultQueueInterface implementation pending")
+        val fluvioQueue = createFluvioQueue(WorkerTriggerResult::class.java, "worker-trigger-results")
+        return FluvioWorkerTriggerResultQueue(fluvioQueue)
     }
 }
