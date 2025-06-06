@@ -2,9 +2,9 @@
 CREATE TABLE blueprints (
     id VARCHAR(36) PRIMARY KEY,
     namespace_id VARCHAR(36) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    content TEXT NOT NULL,
+    title VARCHAR(500) NOT NULL,
+    description CLOB,
+    content CLOB NOT NULL,
     kind VARCHAR(50),
     is_public BOOLEAN NOT NULL DEFAULT FALSE,
     is_template BOOLEAN NOT NULL DEFAULT FALSE,
