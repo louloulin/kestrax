@@ -76,7 +76,6 @@ open class BlueprintService(
     /**
      * 获取所有公开的蓝图（不受命名空间限制）
      */
-    @Cacheable("public-blueprints")
     open fun getPublicBlueprints(
         pageable: Pageable,
         keyword: String? = null,
@@ -85,6 +84,8 @@ open class BlueprintService(
         isTemplate: Boolean? = null,
         createdBy: String? = null
     ): BlueprintListResponse {
+        logger.debug("查询公开蓝图 - kind: {}, isTemplate: {}, createdBy: {}", kind, isTemplate, createdBy)
+
         // 查询所有公开的蓝图，不受命名空间限制
         val page = when {
             !kind.isNullOrBlank() -> blueprintRepository.findByIsPublicAndKind(true, kind, pageable)
@@ -92,6 +93,8 @@ open class BlueprintService(
             !createdBy.isNullOrBlank() -> blueprintRepository.findByIsPublicAndCreatedBy(true, createdBy, pageable)
             else -> blueprintRepository.findByIsPublic(true, pageable)
         }
+
+        logger.debug("查询到 {} 个公开蓝图", page.totalSize)
 
         val blueprints = page.content.map { blueprint ->
             // 获取标签和任务

@@ -707,3 +707,177 @@ CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,
 2025-06-06 09:12:30.501 [default-nioEventLoopGroup-1-5] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
 2025-06-06 09:12:30.502 [default-nioEventLoopGroup-1-5] DEBUG i.k.blueprint.controller.ApiBlueprintController - 获取蓝图列表 - q: null, tags: null, page: 1, size: 20
 2025-06-06 09:12:30.503 [default-nioEventLoopGroup-1-5] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints/community
+2025-06-06 09:49:12.133 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 09:49:12.223 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 09:49:12.223 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 09:49:12.353 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 09:49:12.374 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 09:49:12.384 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 09:49:12.385 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 09:49:12.389 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 09:49:12.403 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 09:49:12.407 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 09:49:12.417 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 09:49:12.430 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 09:49:12.439 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 09:49:12.439 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 09:49:12.556 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 09:49:12.770 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:49:12.772 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 09:49:12.775 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 900ms. Server Running: http://localhost:8084
+2025-06-06 09:49:56.607 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request POST /api/v1/blueprints/sync/sample
+2025-06-06 09:49:56.643 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 09:49:56.751 [virtual-executor1] INFO  i.kestra.blueprint.controller.BlueprintController - 开始同步示例蓝图...
+2025-06-06 09:49:56.751 [virtual-executor1] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 开始同步官方蓝图...
+2025-06-06 09:49:56.751 [virtual-executor1] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 使用官方命名空间: official
+2025-06-06 09:49:56.758 [virtual-executor1] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 准备同步 5 个示例蓝图
+2025-06-06 09:49:56.760 [virtual-executor1] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`title` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 09:49:56.767 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprints` (`namespace_id`,`title`,`description`,`content`,`kind`,`is_public`,`is_template`,`created_by`,`created_at`,`updated_at`,`version`,`id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+2025-06-06 09:49:56.768 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.769 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.769 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.769 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.770 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.770 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.770 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 数据ETL流水线
+2025-06-06 09:49:56.770 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 数据ETL流水线
+2025-06-06 09:49:56.770 [virtual-executor1] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`title` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 09:49:56.771 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprints` (`namespace_id`,`title`,`description`,`content`,`kind`,`is_public`,`is_template`,`created_by`,`created_at`,`updated_at`,`version`,`id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+2025-06-06 09:49:56.771 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.771 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.771 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: API数据同步
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: API数据同步
+2025-06-06 09:49:56.772 [virtual-executor1] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`title` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprints` (`namespace_id`,`title`,`description`,`content`,`kind`,`is_public`,`is_template`,`created_by`,`created_at`,`updated_at`,`version`,`id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.773 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 文件处理流水线
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 文件处理流水线
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`title` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprints` (`namespace_id`,`title`,`description`,`content`,`kind`,`is_public`,`is_template`,`created_by`,`created_at`,`updated_at`,`version`,`id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+2025-06-06 09:49:56.774 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.775 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.775 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.775 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.775 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 定时报告生成
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 定时报告生成
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`title` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprints` (`namespace_id`,`title`,`description`,`content`,`kind`,`is_public`,`is_template`,`created_by`,`created_at`,`updated_at`,`version`,`id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+2025-06-06 09:49:56.776 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_tags` (`blueprint_id`,`tag`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG io.micronaut.data.query - Executing SQL query: INSERT INTO `blueprint_included_tasks` (`blueprint_id`,`task`) VALUES (?,?)
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 创建新蓝图: 数据质量检查
+2025-06-06 09:49:56.777 [virtual-executor1] DEBUG i.k.blueprint.service.SimpleBlueprintSyncService - 成功同步蓝图: 数据质量检查
+2025-06-06 09:49:56.777 [virtual-executor1] INFO  i.k.blueprint.service.SimpleBlueprintSyncService - 蓝图同步完成 - 成功: 5, 失败: 0, 耗时: 26ms
+2025-06-06 09:49:56.822 [virtual-executor1] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - POST /api/v1/blueprints/sync/sample
+2025-06-06 09:50:12.489 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:50:17.055 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints/community
+2025-06-06 09:50:17.056 [default-nioEventLoopGroup-1-3] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 09:50:17.068 [default-nioEventLoopGroup-1-3] DEBUG i.k.blueprint.controller.ApiBlueprintController - 获取蓝图列表 - q: null, tags: null, page: 1, size: 20
+2025-06-06 09:50:17.068 [default-nioEventLoopGroup-1-3] DEBUG io.kestra.blueprint.service.BlueprintService - 查询公开蓝图 - kind: null, isTemplate: null, createdBy: null
+2025-06-06 09:50:17.069 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?) LIMIT 20
+2025-06-06 09:50:17.070 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?)
+2025-06-06 09:50:17.071 [default-nioEventLoopGroup-1-3] DEBUG io.kestra.blueprint.service.BlueprintService - 查询到 5 个公开蓝图
+2025-06-06 09:50:17.071 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 09:50:17.072 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 09:50:17.072 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 09:50:17.072 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 09:50:17.073 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 09:50:17.073 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 09:50:17.073 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 09:50:17.073 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 09:50:17.073 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 09:50:17.074 [default-nioEventLoopGroup-1-3] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 09:50:17.078 [default-nioEventLoopGroup-1-3] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints/community
+2025-06-06 09:51:12.491 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:52:13.738 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:53:17.749 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:54:20.014 [scheduled-executor-thread-3] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:55:20.018 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:55:57.678 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 09:55:57.700 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 09:55:57.701 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 09:56:08.456 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 09:56:08.572 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 09:56:08.573 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 09:56:08.711 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 09:56:08.728 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 09:56:08.738 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 09:56:08.739 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 09:56:08.742 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 09:56:08.756 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 09:56:08.760 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 09:56:08.771 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 09:56:08.785 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 09:56:08.794 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 09:56:08.795 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 09:56:08.917 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 09:56:09.159 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:56:09.161 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 09:56:09.163 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 986ms. Server Running: http://localhost:8084
+2025-06-06 09:57:08.821 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:58:08.825 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:58:46.674 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /health
+2025-06-06 09:58:46.709 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: official, userId: system
+2025-06-06 09:58:46.722 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 401 - GET /health
+2025-06-06 09:58:58.756 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 09:58:58.772 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 09:58:58.773 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 09:59:07.090 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 09:59:07.171 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 09:59:07.171 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 09:59:07.280 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 09:59:07.296 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 09:59:07.305 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 09:59:07.305 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 09:59:07.308 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 09:59:07.320 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 09:59:07.323 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 09:59:07.333 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.005s)
+2025-06-06 09:59:07.346 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 09:59:07.354 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 09:59:07.354 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 09:59:07.457 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 09:59:07.638 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 09:59:07.639 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 09:59:07.641 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 796ms. Server Running: http://localhost:8084
+2025-06-06 10:00:09.834 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:00:43.823 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 10:00:43.910 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 10:00:43.911 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 10:00:44.046 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 10:00:44.063 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 10:00:44.072 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 10:00:44.073 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 10:00:44.076 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 10:00:44.089 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 10:00:44.092 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 10:00:44.102 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 10:00:44.115 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 10:00:44.124 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 10:00:44.124 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 10:00:44.232 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 10:00:44.405 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:00:44.407 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 10:00:44.408 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 831ms. Server Running: http://localhost:8084
+2025-06-06 10:01:48.240 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:02:53.025 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:04:12.900 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47s765ms).
+2025-06-06 10:04:13.058 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_

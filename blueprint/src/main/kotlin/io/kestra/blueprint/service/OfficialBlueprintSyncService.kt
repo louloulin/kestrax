@@ -103,19 +103,50 @@ class OfficialBlueprintSyncService(
      * 获取flows目录下的所有文件
      */
     private fun getFlowFiles(): List<GitHubFile> {
-        val request = HttpRequest.GET<Any>("/repos/$GITHUB_REPO/contents/$FLOWS_PATH")
-        val response = githubClient.toBlocking().exchange(request, Array<GitHubFile>::class.java)
-        
-        return response.body()?.filter { it.type == "file" && it.name.endsWith(".yaml") } ?: emptyList()
+        return try {
+            logger.debug("获取GitHub仓库文件列表: {}/{}", GITHUB_REPO, FLOWS_PATH)
+            val request = HttpRequest.GET<Any>("/repos/$GITHUB_REPO/contents/$FLOWS_PATH")
+                .header("User-Agent", "Kestra-Blueprint-Sync/1.0")
+                .header("Accept", "application/vnd.github.v3+json")
+
+            val response = githubClient.toBlocking().exchange(request, Array<GitHubFile>::class.java)
+            val files = response.body()?.filter { it.type == "file" && it.name.endsWith(".yaml") } ?: emptyList()
+            logger.info("发现 {} 个YAML文件", files.size)
+            files
+        } catch (e: Exception) {
+            logger.error("获取GitHub文件列表失败: {}", e.message)
+            throw e
+        }
     }
     
     /**
      * 下载文件内容
      */
     private fun downloadFileContent(downloadUrl: String): String {
-        // 使用简单的HTTP GET请求下载文件内容
-        val url = java.net.URL(downloadUrl)
-        return url.readText()
+        return try {
+            // 使用简单的HTTP GET请求下载文件内容，增加重试机制
+            var lastException: Exception? = null
+            repeat(3) { attempt ->
+                try {
+                    logger.debug("下载文件内容 (尝试 ${attempt + 1}/3): {}", downloadUrl)
+                    val url = java.net.URL(downloadUrl)
+                    val connection = url.openConnection()
+                    connection.connectTimeout = 30000 // 30秒连接超时
+                    connection.readTimeout = 60000    // 60秒读取超时
+                    return connection.getInputStream().bufferedReader().use { it.readText() }
+                } catch (e: Exception) {
+                    lastException = e
+                    logger.warn("下载失败 (尝试 ${attempt + 1}/3): {} - {}", downloadUrl, e.message)
+                    if (attempt < 2) {
+                        Thread.sleep(2000) // 等待2秒后重试
+                    }
+                }
+            }
+            throw lastException ?: Exception("下载失败")
+        } catch (e: Exception) {
+            logger.error("下载文件内容失败: {} - {}", downloadUrl, e.message)
+            throw e
+        }
     }
     
     /**
