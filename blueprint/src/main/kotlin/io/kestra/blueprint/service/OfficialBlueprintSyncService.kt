@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
 import java.time.Instant
 import java.util.*
-import java.util.regex.Pattern
 
 /**
  * 官方蓝图同步服务
@@ -60,7 +59,7 @@ class OfficialBlueprintSyncService(
                 try {
                     val content = downloadFileContent(file.downloadUrl)
                     val blueprint = parseBlueprint(file.name, content)
-                    
+
                     if (blueprint != null) {
                         syncBlueprint(blueprint)
                         successCount++
@@ -114,9 +113,9 @@ class OfficialBlueprintSyncService(
      * 下载文件内容
      */
     private fun downloadFileContent(downloadUrl: String): String {
-        val request = HttpRequest.GET<Any>(downloadUrl)
-        val response = githubClient.toBlocking().exchange(request, String::class.java)
-        return response.body() ?: throw RuntimeException("无法下载文件内容")
+        // 使用简单的HTTP GET请求下载文件内容
+        val url = java.net.URL(downloadUrl)
+        return url.readText()
     }
     
     /**
@@ -124,22 +123,21 @@ class OfficialBlueprintSyncService(
      */
     private fun parseBlueprint(fileName: String, content: String): ParsedBlueprint? {
         try {
-            val yamlData = yaml.load<Map<String, Any>>(content)
-            
+            val yamlData = yaml.load(content) as? Map<String, Any> ?: return null
+
             val id = yamlData["id"] as? String ?: fileName.removeSuffix(".yaml")
-            val namespace = yamlData["namespace"] as? String ?: "demo"
             val extend = yamlData["extend"] as? Map<String, Any>
-            
+
             val title = extend?.get("title") as? String ?: id.replace("-", " ").replaceFirstChar { it.uppercase() }
-            val description = extend?.get("description") as? String ?: "从官方蓝图仓库同步的工作流"
+            val description = extend?.get("description") as? String ?: "从Kestra官方仓库同步的工作流蓝图"
             val tags = (extend?.get("tags") as? List<*>)?.mapNotNull { it as? String } ?: emptyList()
             val isDemo = extend?.get("demo") as? Boolean ?: false
             val isEE = extend?.get("ee") as? Boolean ?: false
-            
+
             // 提取任务类型
-            val tasks = yamlData["tasks"] as? List<*> ?: emptyList()
+            val tasks = yamlData["tasks"] as? List<*> ?: emptyList<Any>()
             val includedTasks = extractTaskTypes(tasks)
-            
+
             return ParsedBlueprint(
                 id = id,
                 title = title,
@@ -152,19 +150,19 @@ class OfficialBlueprintSyncService(
                 isDemo = isDemo,
                 isEE = isEE
             )
-            
+
         } catch (e: Exception) {
             logger.error("解析蓝图失败: {} - {}", fileName, e.message)
             return null
         }
     }
-    
+
     /**
      * 提取任务类型
      */
     private fun extractTaskTypes(tasks: List<*>): List<String> {
         val taskTypes = mutableSetOf<String>()
-        
+
         for (task in tasks) {
             if (task is Map<*, *>) {
                 val type = task["type"] as? String
@@ -173,10 +171,10 @@ class OfficialBlueprintSyncService(
                 }
             }
         }
-        
+
         return taskTypes.toList()
     }
-    
+
     /**
      * 同步单个蓝图
      */
@@ -210,7 +208,8 @@ class OfficialBlueprintSyncService(
         blueprintRepository.save(blueprint)
 
         // 保存标签
-        parsedBlueprint.tags.forEach { tag ->
+        val allTags = parsedBlueprint.tags + listOf("官方", "Kestra")
+        allTags.forEach { tag ->
             val blueprintTag = BlueprintTag(
                 blueprintId = blueprintId,
                 tag = tag
@@ -218,7 +217,7 @@ class OfficialBlueprintSyncService(
             blueprintTagRepository.save(blueprintTag)
         }
 
-        // 保存任务
+        // 保存任务类型
         parsedBlueprint.includedTasks.forEach { task ->
             val blueprintTask = BlueprintTask(
                 blueprintId = blueprintId,
@@ -238,6 +237,7 @@ data class GitHubFile(
     val name: String,
     val path: String,
     val type: String,
+    @com.fasterxml.jackson.annotation.JsonProperty("download_url")
     val downloadUrl: String
 )
 
@@ -256,3 +256,5 @@ data class ParsedBlueprint(
     val isDemo: Boolean,
     val isEE: Boolean
 )
+
+

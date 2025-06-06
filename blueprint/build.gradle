@@ -44,6 +44,9 @@ dependencies {
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-jackson-databind"
     implementation "io.micronaut:micronaut-runtime"
+
+    // YAML解析
+    implementation "org.yaml:snakeyaml:2.0"
     
     // Micronaut Security
     implementation "io.micronaut.security:micronaut-security"

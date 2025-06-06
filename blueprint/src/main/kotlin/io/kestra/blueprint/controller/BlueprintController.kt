@@ -10,6 +10,8 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
@@ -219,6 +221,7 @@ open class BlueprintController(
      * 同步官网蓝图
      */
     @Post("/sync/official")
+    @ExecuteOn(TaskExecutors.BLOCKING)
     @RequirePermission(["blueprint:admin"])
     @Operation(
         summary = "同步官网蓝图",
@@ -241,6 +244,44 @@ open class BlueprintController(
             HttpResponse.ok(response)
         } catch (e: Exception) {
             logger.error("同步官方蓝图失败", e)
+            val response = SyncBlueprintResponse(
+                success = false,
+                message = "同步失败: ${e.message}",
+                syncedCount = 0,
+                failedCount = 0,
+                failedBlueprints = listOf(FailedBlueprintInfo("unknown", e.message ?: "未知错误"))
+            )
+            HttpResponse.status<SyncBlueprintResponse>(HttpStatus.INTERNAL_SERVER_ERROR).body(response)
+        }
+    }
+
+    /**
+     * 同步示例蓝图（测试数据）
+     */
+    @Post("/sync/sample")
+    @ExecuteOn(TaskExecutors.BLOCKING)
+    @RequirePermission(["blueprint:admin"])
+    @Operation(
+        summary = "同步示例蓝图",
+        description = "同步示例蓝图数据（用于测试和演示）"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "同步成功",
+            content = [Content(schema = Schema(implementation = SyncBlueprintResponse::class))]
+        ),
+        ApiResponse(responseCode = "401", description = "未认证"),
+        ApiResponse(responseCode = "403", description = "权限不足"),
+        ApiResponse(responseCode = "500", description = "同步失败")
+    )
+    open fun syncSampleBlueprints(): HttpResponse<SyncBlueprintResponse> {
+        return try {
+            logger.info("开始同步示例蓝图...")
+            val response = simpleBlueprintSyncService.syncOfficialBlueprints()
+            HttpResponse.ok(response)
+        } catch (e: Exception) {
+            logger.error("同步示例蓝图失败", e)
             val response = SyncBlueprintResponse(
                 success = false,
                 message = "同步失败: ${e.message}",

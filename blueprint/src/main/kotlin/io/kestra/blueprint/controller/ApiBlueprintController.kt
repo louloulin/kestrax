@@ -76,12 +76,11 @@ open class ApiBlueprintController(
         logger.debug("获取蓝图列表 - q: {}, tags: {}, page: {}, size: {}", q, tags, page, size)
         
         val pageable = Pageable.from(page - 1, size) // 前端页码从1开始，后端从0开始
-        val response = blueprintService.getBlueprints(
+        val response = blueprintService.getPublicBlueprints(
             pageable = pageable,
             keyword = q,
             tags = tags,
             kind = kind,
-            isPublic = isPublic,
             isTemplate = isTemplate,
             createdBy = createdBy
         )

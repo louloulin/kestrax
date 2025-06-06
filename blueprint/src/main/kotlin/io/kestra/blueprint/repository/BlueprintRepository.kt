@@ -58,7 +58,27 @@ interface BlueprintRepository : CrudRepository<Blueprint, String> {
      * 根据命名空间ID统计蓝图数量
      */
     fun countByNamespaceId(namespaceId: String): Long
-    
+
+    /**
+     * 查找所有公开的蓝图（不受命名空间限制）
+     */
+    fun findByIsPublic(isPublic: Boolean, pageable: Pageable): Page<Blueprint>
+
+    /**
+     * 根据是否公开和类型查找蓝图
+     */
+    fun findByIsPublicAndKind(isPublic: Boolean, kind: String, pageable: Pageable): Page<Blueprint>
+
+    /**
+     * 根据是否公开和是否为模板查找蓝图
+     */
+    fun findByIsPublicAndIsTemplate(isPublic: Boolean, isTemplate: Boolean, pageable: Pageable): Page<Blueprint>
+
+    /**
+     * 根据是否公开和创建者查找蓝图
+     */
+    fun findByIsPublicAndCreatedBy(isPublic: Boolean, createdBy: String, pageable: Pageable): Page<Blueprint>
+
 
     
     /**
