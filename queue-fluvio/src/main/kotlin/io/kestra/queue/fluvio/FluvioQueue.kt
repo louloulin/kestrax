@@ -1,6 +1,6 @@
 package io.kestra.queue.fluvio
 
-// TODO: Add Fluvio imports when client is available
+import com.infinyon.fluvio.*
 import io.kestra.core.exceptions.DeserializationException
 import io.kestra.core.metrics.MetricRegistry
 import io.kestra.core.queues.QueueException
@@ -75,9 +75,8 @@ class FluvioQueue<T>(
             }
 
             // Send message using Fluvio Java client API
-            // For now, we'll use a simplified approach
-            // TODO: Replace with actual Fluvio client when available
-            logger.debug("Would send message to Fluvio topic {} with key {}", actualTopicName, key)
+            // The API is: producer.send(key, value) - both as byte arrays
+            producer.send(key.toByteArray(), data)
 
             // Update metrics similar to JdbcQueue
             metricRegistry.counter(
@@ -146,11 +145,25 @@ class FluvioQueue<T>(
 
         return poll {
             try {
-                // TODO: Replace with actual Fluvio consumer when available
-                logger.debug("Would poll messages from topic {} for consumer group {}", actualTopicName, consumerGroup)
+                val fluvioConsumer = getConsumer(actualTopicName, consumerGroup)
+                val stream = fluvioConsumer.stream(Offset.beginning())
 
-                // For now, return 0 to indicate no messages
-                0
+                // Try to get one record with timeout
+                val record = stream.next()
+                if (record != null) {
+                    processRecord(record, consumer)
+
+                    // Update metrics
+                    metricRegistry.counter(
+                        "queue.message.in.count",
+                        "Total number of messages received from queue",
+                        MetricRegistry.TAG_CLASS_NAME, queueType()
+                    ).increment()
+
+                    1
+                } else {
+                    0
+                }
             } catch (e: Exception) {
                 logger.error("Error polling messages from topic {}", actualTopicName, e)
                 0
@@ -174,11 +187,25 @@ class FluvioQueue<T>(
 
         return poll {
             try {
-                // TODO: Replace with actual Fluvio consumer when available
-                logger.debug("Would poll messages from topic {} for consumer group {}", actualTopicName, consumerGroup)
+                val fluvioConsumer = getConsumer(actualTopicName, consumerGroup)
+                val stream = fluvioConsumer.stream(Offset.beginning())
 
-                // For now, return 0 to indicate no messages
-                0
+                // Try to get one record with timeout
+                val record = stream.next()
+                if (record != null) {
+                    processRecord(record, consumer)
+
+                    // Update metrics
+                    metricRegistry.counter(
+                        "queue.message.in.count",
+                        "Total number of messages received from queue",
+                        MetricRegistry.TAG_CLASS_NAME, queueType()
+                    ).increment()
+
+                    1
+                } else {
+                    0
+                }
             } catch (e: Exception) {
                 logger.error("Error polling messages from topic {}", actualTopicName, e)
                 0
@@ -209,11 +236,44 @@ class FluvioQueue<T>(
 
         return poll {
             try {
-                // TODO: Replace with actual Fluvio consumer when available
-                logger.debug("Would poll batch messages from topic {} for consumer group {}", actualTopicName, consumerGroup)
+                val fluvioConsumer = getConsumer(actualTopicName, consumerGroup)
+                val stream = fluvioConsumer.stream(Offset.beginning())
 
-                // For now, return 0 to indicate no messages
-                0
+                // Collect a batch of records
+                val batch = mutableListOf<Either<T, DeserializationException>>()
+                val maxBatchSize = config.consumer.maxPollRecords
+
+                for (i in 0 until maxBatchSize) {
+                    val record = stream.next()
+                    if (record != null) {
+                        try {
+                            val message = serializer.deserialize(record.value(), messageType)
+                            batch.add(Either.left<T, DeserializationException>(message))
+                        } catch (e: Exception) {
+                            metricRegistry.counter(
+                                "queue.message.failed.count",
+                                "Total number of failed queue messages",
+                                MetricRegistry.TAG_CLASS_NAME, queueType()
+                            ).increment()
+                            batch.add(Either.right<T, DeserializationException>(DeserializationException(e, String(record.value()))))
+                        }
+                    } else {
+                        break
+                    }
+                }
+
+                if (batch.isNotEmpty()) {
+                    consumer.accept(batch)
+
+                    // Update metrics
+                    metricRegistry.counter(
+                        "queue.message.in.count",
+                        "Total number of messages received from queue",
+                        MetricRegistry.TAG_CLASS_NAME, queueType()
+                    ).increment(batch.size.toDouble())
+                }
+
+                batch.size
             } catch (e: Exception) {
                 logger.error("Error in batch polling from topic {}", actualTopicName, e)
                 0
@@ -310,11 +370,11 @@ class FluvioQueue<T>(
         return Runnable { running.set(false) }
     }
 
-    private fun getProducer(topicName: String): Any {
+    private fun getProducer(topicName: String): TopicProducer {
         return clientManager.getProducer(topicName)
     }
 
-    private fun getConsumer(topicName: String, consumerGroup: String?): Any {
+    private fun getConsumer(topicName: String, consumerGroup: String?): PartitionConsumer {
         return clientManager.getConsumer(topicName, consumerGroup)
     }
 
@@ -326,17 +386,17 @@ class FluvioQueue<T>(
         }
     }
 
-    private fun processRecord(record: Any, consumer: Consumer<Either<T, DeserializationException>>) {
+    private fun processRecord(record: Record, consumer: Consumer<Either<T, DeserializationException>>) {
         try {
-            // TODO: Replace with actual record processing when Fluvio client is available
-            logger.debug("Would process record: {}", record)
+            val message = serializer.deserialize(record.value(), messageType)
+            consumer.accept(Either.left(message))
         } catch (e: Exception) {
             metricRegistry.counter(
                 "queue.message.failed.count",
                 "Total number of failed queue messages",
                 MetricRegistry.TAG_CLASS_NAME, queueType()
             ).increment()
-            consumer.accept(Either.right(DeserializationException(e, record.toString())))
+            consumer.accept(Either.right(DeserializationException(e, String(record.value()))))
         }
     }
 
