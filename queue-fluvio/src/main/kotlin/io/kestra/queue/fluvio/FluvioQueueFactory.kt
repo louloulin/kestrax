@@ -158,6 +158,13 @@ class FluvioQueueFactory(
         return createFluvioQueue(SubflowExecutionEnd::class.java, "subflow-execution-end")
     }
 
+    @Bean
+    @Singleton
+    @Named(QueueFactoryInterface.CLUSTER_EVENT_NAMED)
+    fun clusterEvent(): QueueInterface<ClusterEvent> {
+        return createFluvioQueue(ClusterEvent::class.java, "cluster-events")
+    }
+
     // Special queue interfaces that extend the base QueueInterface
     // For now, we'll use the standard FluvioQueue implementation
 
