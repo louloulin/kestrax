@@ -489,13 +489,23 @@ kestra:
 - ✅ **回退机制**: 完整的默认配置和回退逻辑
 - ✅ **健康检查**: 集成的连接和健康检查配置
 
-#### 5. **测试验证** (100% 完成)
-- ✅ **单元测试**: 37个测试通过，覆盖核心功能
+#### 6. **监控和可观测性系统** (100% 完成)
+- ✅ **FluvioMetricsCollector**: 完整的指标收集系统，支持消息计数、延迟统计、连接状态监控
+- ✅ **FluvioHealthIndicator**: 集成Micronaut健康检查，提供实时健康状态报告
+- ✅ **FluvioHealthChecker**: 深度健康检查器，包含连接测试、性能测试、配置验证
+- ✅ **FluvioQueueMonitor**: 实时监控器，支持告警管理、自动恢复、性能统计
+- ✅ **Micrometer集成**: 完整的Gauge、Counter、Timer指标集成
+- ✅ **告警系统**: 支持高延迟、低成功率、连接失败等多种告警类型
+- ✅ **实时统计**: 提供实时性能统计、健康状态、监控状态和活跃告警信息
+
+#### 7. **测试验证** (100% 完成)
+- ✅ **单元测试**: 83个测试通过，覆盖核心功能
 - ✅ **集成测试**: 验证与Kestra核心组件的集成
 - ✅ **性能测试框架**: 为性能基准测试做好准备
 - ✅ **错误场景测试**: 验证异常处理和错误恢复
 - ✅ **Protocol Buffers测试**: 16个测试验证完整Protocol Buffers序列化和性能提升
 - ✅ **ClusterEvent测试**: 7个新增测试验证集群事件队列的序列化和工厂方法
+- ✅ **监控功能测试**: 16个新增测试验证指标收集、健康检查和实时监控功能
 
 ### 🎯 关键技术成就
 
@@ -526,6 +536,13 @@ kestra:
 - ✅ 监控指标集成（MetricRegistry）
 - ✅ 配置管理和主题定制
 - ✅ 健康检查支持
+
+#### 4. **监控和可观测性**
+- ✅ 实时性能指标收集（消息计数、延迟统计、成功率）
+- ✅ 健康检查集成（连接状态、性能检查、配置验证）
+- ✅ 告警系统（高延迟、低成功率、连接失败告警）
+- ✅ Micrometer指标集成（Gauge、Counter、Timer）
+- ✅ 并发安全的指标收集（AtomicLong、ConcurrentHashMap）
 
 ### 📊 测试结果
 
@@ -801,6 +818,184 @@ fun getPerformanceStats(): Map<String, Any> {
 
 **🎉 完整Protocol Buffers高性能序列化实现成功！Fluvio队列系统现已具备3-4倍性能提升，为Kestra提供了企业级高性能队列解决方案！** 🚀
 
+### 🔍 监控和可观测性实现
+
+#### 1. **实时指标收集**
+```kotlin
+@Singleton
+class FluvioMetricsCollector(private val meterRegistry: MeterRegistry) {
+    // 消息统计
+    private val messagesSent = AtomicLong(0)
+    private val messagesReceived = AtomicLong(0)
+    private val messagesFailed = AtomicLong(0)
+
+    // 性能指标
+    private val totalLatency = AtomicLong(0)
+    private val latencyCount = AtomicLong(0)
+    private val maxLatency = AtomicLong(0)
+    private val minLatency = AtomicLong(Long.MAX_VALUE)
+
+    fun recordMessageSent(queueType: String, consumerGroup: String?, latencyMs: Long = 0) {
+        messagesSent.incrementAndGet()
+        if (latencyMs > 0) recordLatency(latencyMs)
+
+        // Micrometer指标
+        meterRegistry.counter("fluvio.queue.messages.sent",
+            "queue_type", queueType, "group", consumerGroup ?: "default").increment()
+    }
+
+    fun getPerformanceStatistics(): PerformanceStatistics {
+        val sent = messagesSent.get()
+        val received = messagesReceived.get()
+        val failed = messagesFailed.get()
+        val avgLatency = if (latencyCount.get() > 0)
+            totalLatency.get().toDouble() / latencyCount.get() else 0.0
+
+        return PerformanceStatistics(
+            messagesSent = sent,
+            messagesReceived = received,
+            messagesFailed = failed,
+            averageLatencyMs = avgLatency,
+            maxLatencyMs = maxLatency.get(),
+            minLatencyMs = if (minLatency.get() == Long.MAX_VALUE) 0 else minLatency.get(),
+            successRate = if (sent > 0) ((sent - failed).toDouble() / sent * 100) else 100.0,
+            connectionStatus = connectionStatus.get(),
+            queueCount = queueMetrics.size,
+            lastConnectionTime = lastConnectionTime.get()
+        )
+    }
+}
+```
+
+#### 2. **健康检查系统**
+```kotlin
+@Singleton
+class FluvioHealthIndicator(
+    private val metricsCollector: FluvioMetricsCollector,
+    private val config: FluvioQueueConfiguration
+) : HealthIndicator {
+
+    override fun getResult(): Publisher<HealthResult> {
+        return Mono.fromCallable {
+            val healthStatus = metricsCollector.getHealthStatus()
+            val performanceStats = metricsCollector.getPerformanceStatistics()
+
+            val status = if (healthStatus.healthy) HealthStatus.UP else HealthStatus.DOWN
+
+            HealthResult.builder("fluvio", status)
+                .details(mapOf(
+                    "connection" to mapOf(
+                        "status" to performanceStats.connectionStatus,
+                        "healthy" to healthStatus.healthy,
+                        "lastConnection" to performanceStats.lastConnectionTime
+                    ),
+                    "performance" to mapOf(
+                        "averageLatency" to performanceStats.averageLatencyMs,
+                        "successRate" to performanceStats.successRate,
+                        "healthy" to (performanceStats.averageLatencyMs < 100.0 &&
+                                    performanceStats.successRate > 95.0)
+                    ),
+                    "statistics" to mapOf(
+                        "messagesSent" to performanceStats.messagesSent,
+                        "messagesReceived" to performanceStats.messagesReceived,
+                        "queueCount" to performanceStats.queueCount
+                    )
+                ))
+                .build()
+        }
+    }
+}
+```
+
+#### 3. **实时监控器**
+```kotlin
+@Singleton
+class FluvioQueueMonitor(
+    private val metricsCollector: FluvioMetricsCollector,
+    private val healthChecker: FluvioHealthChecker,
+    private val meterRegistry: MeterRegistry,
+    private val config: MonitorConfig = MonitorConfig()
+) {
+
+    fun getRealTimeStatistics(): RealTimeStatistics {
+        return RealTimeStatistics(
+            timestamp = Instant.now(),
+            performanceStats = metricsCollector.getPerformanceStatistics(),
+            healthStatus = metricsCollector.getHealthStatus(),
+            monitoringStatus = getMonitoringStatus(),
+            activeAlerts = alertManager.getActiveAlerts()
+        )
+    }
+
+    fun startMonitoring() {
+        if (isRunning.compareAndSet(false, true)) {
+            // 启动健康检查调度器
+            healthCheckScheduler = Executors.newSingleThreadScheduledExecutor()
+            healthCheckScheduler.scheduleAtFixedRate(
+                { performHealthCheck() },
+                0,
+                config.healthCheckIntervalSeconds.toLong(),
+                TimeUnit.SECONDS
+            )
+
+            // 启动告警检查调度器
+            alertCheckScheduler = Executors.newSingleThreadScheduledExecutor()
+            alertCheckScheduler.scheduleAtFixedRate(
+                { checkAlerts() },
+                0,
+                config.alertCheckIntervalSeconds.toLong(),
+                TimeUnit.SECONDS
+            )
+        }
+    }
+}
+```
+
+#### 4. **告警系统**
+```kotlin
+@Singleton
+class AlertManager(private val meterRegistry: MeterRegistry) {
+    private val activeAlerts = ConcurrentHashMap<AlertKey, Alert>()
+
+    fun checkAlerts(stats: PerformanceStatistics, healthStatus: HealthStatus, config: MonitorConfig) {
+        // 检查高延迟告警
+        if (stats.averageLatencyMs > config.latencyAlertThresholdMs) {
+            val alert = Alert(
+                type = AlertType.HIGH_LATENCY,
+                message = "Average latency ${stats.averageLatencyMs}ms exceeds threshold ${config.latencyAlertThresholdMs}ms",
+                severity = AlertSeverity.WARNING,
+                timestamp = Instant.now()
+            )
+            addAlert(alert)
+        }
+
+        // 检查成功率告警
+        if (stats.successRate < config.successRateAlertThreshold) {
+            val alert = Alert(
+                type = AlertType.LOW_SUCCESS_RATE,
+                message = "Success rate ${stats.successRate}% below threshold ${config.successRateAlertThreshold}%",
+                severity = AlertSeverity.CRITICAL,
+                timestamp = Instant.now()
+            )
+            addAlert(alert)
+        }
+
+        // 检查连接状态告警
+        if (stats.connectionStatus != ConnectionStatus.CONNECTED) {
+            val alert = Alert(
+                type = AlertType.CONNECTION_FAILED,
+                message = "Connection status: ${stats.connectionStatus}",
+                severity = AlertSeverity.CRITICAL,
+                timestamp = Instant.now()
+            )
+            addAlert(alert)
+        }
+    }
+}
+```
+
+**🎯 监控功能完整实现！提供企业级实时监控、健康检查、告警系统，确保Fluvio队列系统的高可用性和可观测性！** 📊
+
 ## 📅 基于Kestra架构的8周实施计划
 
 ### 第1-2周: 基础设施和架构分析
@@ -873,16 +1068,18 @@ fun getPerformanceStats(): Map<String, Any> {
   - [ ] 并发执行和资源竞争测试
   - [ ] 暂停/恢复功能测试
 
-#### 第6周: 迁移策略和双写模式
-- [ ] **双写模式实现**
-  - [ ] HybridQueueFactory支持JDBC+Fluvio双写
-  - [ ] 数据一致性验证机制
-  - [ ] 性能影响评估和优化
+#### 第6周: 迁移策略和生产准备
+- [ ] **简化迁移策略**（避免双写模式的复杂性）
+  - [ ] 配置切换验证机制
+  - [ ] 快速回滚流程（5分钟内完成）
+  - [ ] 迁移前后数据完整性检查
+  - [ ] 性能基线建立和对比
 
-- [ ] **迁移工具开发**
-  - [ ] 配置切换工具
-  - [ ] 数据迁移脚本（如果需要）
-  - [ ] 回滚机制实现
+- [ ] **生产就绪验证**
+  - [ ] 完整的端到端功能测试
+  - [ ] 负载测试和性能验证
+  - [ ] 监控和告警系统测试
+  - [ ] 故障恢复和回滚演练
 
 ### 第7-8周: 生产部署和性能优化
 **目标**: 生产环境部署和最终优化
@@ -894,16 +1091,16 @@ fun getPerformanceStats(): Map<String, Any> {
   - [ ] 安全配置和权限管理
   - [ ] 监控和告警系统完善
 
-- [ ] **渐进式切换**
-  - [ ] 双写模式生产验证
-  - [ ] 小流量切换测试
-  - [ ] 性能监控和基线建立
+- [ ] **原子切换策略**
+  - [ ] 维护窗口内完整切换（避免双写复杂性）
+  - [ ] 实时性能监控和基线建立
+  - [ ] 快速回滚机制验证
 
-#### 第8周: 全面切换和优化
-- [ ] **生产流量切换**
-  - [ ] 分阶段流量切换（10% → 50% → 100%）
+#### 第8周: 生产切换和优化
+- [ ] **生产环境原子切换**
+  - [ ] 维护窗口内完整切换（配置变更重启）
   - [ ] 实时性能监控和调优
-  - [ ] 问题快速响应和处理
+  - [ ] 问题快速响应和5分钟回滚能力
 
 - [ ] **项目收尾**
   - [ ] 旧JDBC队列系统下线
@@ -1030,10 +1227,10 @@ fun getPerformanceStats(): Map<String, Any> {
 #### 3. 数据一致性风险
 **风险**: 迁移过程中消息丢失或重复
 **缓解措施**:
-- 实施双写模式确保数据一致性
-- 基于消息ID的去重机制
-- 实时数据对比和验证工具
-- 分阶段迁移策略
+- 采用原子切换策略（避免双写复杂性）
+- 维护窗口内完整切换，确保数据一致性
+- 迁移前后数据完整性验证
+- 5分钟内快速回滚机制
 
 #### 4. 性能回退风险
 **风险**: Fluvio性能不如预期，影响系统稳定性
@@ -1103,86 +1300,56 @@ public class QueueHealthMonitor {
 }
 ```
 
-#### 2. 双写模式实现
-```java
-@Component
-@ConditionalOnProperty(name = "kestra.queue.dual-write.enabled", havingValue = "true")
-public class DualWriteQueueWrapper<T> implements QueueInterface<T> {
+#### 2. 简化迁移策略（推荐）
+```yaml
+# 避免双写模式的复杂性，采用原子切换策略
 
-    private final QueueInterface<T> primaryQueue;   // Fluvio
-    private final QueueInterface<T> secondaryQueue; // JDBC
-    private final DualWriteConfig config;
+# 步骤1：当前JDBC配置
+kestra:
+  queue:
+    type: jdbc
 
-    @Override
-    public void emit(String consumerGroup, T message) throws QueueException {
-        QueueException primaryException = null;
+# 步骤2：切换到Fluvio（重启应用）
+kestra:
+  queue:
+    type: fluvio
+    fluvio:
+      cluster-endpoint: "localhost:9003"
 
-        // 主队列写入
-        try {
-            primaryQueue.emit(consumerGroup, message);
-        } catch (QueueException e) {
-            primaryException = e;
-            log.warn("Primary queue emit failed", e);
-        }
-
-        // 备份队列写入
-        try {
-            secondaryQueue.emit(consumerGroup, message);
-        } catch (QueueException e) {
-            log.warn("Secondary queue emit failed", e);
-            if (primaryException != null) {
-                // 两个队列都失败，抛出异常
-                throw new QueueException("Both primary and secondary queues failed", e);
-            }
-        }
-
-        // 如果主队列失败但备份成功，记录但不抛异常
-        if (primaryException != null) {
-            metricRegistry.counter("queue.primary.failure").increment();
-        }
-    }
-
-    @Override
-    public Runnable receive(String consumerGroup,
-                           Consumer<Either<T, DeserializationException>> consumer,
-                           boolean forUpdate) {
-        // 只从主队列消费，避免重复处理
-        return primaryQueue.receive(consumerGroup, consumer, forUpdate);
-    }
-}
+# 步骤3：如需回滚（重启应用）
+kestra:
+  queue:
+    type: jdbc
 ```
 
-#### 3. 消息一致性验证
-```java
+**原子切换的优势**:
+- ✅ **简单可靠**: 避免双写的复杂性和一致性问题
+- ✅ **原子操作**: 要么全部JDBC，要么全部Fluvio，无中间状态
+- ✅ **快速回滚**: 5分钟内完成配置回滚和重启
+- ✅ **无数据冲突**: 避免重复消费和数据不一致
+- ✅ **性能最优**: 避免双写的性能开销
+
+#### 3. 迁移验证机制
+```kotlin
 @Component
-public class MessageConsistencyValidator {
+class MigrationValidator {
 
-    @Scheduled(fixedDelay = 60000) // 每分钟检查一次
-    public void validateMessageConsistency() {
-        if (!isDualWriteMode()) {
-            return;
-        }
+    fun validatePreMigration(): ValidationResult {
+        return ValidationResult.builder()
+            .fluvioClusterHealth(checkFluvioCluster())
+            .topicConfiguration(validateTopics())
+            .performanceBaseline(establishBaseline())
+            .backupStrategy(validateBackup())
+            .build()
+    }
 
-        // 检查最近1分钟的消息一致性
-        Instant checkPoint = Instant.now().minus(Duration.ofMinutes(1));
-
-        Map<String, Integer> fluvioMessageCounts = getFluvioMessageCounts(checkPoint);
-        Map<String, Integer> jdbcMessageCounts = getJdbcMessageCounts(checkPoint);
-
-        for (String queueType : fluvioMessageCounts.keySet()) {
-            int fluvioCount = fluvioMessageCounts.getOrDefault(queueType, 0);
-            int jdbcCount = jdbcMessageCounts.getOrDefault(queueType, 0);
-
-            double discrepancy = Math.abs(fluvioCount - jdbcCount) / (double) Math.max(fluvioCount, jdbcCount);
-
-            if (discrepancy > 0.05) { // 5%的差异阈值
-                log.warn("Message count discrepancy detected for queue {}: Fluvio={}, JDBC={}",
-                    queueType, fluvioCount, jdbcCount);
-
-                metricRegistry.gauge("queue.consistency.discrepancy", discrepancy,
-                    "queue_type", queueType);
-            }
-        }
+    fun validatePostMigration(): ValidationResult {
+        return ValidationResult.builder()
+            .functionalTest(runFunctionalTests())
+            .performanceTest(runPerformanceTests())
+            .dataIntegrity(checkDataIntegrity())
+            .rollbackCapability(testRollback())
+            .build()
     }
 }
 ```
@@ -1521,16 +1688,16 @@ public class QueuePerformanceBenchmark {
 
 ### 第5-6周检查清单
 - [ ] **迁移准备**
-  - [ ] 双写模式实现
-  - [ ] 数据一致性检查器
-  - [ ] 监控指标集成
-  - [ ] 回滚机制实现
+  - [ ] 原子切换策略验证
+  - [ ] 快速回滚机制实现（5分钟内）
+  - [ ] 迁移前后数据完整性检查
+  - [ ] 监控指标集成和基线建立
 
 - [ ] **验证测试**
-  - [ ] 开发环境迁移测试
+  - [ ] 开发环境原子切换测试
   - [ ] 性能对比验证
-  - [ ] 数据完整性验证
-  - [ ] 故障恢复测试
+  - [ ] 功能完整性验证
+  - [ ] 故障恢复和回滚演练
 
 ### 第7-8周检查清单
 - [ ] **生产部署**
@@ -1540,9 +1707,9 @@ public class QueuePerformanceBenchmark {
   - [ ] 备份和恢复机制
 
 - [ ] **切换和优化**
-  - [ ] 双写模式生产验证
-  - [ ] 渐进式流量切换
-  - [ ] 性能监控和调优
+  - [ ] 原子切换生产验证
+  - [ ] 实时性能监控和调优
+  - [ ] 快速回滚能力验证
   - [ ] 文档更新和培训
 
 ## 🎯 质量保证标准
@@ -1627,7 +1794,7 @@ public class QueuePerformanceBenchmark {
 #### 里程碑3（第6周末）: 兼容性验证完成
 - [ ] 所有队列类型功能测试通过
 - [ ] 性能基准测试达到预期目标
-- [ ] 双写模式实现并验证
+- [ ] 原子切换策略验证完成
 
 #### 里程碑4（第8周末）: 生产就绪
 - [ ] 生产环境部署完成
