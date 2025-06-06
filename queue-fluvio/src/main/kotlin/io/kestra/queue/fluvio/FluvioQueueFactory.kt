@@ -12,7 +12,7 @@ import io.kestra.core.queues.WorkerJobQueueInterface
 import io.kestra.core.queues.WorkerTriggerResultQueueInterface
 import io.kestra.core.runners.*
 import io.kestra.core.server.ClusterEvent
-import io.kestra.queue.fluvio.serialization.ProtobufSerializer
+import io.kestra.queue.fluvio.serialization.FluvioProtobufSerializer
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Requires
@@ -31,7 +31,7 @@ import jakarta.inject.Singleton
 @Requires(property = "kestra.queue.type", value = "fluvio")
 class FluvioQueueFactory(
     private val clientManager: FluvioClientManager,
-    private val serializer: ProtobufSerializer,
+    private val serializer: FluvioProtobufSerializer,
     private val queueService: QueueService,
     private val metricRegistry: MetricRegistry,
     private val config: FluvioQueueConfiguration,

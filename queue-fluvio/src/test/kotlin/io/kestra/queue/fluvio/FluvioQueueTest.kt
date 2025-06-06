@@ -4,7 +4,7 @@ import io.kestra.core.models.executions.Execution
 import io.kestra.core.queues.QueueService
 import io.kestra.core.metrics.MetricRegistry
 import io.kestra.core.utils.ExecutorsUtils
-import io.kestra.queue.fluvio.serialization.ProtobufSerializer
+import io.kestra.queue.fluvio.serialization.FluvioProtobufSerializer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito.*
@@ -17,7 +17,7 @@ class FluvioQueueTest {
     fun `should create FluvioQueue with correct configuration`() {
         // Given
         val clientManager = mock(FluvioClientManager::class.java)
-        val serializer = mock(ProtobufSerializer::class.java)
+        val serializer = mock(FluvioProtobufSerializer::class.java)
         val queueService = mock(QueueService::class.java)
         val metricRegistry = mock(MetricRegistry::class.java)
         val executorsUtils = mock(ExecutorsUtils::class.java)

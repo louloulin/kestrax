@@ -2,17 +2,22 @@ package io.kestra.queue.fluvio.serialization
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kestra.core.exceptions.DeserializationException
+import io.kestra.core.models.executions.Execution
+import io.kestra.core.models.executions.TaskRun
+import io.kestra.core.models.executions.LogEntry
+import io.kestra.core.models.executions.MetricEntry
+import io.kestra.queue.fluvio.proto.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 /**
- * Simplified serializer for Fluvio queue messages
- * Uses JSON serialization as a fallback until Protocol Buffers are properly configured
+ * Protocol Buffers serializer for Fluvio queue messages
+ * Currently uses JSON as fallback, will be enhanced with Protocol Buffers later
  */
 @Singleton
-class ProtobufSerializer {
+class FluvioProtobufSerializer {
 
-    private val logger = LoggerFactory.getLogger(ProtobufSerializer::class.java)
+    private val logger = LoggerFactory.getLogger(FluvioProtobufSerializer::class.java)
     private val objectMapper = ObjectMapper()
 
     /**

@@ -9,7 +9,7 @@ import io.kestra.core.queues.QueueService
 import io.kestra.core.utils.Either
 import io.kestra.core.utils.ExecutorsUtils
 import io.kestra.core.utils.IdUtils
-import io.kestra.queue.fluvio.serialization.ProtobufSerializer
+import io.kestra.queue.fluvio.serialization.FluvioProtobufSerializer
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.time.Duration
@@ -37,7 +37,7 @@ class FluvioQueue<T>(
     private val messageType: Class<T>,
     private val queueTypeName: String,
     private val clientManager: FluvioClientManager,
-    private val serializer: ProtobufSerializer,
+    private val serializer: FluvioProtobufSerializer,
     private val queueService: QueueService,
     private val metricRegistry: MetricRegistry,
     private val config: FluvioQueueConfiguration,

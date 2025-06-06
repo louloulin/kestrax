@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'idea'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 configurations {
@@ -68,6 +69,35 @@ java {
 }
 
 
+
+// Protocol Buffers configuration
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.1"
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option "lite"
+                }
+            }
+        }
+    }
+}
+
+// Ensure proto files are compiled before Java compilation
+compileJava.dependsOn generateProto
+
+// Add generated sources to source sets
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
 
 test {
     useJUnitPlatform()
