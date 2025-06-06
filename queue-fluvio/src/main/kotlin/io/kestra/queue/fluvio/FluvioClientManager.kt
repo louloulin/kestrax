@@ -1,6 +1,6 @@
 package io.kestra.queue.fluvio
 
-// TODO: Add Fluvio imports when client is available
+import com.infinyon.fluvio.*
 import io.micronaut.context.event.ApplicationEventListener
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.context.event.ShutdownEvent
@@ -22,10 +22,9 @@ class FluvioClientManager(
     private val isInitialized = AtomicBoolean(false)
     private val isShutdown = AtomicBoolean(false)
 
-    // TODO: Replace with actual Fluvio client when available
-    private var fluvio: Any? = null
-    private val producers = ConcurrentHashMap<String, Any>()
-    private val consumers = ConcurrentHashMap<String, Any>()
+    private lateinit var fluvio: Fluvio
+    private val producers = ConcurrentHashMap<String, TopicProducer>()
+    private val consumers = ConcurrentHashMap<String, PartitionConsumer>()
     
     /**
      * Initialize Fluvio connection on application startup
@@ -59,12 +58,11 @@ class FluvioClientManager(
     /**
      * Get or create a producer for the specified topic
      */
-    fun getProducer(topicName: String): Any {
+    fun getProducer(topicName: String): TopicProducer {
         ensureInitialized()
         return producers.computeIfAbsent(topicName) { topic ->
             logger.debug("Creating producer for topic: {}", topic)
-            // TODO: Replace with actual Fluvio producer
-            "mock-producer-$topic"
+            fluvio.producer(topic)
         }
     }
 
@@ -72,14 +70,15 @@ class FluvioClientManager(
      * Get or create a consumer for the specified topic
      * Note: Fluvio Java client uses partition-based consumers
      */
-    fun getConsumer(topicName: String, consumerGroup: String? = null): Any {
+    fun getConsumer(topicName: String, consumerGroup: String? = null): PartitionConsumer {
         ensureInitialized()
         val consumerKey = if (consumerGroup != null) "$topicName:$consumerGroup" else topicName
 
         return consumers.computeIfAbsent(consumerKey) { _ ->
             logger.debug("Creating consumer for topic: {}, group: {}", topicName, consumerGroup)
-            // TODO: Replace with actual Fluvio consumer
-            "mock-consumer-$consumerKey"
+            // Fluvio Java client uses partition-based consumers
+            // For simplicity, we'll use partition 0 by default
+            fluvio.consumer(topicName, 0)
         }
     }
     
@@ -91,8 +90,8 @@ class FluvioClientManager(
             if (!isInitialized.get() || isShutdown.get()) {
                 false
             } else {
-                // TODO: Replace with actual health check when Fluvio client is available
-                logger.debug("Mock health check passed")
+                // Simple health check by checking if we can get cluster metadata
+                fluvio.metadata()
                 true
             }
         } catch (e: Exception) {
@@ -105,16 +104,16 @@ class FluvioClientManager(
      * Get Fluvio client for topic management
      * Note: Fluvio Java client doesn't have a separate admin client
      */
-    fun getFluvio(): Any? {
+    fun getFluvio(): Fluvio {
         ensureInitialized()
         return fluvio
     }
     
     private fun initializeFluvio() {
-        // TODO: Replace with actual Fluvio client initialization
-        fluvio = "mock-fluvio-client"
+        // Initialize Fluvio client with cluster endpoint
+        fluvio = Fluvio.connect(config.clusterEndpoint)
 
-        logger.info("Mock Fluvio client initialized")
+        logger.info("Connected to Fluvio cluster at {}", config.clusterEndpoint)
     }
     
     private fun createTopics() {

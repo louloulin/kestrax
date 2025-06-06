@@ -17,9 +17,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
 
-    // Fluvio Java client - using specific version that's available
-    // Note: This may need to be updated based on actual availability
-    implementation("com.infinyon:fluvio:0.12.14")
+    // Fluvio Java client - using version 0.12.15
+    implementation("com.infinyon:fluvio:0.12.15")
 
     // Protocol Buffers
     implementation("com.google.protobuf:protobuf-java:3.25.1")
