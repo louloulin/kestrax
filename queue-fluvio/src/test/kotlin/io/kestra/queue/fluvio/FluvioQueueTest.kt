@@ -24,6 +24,7 @@ class FluvioQueueTest {
 
         // Mock the ExecutorsUtils to return non-null values
         `when`(executorsUtils.cachedThreadPool(anyString())).thenReturn(java.util.concurrent.Executors.newCachedThreadPool())
+        `when`(executorsUtils.maxCachedThreadPool(anyInt(), anyString())).thenReturn(java.util.concurrent.Executors.newCachedThreadPool())
 
         // When
         val queue = FluvioQueue(
