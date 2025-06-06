@@ -1,97 +1,98 @@
 package io.kestra.queue.fluvio
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kestra.core.models.executions.Execution
-import io.kestra.core.models.flows.State
 import io.kestra.core.queues.QueueService
 import io.kestra.core.metrics.MetricRegistry
+import io.kestra.core.utils.ExecutorsUtils
 import io.kestra.queue.fluvio.serialization.ProtobufSerializer
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.mockk.mockk
-import io.mockk.every
 import jakarta.inject.Inject
-import java.time.Instant
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
+import org.mockito.Mockito.*
 
 @MicronautTest
-class FluvioQueueTest : StringSpec() {
-    
+class FluvioQueueTest {
+
     @Inject
     lateinit var config: FluvioQueueConfiguration
-    
-    init {
-        "should create FluvioQueue with correct configuration" {
-            // Given
-            val clientManager = mockk<FluvioClientManager>()
-            val serializer = mockk<ProtobufSerializer>()
-            val queueService = mockk<QueueService>()
-            val metricRegistry = mockk<MetricRegistry>()
-            
-            // When
-            val queue = FluvioQueue(
-                messageType = Execution::class.java,
-                queueTypeName = "executions",
-                clientManager = clientManager,
-                serializer = serializer,
-                queueService = queueService,
-                metricRegistry = metricRegistry,
-                config = config
-            )
-            
-            // Then
-            queue shouldNotBe null
-        }
-        
-        "should generate correct topic name" {
-            // Given
-            val queueType = "worker-jobs"
-            
-            // When
-            val topicName = config.getTopicName(queueType)
-            
-            // Then
-            topicName shouldBe "kestra-worker-jobs"
-        }
-        
-        "should use custom topic configuration when available" {
-            // Given
-            val customConfig = FluvioQueueConfiguration(
-                topics = mapOf(
-                    "executions" to FluvioQueueConfiguration.TopicConfig(
-                        partitions = 10,
-                        replicationFactor = 3,
-                        topicName = "custom-executions"
-                    )
+
+    @Test
+    fun `should create FluvioQueue with correct configuration`() {
+        // Given
+        val clientManager = mock(FluvioClientManager::class.java)
+        val serializer = mock(ProtobufSerializer::class.java)
+        val queueService = mock(QueueService::class.java)
+        val metricRegistry = mock(MetricRegistry::class.java)
+        val executorsUtils = mock(ExecutorsUtils::class.java)
+
+        // When
+        val queue = FluvioQueue(
+            messageType = Execution::class.java,
+            queueTypeName = "executions",
+            clientManager = clientManager,
+            serializer = serializer,
+            queueService = queueService,
+            metricRegistry = metricRegistry,
+            config = config,
+            executorsUtils = executorsUtils
+        )
+
+        // Then
+        assertNotNull(queue)
+    }
+
+    @Test
+    fun `should generate correct topic name`() {
+        // Given
+        val queueType = "worker-jobs"
+
+        // When
+        val topicName = config.getTopicName(queueType)
+
+        // Then
+        assertEquals("kestra-worker-jobs", topicName)
+    }
+
+    @Test
+    fun `should use custom topic configuration when available`() {
+        // Given
+        val customConfig = FluvioQueueConfiguration(
+            topics = mapOf(
+                "executions" to FluvioQueueConfiguration.TopicConfig(
+                    partitions = 10,
+                    replicationFactor = 3,
+                    topicName = "custom-executions"
                 )
             )
-            
-            // When
-            val topicName = customConfig.getTopicName("executions")
-            val partitions = customConfig.getPartitions("executions")
-            val replicationFactor = customConfig.getReplicationFactor("executions")
-            
-            // Then
-            topicName shouldBe "custom-executions"
-            partitions shouldBe 10
-            replicationFactor shouldBe 3
-        }
-        
-        "should fall back to default configuration when topic config not found" {
-            // Given
-            val defaultConfig = FluvioQueueConfiguration(
-                partitions = 5,
-                replicationFactor = 2
-            )
-            
-            // When
-            val partitions = defaultConfig.getPartitions("unknown-queue")
-            val replicationFactor = defaultConfig.getReplicationFactor("unknown-queue")
-            
-            // Then
-            partitions shouldBe 5
-            replicationFactor shouldBe 2
-        }
+        )
+
+        // When
+        val topicName = customConfig.getTopicName("executions")
+        val partitions = customConfig.getPartitions("executions")
+        val replicationFactor = customConfig.getReplicationFactor("executions")
+
+        // Then
+        assertEquals("custom-executions", topicName)
+        assertEquals(10, partitions)
+        assertEquals(3, replicationFactor)
+    }
+
+    @Test
+    fun `should fall back to default configuration when topic config not found`() {
+        // Given
+        val defaultConfig = FluvioQueueConfiguration(
+            partitions = 5,
+            replicationFactor = 2
+        )
+
+        // When
+        val partitions = defaultConfig.getPartitions("unknown-queue")
+        val replicationFactor = defaultConfig.getReplicationFactor("unknown-queue")
+
+        // Then
+        assertEquals(5, partitions)
+        assertEquals(2, replicationFactor)
     }
 }
 

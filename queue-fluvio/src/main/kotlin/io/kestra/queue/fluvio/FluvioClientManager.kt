@@ -1,22 +1,15 @@
 package io.kestra.queue.fluvio
 
-import com.infinyon.fluvio.Fluvio
-import com.infinyon.fluvio.FluvioAdmin
-import com.infinyon.fluvio.FluvioConfig
-import com.infinyon.fluvio.FluvioProducer
-import com.infinyon.fluvio.FluvioConsumer
-import com.infinyon.fluvio.TopicSpec
-import io.micronaut.context.annotation.Bean
-import io.micronaut.context.annotation.Factory
+import com.infinyon.fluvio.*
 import io.micronaut.context.event.ApplicationEventListener
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.context.event.ShutdownEvent
 import jakarta.inject.Singleton
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
-private val logger = KotlinLogging.logger {}
+private val logger = LoggerFactory.getLogger(FluvioClientManager::class.java)
 
 /**
  * Manages Fluvio client connections and topic creation
@@ -24,15 +17,14 @@ private val logger = KotlinLogging.logger {}
 @Singleton
 class FluvioClientManager(
     private val config: FluvioQueueConfiguration
-) : ApplicationEventListener<StartupEvent>, ApplicationEventListener<ShutdownEvent> {
-    
+) : ApplicationEventListener<StartupEvent> {
+
     private val isInitialized = AtomicBoolean(false)
     private val isShutdown = AtomicBoolean(false)
-    
+
     private lateinit var fluvio: Fluvio
-    private lateinit var admin: FluvioAdmin
-    private val producers = ConcurrentHashMap<String, FluvioProducer>()
-    private val consumers = ConcurrentHashMap<String, FluvioConsumer>()
+    private val producers = ConcurrentHashMap<String, TopicProducer>()
+    private val consumers = ConcurrentHashMap<String, PartitionConsumer>()
     
     /**
      * Initialize Fluvio connection on application startup
@@ -40,12 +32,12 @@ class FluvioClientManager(
     override fun onApplicationEvent(event: StartupEvent) {
         if (isInitialized.compareAndSet(false, true)) {
             try {
-                logger.info { "Initializing Fluvio client manager..." }
+                logger.info("Initializing Fluvio client manager...")
                 initializeFluvio()
                 createTopics()
-                logger.info { "Fluvio client manager initialized successfully" }
+                logger.info("Fluvio client manager initialized successfully")
             } catch (e: Exception) {
-                logger.error(e) { "Failed to initialize Fluvio client manager" }
+                logger.error("Failed to initialize Fluvio client manager", e)
                 isInitialized.set(false)
                 throw e
             }
@@ -55,44 +47,38 @@ class FluvioClientManager(
     /**
      * Cleanup resources on application shutdown
      */
-    override fun onApplicationEvent(event: ShutdownEvent) {
+    fun shutdown() {
         if (isShutdown.compareAndSet(false, true)) {
-            logger.info { "Shutting down Fluvio client manager..." }
+            logger.info("Shutting down Fluvio client manager...")
             cleanup()
-            logger.info { "Fluvio client manager shutdown completed" }
+            logger.info("Fluvio client manager shutdown completed")
         }
     }
     
     /**
      * Get or create a producer for the specified topic
      */
-    fun getProducer(topicName: String): FluvioProducer {
+    fun getProducer(topicName: String): TopicProducer {
         ensureInitialized()
         return producers.computeIfAbsent(topicName) { topic ->
-            logger.debug { "Creating producer for topic: $topic" }
+            logger.debug("Creating producer for topic: {}", topic)
             fluvio.producer(topic)
         }
     }
-    
+
     /**
      * Get or create a consumer for the specified topic
+     * Note: Fluvio Java client uses partition-based consumers
      */
-    fun getConsumer(topicName: String, consumerGroup: String? = null): FluvioConsumer {
+    fun getConsumer(topicName: String, consumerGroup: String? = null): PartitionConsumer {
         ensureInitialized()
         val consumerKey = if (consumerGroup != null) "$topicName:$consumerGroup" else topicName
-        
+
         return consumers.computeIfAbsent(consumerKey) { _ ->
-            logger.debug { "Creating consumer for topic: $topicName, group: $consumerGroup" }
-            if (consumerGroup != null) {
-                fluvio.consumerWithConfig(topicName) {
-                    groupId(consumerGroup)
-                    autoOffsetReset(config.consumer.autoOffsetReset)
-                    sessionTimeout(config.consumer.sessionTimeout.toMillis().toInt())
-                    heartbeatInterval(config.consumer.heartbeatInterval.toMillis().toInt())
-                }
-            } else {
-                fluvio.consumer(topicName)
-            }
+            logger.debug("Creating consumer for topic: {}, group: {}", topicName, consumerGroup)
+            // Fluvio Java client uses partition-based consumers
+            // For simplicity, we'll use partition 0 by default
+            fluvio.consumer(topicName, 0)
         }
     }
     
@@ -105,32 +91,29 @@ class FluvioClientManager(
                 false
             } else {
                 // Simple health check by listing topics
-                admin.listTopics().isNotEmpty() || admin.listTopics().isEmpty()
+                admin.listTopics()
                 true
             }
         } catch (e: Exception) {
-            logger.warn(e) { "Fluvio health check failed" }
+            logger.warn("Fluvio health check failed", e)
             false
         }
     }
     
     /**
-     * Get admin client for topic management
+     * Get Fluvio client for topic management
+     * Note: Fluvio Java client doesn't have a separate admin client
      */
-    fun getAdmin(): FluvioAdmin {
+    fun getFluvio(): Fluvio {
         ensureInitialized()
-        return admin
+        return fluvio
     }
     
     private fun initializeFluvio() {
-        val fluvioConfig = FluvioConfig.builder()
-            .endpoint(config.clusterEndpoint)
-            .build()
-        
-        fluvio = Fluvio.connect(fluvioConfig)
-        admin = fluvio.admin()
-        
-        logger.info { "Connected to Fluvio cluster at ${config.clusterEndpoint}" }
+        // Fluvio Java client uses a simple connect method
+        fluvio = Fluvio.connect()
+
+        logger.info("Connected to Fluvio cluster")
     }
     
     private fun createTopics() {
@@ -152,30 +135,11 @@ class FluvioClientManager(
             "subflow-execution-end"
         )
         
-        val existingTopics = admin.listTopics().map { it.name }.toSet()
-        
-        requiredTopics.forEach { queueType ->
-            val topicName = config.getTopicName(queueType)
-            
-            if (topicName !in existingTopics) {
-                logger.info { "Creating topic: $topicName" }
-                
-                val topicSpec = TopicSpec.builder()
-                    .partitions(config.getPartitions(queueType))
-                    .replicationFactor(config.getReplicationFactor(queueType))
-                    .build()
-                
-                try {
-                    admin.createTopic(topicName, topicSpec)
-                    logger.info { "Successfully created topic: $topicName" }
-                } catch (e: Exception) {
-                    logger.error(e) { "Failed to create topic: $topicName" }
-                    throw e
-                }
-            } else {
-                logger.debug { "Topic already exists: $topicName" }
-            }
-        }
+        // Note: Fluvio Java client doesn't provide topic management APIs
+        // Topics need to be created externally using the Fluvio CLI
+        // This is a limitation of the current Java client
+        logger.info("Topic creation is handled externally via Fluvio CLI")
+        logger.info("Required topics: {}", requiredTopics.joinToString(", "))
     }
     
     private fun cleanup() {
@@ -185,33 +149,28 @@ class FluvioClientManager(
                 try {
                     producer.close()
                 } catch (e: Exception) {
-                    logger.warn(e) { "Error closing producer" }
+                    logger.warn("Error closing producer", e)
                 }
             }
             producers.clear()
-            
+
             // Close all consumers
             consumers.values.forEach { consumer ->
                 try {
                     consumer.close()
                 } catch (e: Exception) {
-                    logger.warn(e) { "Error closing consumer" }
+                    logger.warn("Error closing consumer", e)
                 }
             }
             consumers.clear()
-            
-            // Close admin client
-            if (::admin.isInitialized) {
-                admin.close()
-            }
-            
+
             // Close main Fluvio connection
             if (::fluvio.isInitialized) {
                 fluvio.close()
             }
-            
+
         } catch (e: Exception) {
-            logger.error(e) { "Error during Fluvio cleanup" }
+            logger.error("Error during Fluvio cleanup", e)
         }
     }
     

@@ -290,8 +290,8 @@ subprojects {
  **********************************************************************************************************************/
 subprojects {
     if (it.name != 'platform' && it.name != 'jmh-benchmarks') {
-        // Apply Kotlin plugin for blueprint module
-        if (it.name == 'blueprint') {
+        // Apply Kotlin plugin for blueprint and queue-fluvio modules
+        if (it.name == 'blueprint' || it.name == 'queue-fluvio') {
             apply plugin: 'org.jetbrains.kotlin.jvm'
             apply plugin: 'org.jetbrains.kotlin.kapt'
         }

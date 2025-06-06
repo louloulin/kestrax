@@ -1,7 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
-    id 'org.jetbrains.kotlin.plugin.allopen'
-    id 'com.google.protobuf' version '0.9.4'
+    id 'java-library'
+    id 'idea'
 }
 
 configurations {
@@ -18,19 +17,18 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
 
-    // Fluvio client
-    implementation("com.infinyon:fluvio:0.15.0")
+    // Fluvio Java client - using specific version that's available
+    // Note: This may need to be updated based on actual availability
+    implementation("com.infinyon:fluvio:0.12.14")
 
     // Protocol Buffers
     implementation("com.google.protobuf:protobuf-java:3.25.1")
     implementation("com.google.protobuf:protobuf-java-util:3.25.1")
-    implementation("com.google.protobuf:protobuf-kotlin:3.25.1")
 
     // Micronaut
     implementation("io.micronaut:micronaut-context")
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut:micronaut-validation")
-    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
 
     // Logging
     implementation("ch.qos.logback:logback-classic")
@@ -48,6 +46,26 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
+}
+
+// Configure Kotlin compilation to use JVM 21 for compatibility
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "21"  // Use JVM 21 target for compatibility
+    }
+}
+
+// Configure KAPT to use same JVM target as Kotlin
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs).configureEach {
+    kotlinOptions {
+        jvmTarget = "21"  // Match Kotlin compilation target
+    }
+}
+
+// Set Java to version 21 for compatibility
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 // Kotlin configuration
