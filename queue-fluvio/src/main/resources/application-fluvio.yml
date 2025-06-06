@@ -1,0 +1,148 @@
+kestra:
+  queue:
+    type: fluvio
+    
+    # Fluvio specific configuration
+    fluvio:
+      # Fluvio cluster endpoint
+      cluster-endpoint: "fluvio-sc:9003"
+      
+      # Topic prefix for all Kestra topics
+      topic-prefix: "kestra"
+      
+      # Default replication factor for topics
+      replication-factor: 2
+      
+      # Default number of partitions for topics
+      partitions: 3
+      
+      # Topic retention configuration
+      retention:
+        # Time-based retention (7 days)
+        time: "P7D"
+        # Size-based retention (10GB)
+        size: 10737418240
+      
+      # Producer configuration
+      producer:
+        # Batch size for batching messages
+        batch-size: 100
+        # Linger time in milliseconds
+        linger-ms: 10
+        # Compression type (none, gzip, snappy, lz4, zstd)
+        compression: "lz4"
+        # Request timeout
+        request-timeout: "PT30S"
+        # Retry attempts
+        retry-attempts: 3
+        # Retry backoff
+        retry-backoff: "PT0.1S"
+      
+      # Consumer configuration
+      consumer:
+        # Minimum bytes to fetch
+        fetch-min-bytes: 1024
+        # Maximum wait time for fetch
+        fetch-max-wait: "PT0.5S"
+        # Maximum records per poll
+        max-poll-records: 100
+        # Consumer group session timeout
+        session-timeout: "PT30S"
+        # Consumer group heartbeat interval
+        heartbeat-interval: "PT3S"
+        # Auto offset reset policy (earliest, latest)
+        auto-offset-reset: "latest"
+      
+      # Health check configuration
+      health-check:
+        # Enable health checks
+        enabled: true
+        # Health check interval
+        interval: "PT30S"
+        # Failure threshold before marking as unhealthy
+        failure-threshold: 3
+        # Enable automatic fallback to JDBC
+        auto-fallback: true
+        # Connection timeout for health checks
+        connection-timeout: "PT5S"
+      
+      # Topic-specific configurations
+      topics:
+        executions:
+          partitions: 6
+          replication-factor: 3
+          retention-time: "P14D"  # 14 days for executions
+        
+        worker-jobs:
+          partitions: 12
+          replication-factor: 2
+          retention-time: "P3D"   # 3 days for worker jobs
+        
+        logs:
+          partitions: 3
+          replication-factor: 2
+          retention-time: "P7D"   # 7 days for logs
+          retention-size: 5368709120  # 5GB for logs
+        
+        metrics:
+          partitions: 3
+          replication-factor: 2
+          retention-time: "P30D"  # 30 days for metrics
+
+# Micronaut configuration for Kotlin
+micronaut:
+  application:
+    name: kestra-fluvio-queue
+  
+  # Enable Kotlin coroutines support
+  executors:
+    io:
+      type: fixed
+      nThreads: 10
+
+# Logging configuration
+logger:
+  levels:
+    io.kestra.queue.fluvio: DEBUG
+    com.infinyon.fluvio: INFO
+    
+# Development profile specific settings
+---
+micronaut:
+  environments: dev
+
+kestra:
+  queue:
+    fluvio:
+      cluster-endpoint: "localhost:9003"
+      health-check:
+        auto-fallback: false  # Disable auto-fallback in dev
+
+---
+# Production profile specific settings
+micronaut:
+  environments: prod
+
+kestra:
+  queue:
+    fluvio:
+      cluster-endpoint: "fluvio-sc.kestra.svc.cluster.local:9003"
+      replication-factor: 3
+      partitions: 6
+      
+      producer:
+        batch-size: 500
+        linger-ms: 50
+        retry-attempts: 5
+        
+      consumer:
+        max-poll-records: 500
+        
+      health-check:
+        failure-threshold: 5
+        auto-fallback: true
+
+logger:
+  levels:
+    io.kestra.queue.fluvio: INFO
+    root: WARN

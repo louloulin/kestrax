@@ -17,6 +17,8 @@ include 'jdbc-h2'
 include 'jdbc-mysql'
 include 'jdbc-postgres'
 
+include 'queue-fluvio'
+
 include 'webserver'
 include 'ui'
 include 'model'
