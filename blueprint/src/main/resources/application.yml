@@ -36,6 +36,10 @@ micronaut:
       pool:
         enabled: true
         max-connections: 50
+      proxy:
+        type: HTTP
+        host: 127.0.0.1
+        port: 4780
 
 # 数据源配置
 datasources:

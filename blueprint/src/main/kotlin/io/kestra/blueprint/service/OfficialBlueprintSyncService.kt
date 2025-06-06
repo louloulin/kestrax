@@ -26,7 +26,8 @@ class OfficialBlueprintSyncService(
     private val blueprintRepository: BlueprintRepository,
     private val blueprintTagRepository: BlueprintTagRepository,
     private val blueprintTaskRepository: BlueprintTaskRepository,
-    @Client("https://api.github.com") private val githubClient: HttpClient
+    @Client("https://api.github.com") private val githubClient: HttpClient,
+    @Client("https://raw.githubusercontent.com") private val rawClient: HttpClient
 ) {
     
     private val logger = LoggerFactory.getLogger(OfficialBlueprintSyncService::class.java)
@@ -124,16 +125,22 @@ class OfficialBlueprintSyncService(
      */
     private fun downloadFileContent(downloadUrl: String): String {
         return try {
-            // 使用简单的HTTP GET请求下载文件内容，增加重试机制
+            // 使用Micronaut HTTP客户端下载文件内容，支持代理
             var lastException: Exception? = null
             repeat(3) { attempt ->
                 try {
                     logger.debug("下载文件内容 (尝试 ${attempt + 1}/3): {}", downloadUrl)
+
+                    // 解析URL，提取路径部分
                     val url = java.net.URL(downloadUrl)
-                    val connection = url.openConnection()
-                    connection.connectTimeout = 30000 // 30秒连接超时
-                    connection.readTimeout = 60000    // 60秒读取超时
-                    return connection.getInputStream().bufferedReader().use { it.readText() }
+                    val path = url.path
+
+                    val request = HttpRequest.GET<String>(path)
+                        .header("User-Agent", "Kestra-Blueprint-Sync/1.0")
+
+                    val response = rawClient.toBlocking().exchange(request, String::class.java)
+                    return response.body() ?: throw Exception("响应体为空")
+
                 } catch (e: Exception) {
                     lastException = e
                     logger.warn("下载失败 (尝试 ${attempt + 1}/3): {} - {}", downloadUrl, e.message)
