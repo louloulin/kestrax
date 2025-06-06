@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory
 
 /**
  * Protocol Buffers serializer for Fluvio queue messages
- * Provides efficient binary serialization using Protocol Buffers with JSON fallback
+ * Currently uses JSON serialization with Protocol Buffers infrastructure ready for future optimization
+ * TODO: Implement full Protocol Buffers serialization for 3-4x performance improvement
  */
 @Singleton
 class FluvioProtobufSerializer {
@@ -29,6 +30,9 @@ class FluvioProtobufSerializer {
      */
     fun <T> serialize(obj: T): ByteArray {
         return try {
+            // For now, use JSON serialization for all types
+            // TODO: Implement Protocol Buffers serialization for core types
+            logger.debug("Serializing object of type: {}", obj?.javaClass?.simpleName)
             objectMapper.writeValueAsBytes(obj)
         } catch (e: Exception) {
             logger.error("Failed to serialize object: {}", obj, e)
@@ -42,6 +46,9 @@ class FluvioProtobufSerializer {
      */
     fun <T> deserialize(data: ByteArray, clazz: Class<T>): T {
         return try {
+            // For now, use JSON deserialization for all types
+            // TODO: Implement Protocol Buffers deserialization for core types
+            logger.debug("Deserializing to class: {}", clazz.name)
             objectMapper.readValue(data, clazz)
         } catch (e: Exception) {
             logger.error("Failed to deserialize data to class: {}", clazz.name, e)
