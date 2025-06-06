@@ -280,7 +280,69 @@ class FluvioQueue<T>(
             }
         }
     }
-    
+
+    /**
+     * Transaction-aware batch receive method for advanced use cases
+     * This provides compatibility with JdbcQueue's receiveTransaction method
+     * Used by JdbcWorkerTriggerResultQueueService and similar components
+     */
+    fun receiveTransaction(
+        consumerGroup: String?,
+        queueType: Class<*>?,
+        consumer: java.util.function.BiConsumer<Any?, List<Either<T, DeserializationException>>>
+    ): Runnable {
+        val queueName = queueType?.let { queueName(it) } ?: queueTypeName
+        val actualTopicName = config.getTopicName(queueName)
+
+        return poll {
+            try {
+                val fluvioConsumer = getConsumer(actualTopicName, consumerGroup)
+                val stream = fluvioConsumer.stream(Offset.beginning())
+
+                // Collect a batch of records
+                val batch = mutableListOf<Either<T, DeserializationException>>()
+                val maxBatchSize = config.consumer.maxPollRecords
+
+                for (i in 0 until maxBatchSize) {
+                    val record = stream.next()
+                    if (record != null) {
+                        try {
+                            val message = serializer.deserialize(record.value(), messageType)
+                            batch.add(Either.left<T, DeserializationException>(message))
+                        } catch (e: Exception) {
+                            metricRegistry.counter(
+                                "queue.message.failed.count",
+                                "Total number of failed queue messages",
+                                MetricRegistry.TAG_CLASS_NAME, queueType()
+                            ).increment()
+                            batch.add(Either.right<T, DeserializationException>(DeserializationException(e, String(record.value()))))
+                        }
+                    } else {
+                        break
+                    }
+                }
+
+                if (batch.isNotEmpty()) {
+                    // Pass null as DSLContext since Fluvio doesn't use database transactions
+                    // This maintains compatibility with JdbcQueue's receiveTransaction signature
+                    consumer.accept(null, batch)
+
+                    // Update metrics
+                    metricRegistry.counter(
+                        "queue.message.in.count",
+                        "Total number of messages received from queue",
+                        MetricRegistry.TAG_CLASS_NAME, queueType()
+                    ).increment(batch.size.toDouble())
+                }
+
+                batch.size
+            } catch (e: Exception) {
+                logger.error("Error in transaction receive for queue: {}", actualTopicName, e)
+                0
+            }
+        }
+    }
+
     /**
      * Pause the queue - compatible with JdbcQueue behavior
      */

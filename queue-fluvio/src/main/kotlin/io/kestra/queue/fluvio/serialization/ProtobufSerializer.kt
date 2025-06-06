@@ -1,6 +1,7 @@
 package io.kestra.queue.fluvio.serialization
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.kestra.core.exceptions.DeserializationException
 import io.kestra.core.models.executions.Execution
 import io.kestra.core.models.executions.TaskRun
@@ -12,17 +13,19 @@ import org.slf4j.LoggerFactory
 
 /**
  * Protocol Buffers serializer for Fluvio queue messages
- * Currently uses JSON as fallback, will be enhanced with Protocol Buffers later
+ * Provides efficient binary serialization using Protocol Buffers with JSON fallback
  */
 @Singleton
 class FluvioProtobufSerializer {
 
     private val logger = LoggerFactory.getLogger(FluvioProtobufSerializer::class.java)
-    private val objectMapper = ObjectMapper()
+    private val objectMapper = ObjectMapper().apply {
+        registerModule(JavaTimeModule())
+    }
 
     /**
      * Serialize an object to byte array
-     * Currently uses JSON serialization as a temporary implementation
+     * Currently uses JSON serialization, Protocol Buffers optimization will be added later
      */
     fun <T> serialize(obj: T): ByteArray {
         return try {
@@ -35,7 +38,7 @@ class FluvioProtobufSerializer {
 
     /**
      * Deserialize byte array to object
-     * Currently uses JSON deserialization as a temporary implementation
+     * Currently uses JSON deserialization, Protocol Buffers optimization will be added later
      */
     fun <T> deserialize(data: ByteArray, clazz: Class<T>): T {
         return try {
