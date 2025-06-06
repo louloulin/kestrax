@@ -28,7 +28,7 @@ dependencies {
     // Micronaut
     implementation("io.micronaut:micronaut-context")
     implementation("io.micronaut:micronaut-inject")
-    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.validation:micronaut-validation")
 
     // Logging
     implementation("ch.qos.logback:logback-classic")
@@ -68,51 +68,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-// Kotlin configuration
-allOpen {
-    annotation("io.micronaut.aop.Around")
-    annotation("jakarta.inject.Singleton")
-    annotation("jakarta.inject.Named")
-}
 
-kotlin {
-    jvmToolchain(21)
-}
-
-// Protocol Buffers configuration
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.25.1"
-    }
-
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option "lite"
-                }
-                kotlin {
-                    option "lite"
-                }
-            }
-        }
-    }
-}
-
-// Ensure proto files are compiled before Kotlin compilation
-compileKotlin.dependsOn generateProto
-
-// Add generated sources to source sets
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-        kotlin {
-            srcDirs 'build/generated/source/proto/main/kotlin'
-        }
-    }
-}
 
 test {
     useJUnitPlatform()

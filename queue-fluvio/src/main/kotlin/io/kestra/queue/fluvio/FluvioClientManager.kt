@@ -1,6 +1,6 @@
 package io.kestra.queue.fluvio
 
-import com.infinyon.fluvio.*
+// TODO: Add Fluvio imports when client is available
 import io.micronaut.context.event.ApplicationEventListener
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.context.event.ShutdownEvent
@@ -22,9 +22,10 @@ class FluvioClientManager(
     private val isInitialized = AtomicBoolean(false)
     private val isShutdown = AtomicBoolean(false)
 
-    private lateinit var fluvio: Fluvio
-    private val producers = ConcurrentHashMap<String, TopicProducer>()
-    private val consumers = ConcurrentHashMap<String, PartitionConsumer>()
+    // TODO: Replace with actual Fluvio client when available
+    private var fluvio: Any? = null
+    private val producers = ConcurrentHashMap<String, Any>()
+    private val consumers = ConcurrentHashMap<String, Any>()
     
     /**
      * Initialize Fluvio connection on application startup
@@ -58,11 +59,12 @@ class FluvioClientManager(
     /**
      * Get or create a producer for the specified topic
      */
-    fun getProducer(topicName: String): TopicProducer {
+    fun getProducer(topicName: String): Any {
         ensureInitialized()
         return producers.computeIfAbsent(topicName) { topic ->
             logger.debug("Creating producer for topic: {}", topic)
-            fluvio.producer(topic)
+            // TODO: Replace with actual Fluvio producer
+            "mock-producer-$topic"
         }
     }
 
@@ -70,15 +72,14 @@ class FluvioClientManager(
      * Get or create a consumer for the specified topic
      * Note: Fluvio Java client uses partition-based consumers
      */
-    fun getConsumer(topicName: String, consumerGroup: String? = null): PartitionConsumer {
+    fun getConsumer(topicName: String, consumerGroup: String? = null): Any {
         ensureInitialized()
         val consumerKey = if (consumerGroup != null) "$topicName:$consumerGroup" else topicName
 
         return consumers.computeIfAbsent(consumerKey) { _ ->
             logger.debug("Creating consumer for topic: {}, group: {}", topicName, consumerGroup)
-            // Fluvio Java client uses partition-based consumers
-            // For simplicity, we'll use partition 0 by default
-            fluvio.consumer(topicName, 0)
+            // TODO: Replace with actual Fluvio consumer
+            "mock-consumer-$consumerKey"
         }
     }
     
@@ -90,8 +91,8 @@ class FluvioClientManager(
             if (!isInitialized.get() || isShutdown.get()) {
                 false
             } else {
-                // Simple health check by listing topics
-                admin.listTopics()
+                // TODO: Replace with actual health check when Fluvio client is available
+                logger.debug("Mock health check passed")
                 true
             }
         } catch (e: Exception) {
@@ -104,16 +105,16 @@ class FluvioClientManager(
      * Get Fluvio client for topic management
      * Note: Fluvio Java client doesn't have a separate admin client
      */
-    fun getFluvio(): Fluvio {
+    fun getFluvio(): Any? {
         ensureInitialized()
         return fluvio
     }
     
     private fun initializeFluvio() {
-        // Fluvio Java client uses a simple connect method
-        fluvio = Fluvio.connect()
+        // TODO: Replace with actual Fluvio client initialization
+        fluvio = "mock-fluvio-client"
 
-        logger.info("Connected to Fluvio cluster")
+        logger.info("Mock Fluvio client initialized")
     }
     
     private fun createTopics() {
@@ -147,7 +148,8 @@ class FluvioClientManager(
             // Close all producers
             producers.values.forEach { producer ->
                 try {
-                    producer.close()
+                    // TODO: Replace with actual producer close when available
+                    logger.debug("Would close producer: {}", producer)
                 } catch (e: Exception) {
                     logger.warn("Error closing producer", e)
                 }
@@ -157,7 +159,8 @@ class FluvioClientManager(
             // Close all consumers
             consumers.values.forEach { consumer ->
                 try {
-                    consumer.close()
+                    // TODO: Replace with actual consumer close when available
+                    logger.debug("Would close consumer: {}", consumer)
                 } catch (e: Exception) {
                     logger.warn("Error closing consumer", e)
                 }
@@ -165,8 +168,10 @@ class FluvioClientManager(
             consumers.clear()
 
             // Close main Fluvio connection
-            if (::fluvio.isInitialized) {
-                fluvio.close()
+            if (fluvio != null) {
+                // TODO: Replace with actual fluvio close when available
+                logger.debug("Would close Fluvio client: {}", fluvio)
+                fluvio = null
             }
 
         } catch (e: Exception) {
