@@ -1,26 +1,23 @@
-# Kestra Blueprint Management Module
+# Kestra Blueprint Service 🚀
 
-## 概述
+Kestra蓝图服务是一个独立的微服务，提供蓝图管理功能，包括官方蓝图同步、社区蓝图管理等。
 
-Blueprint 模块是 Kestra 工作流引擎的蓝图管理组件，提供了工作流模板的创建、管理、版本控制和渲染功能。该模块支持多租户架构，具备完整的权限控制和监控能力。
-
-## 功能特性
+## 🌟 功能特性
 
 ### 核心功能
-- **蓝图管理**: 创建、更新、删除和查询工作流蓝图
-- **版本控制**: 支持蓝图的版本管理和历史追踪
-- **模板引擎**: 基于 Pebble 模板引擎的动态内容渲染
-- **多租户支持**: 基于命名空间的租户隔离
-- **权限控制**: 细粒度的访问权限管理
-- **监控指标**: 完整的性能监控和健康检查
+- 📋 **蓝图管理**: 创建、查询、更新、删除蓝图
+- 🔄 **官方蓝图同步**: 从Kestra官方仓库同步最新蓝图
+- 🏷️ **标签管理**: 支持蓝图标签分类和搜索
+- 📊 **监控指标**: 内置Prometheus监控指标
+- 🔍 **健康检查**: 提供健康检查端点
+- 🐳 **Docker支持**: 完整的Docker化部署方案
 
 ### 技术栈
 - **框架**: Micronaut 4.x
 - **语言**: Kotlin
-- **数据库**: 支持 H2、PostgreSQL
-- **模板引擎**: Pebble
+- **数据库**: H2 (文件存储)
 - **监控**: Micrometer + Prometheus
-- **安全**: JWT 认证
+- **容器化**: Docker + Docker Compose
 
 ## 项目结构
 
@@ -242,20 +239,78 @@ curl http://localhost:8080/api/v1/blueprints
 - 添加适当的注释和文档
 - 保持测试覆盖率
 
-## 部署
+## 🐳 Docker部署
 
-### Docker 部署
-```dockerfile
-FROM openjdk:17-jre-slim
-COPY build/libs/blueprint-*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+### 构建Docker镜像
+
+#### 单平台构建
+```bash
+# 构建本地镜像
+./build-docker.sh
+
+# 或指定版本
+./build-docker.sh v1.0.0
 ```
 
-### 环境变量
-- `MICRONAUT_ENVIRONMENTS`: 运行环境 (dev, test, prod)
-- `DATASOURCES_DEFAULT_URL`: 数据库连接 URL
-- `JWT_GENERATOR_SIGNATURE_SECRET`: JWT 签名密钥
+#### 多平台构建
+```bash
+# 构建支持AMD64和ARM64的镜像
+./build-multiplatform.sh
+
+# 或指定版本
+./build-multiplatform.sh v1.0.0
+```
+
+### 运行容器
+
+#### 使用Docker命令
+```bash
+# 运行容器
+docker run -d \
+  --name kestra-blueprint \
+  -p 8084:8084 \
+  -v blueprint_data:/app/data \
+  -v blueprint_logs:/app/logs \
+  -e MICRONAUT_ENVIRONMENTS=docker \
+  dataflare/kestra-blueprint:latest
+
+# 查看日志
+docker logs -f kestra-blueprint
+
+# 停止容器
+docker stop kestra-blueprint
+```
+
+#### 使用Docker Compose
+```bash
+# 启动服务
+docker-compose up -d
+
+# 查看日志
+docker-compose logs -f
+
+# 停止服务
+docker-compose down
+```
+
+### Docker环境变量
+- `MICRONAUT_ENVIRONMENTS`: 运行环境 (默认: docker)
+- `MICRONAUT_SERVER_PORT`: 服务端口 (默认: 8084)
+- `DATASOURCES_DEFAULT_URL`: 数据库连接URL
+- `JAVA_OPTS`: JVM参数 (默认: -Xmx512m -Xms256m)
+- `BLUEPRINT_GITHUB_PROXY`: GitHub代理地址 (可选)
+
+### 数据持久化
+Docker容器使用以下卷进行数据持久化：
+- `/app/data`: 数据库文件存储
+- `/app/logs`: 应用日志文件
+
+### 健康检查
+容器内置健康检查，检查间隔30秒：
+```bash
+# 手动健康检查
+curl -f http://localhost:8084/health
+```
 
 ## 故障排除
 

@@ -1,0 +1,72 @@
+# Docker环境配置
+micronaut:
+  application:
+    name: kestra-blueprint
+  server:
+    port: 8084
+    host: 0.0.0.0
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+
+# 数据源配置
+datasources:
+  default:
+    url: ${DATASOURCES_DEFAULT_URL:jdbc:h2:file:/app/data/blueprint;DB_CLOSE_DELAY=-1}
+    driver-class-name: ${DATASOURCES_DEFAULT_DRIVER_CLASS_NAME:org.h2.Driver}
+    username: ${DATASOURCES_DEFAULT_USERNAME:sa}
+    password: ${DATASOURCES_DEFAULT_PASSWORD:}
+    dialect: H2
+    schema-generate: NONE
+    schema-generate-names: false
+
+# Flyway数据库迁移
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: classpath:db/migration
+      baseline-on-migrate: true
+      validate-on-migrate: false
+      clean-disabled: false
+      baseline-version: 0
+      baseline-description: "Initial baseline"
+
+# 日志配置
+logger:
+  levels:
+    io.kestra.blueprint: DEBUG
+    io.micronaut.data.query: DEBUG
+    io.micronaut.http.server: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    com.github.mustachejava: INFO
+
+# 蓝图服务配置
+blueprint:
+  github:
+    proxy: ${BLUEPRINT_GITHUB_PROXY:}
+    timeout: 30s
+  sync:
+    batch-size: 10
+    max-retries: 3
+  cache:
+    enabled: true
+    ttl: 1h
+
+# 健康检查配置
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  metrics:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+    sensitive: false
