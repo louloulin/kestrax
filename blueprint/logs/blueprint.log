@@ -881,3 +881,150 @@ CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,
 2025-06-06 10:02:53.025 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
 2025-06-06 10:04:12.900 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47s765ms).
 2025-06-06 10:04:13.058 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:04:28.726 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 10:04:28.741 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 10:04:28.743 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 10:13:30.818 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator null
+2025-06-06 10:13:31.024 [main] ERROR io.micronaut.http.server.netty.NettyHttpServer - Unable to start server. Port *:8080 already in use.
+2025-06-06 10:13:31.044 [main] ERROR io.micronaut.runtime.Micronaut - Error starting Micronaut server: Unable to start Micronaut server on *:8080
+io.micronaut.http.server.exceptions.ServerStartupException: Unable to start Micronaut server on *:8080
+	at io.micronaut.http.server.netty.NettyHttpServer.bind(NettyHttpServer.java:661)
+	at io.micronaut.http.server.netty.NettyHttpServer.start(NettyHttpServer.java:303)
+	at io.micronaut.http.server.netty.NettyHttpServer.start(NettyHttpServer.java:114)
+	at io.micronaut.runtime.Micronaut.start(Micronaut.java:81)
+	at io.micronaut.runtime.Micronaut.run(Micronaut.java:334)
+	at io.micronaut.runtime.Micronaut.run(Micronaut.java:320)
+	at io.kestra.blueprint.Application$Companion.main(Application.kt:83)
+	at io.kestra.blueprint.Application.main(Application.kt)
+Caused by: java.net.BindException: Address already in use
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:565)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:344)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:301)
+	at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:141)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:561)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1281)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:600)
+	at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:579)
+	at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:922)
+	at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:259)
+	at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:380)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-06-06 10:19:20.263 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 10:19:20.345 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 10:19:20.345 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 10:19:20.465 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 10:19:20.482 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 10:19:20.491 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 10:19:20.492 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 10:19:20.494 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 10:19:20.506 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 10:19:20.510 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 10:19:20.520 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 10:19:20.533 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 10:19:20.541 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 10:19:20.541 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 10:19:20.659 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 10:19:20.854 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:19:20.856 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 10:19:20.857 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 872ms. Server Running: http://localhost:8084
+2025-06-06 10:20:20.591 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:21:00.038 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request POST /api/v1/blueprints/sync/official
+2025-06-06 10:21:00.081 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 10:21:00.183 [virtual-executor4] INFO  i.kestra.blueprint.controller.BlueprintController - 开始同步Kestra官方蓝图...
+2025-06-06 10:21:00.183 [virtual-executor4] INFO  i.k.blueprint.service.OfficialBlueprintSyncService - 开始同步Kestra官方蓝图...
+2025-06-06 10:21:00.183 [virtual-executor4] DEBUG i.k.blueprint.service.OfficialBlueprintSyncService - 获取GitHub仓库文件列表: kestra-io/blueprints/flows
+2025-06-06 10:21:10.378 [virtual-executor4] ERROR i.k.blueprint.service.OfficialBlueprintSyncService - 获取GitHub文件列表失败: Client 'https://api.github.com': Connect Error: handshake timed out after 10000ms
+2025-06-06 10:21:10.378 [virtual-executor4] ERROR i.k.blueprint.service.OfficialBlueprintSyncService - 同步官方蓝图失败
+io.micronaut.http.client.exceptions.HttpClientException: Client 'https://api.github.com': Connect Error: handshake timed out after 10000ms
+	at io.micronaut.http.client.netty.ConnectionManager$Pool.onNewConnectionFailure(ConnectionManager.java:1241)
+	at io.micronaut.http.client.netty.ConnectionManager$Pool$1.onNewConnectionFailure(ConnectionManager.java:1205)
+	at io.micronaut.http.client.netty.InitialConnectionErrorHandler.channelInactive(InitialConnectionErrorHandler.java:48)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelInactive(ChannelInboundHandlerAdapter.java:81)
+	at io.netty.handler.ssl.ApplicationProtocolNegotiationHandler.channelInactive(ApplicationProtocolNegotiationHandler.java:167)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:412)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:377)
+	at io.netty.handler.ssl.SslHandler.channelInactive(SslHandler.java:1192)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1352)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:301)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:850)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$7.run(AbstractChannel.java:811)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:104)
+		at reactor.core.publisher.Mono.block(Mono.java:1779)
+		at io.micronaut.http.client.netty.DefaultHttpClient$1.exchange(DefaultHttpClient.java:616)
+		at io.micronaut.http.client.BlockingHttpClient.exchange(BlockingHttpClient.java:78)
+		at io.micronaut.http.client.BlockingHttpClient.exchange(BlockingHttpClient.java:107)
+		at io.kestra.blueprint.service.OfficialBlueprintSyncService.getFlowFiles(OfficialBlueprintSyncService.kt:112)
+		at io.kestra.blueprint.service.OfficialBlueprintSyncService.syncOfficialBlueprints(OfficialBlueprintSyncService.kt:54)
+		at io.kestra.blueprint.controller.BlueprintController.syncOfficialBlueprints(BlueprintController.kt:243)
+		at io.kestra.blueprint.controller.$BlueprintController$Definition$Intercepted.$$access$$syncOfficialBlueprints(Unknown Source)
+		at io.kestra.blueprint.controller.$BlueprintController$Definition$Exec.dispatch(Unknown Source)
+		at io.micronaut.context.AbstractExecutableMethodsDefinition$DispatchedExecutableMethod.invoke(AbstractExecutableMethodsDefinition.java:456)
+		at io.micronaut.aop.chain.MethodInterceptorChain.proceed(MethodInterceptorChain.java:134)
+		at io.kestra.blueprint.security.PermissionInterceptor.intercept(PermissionInterceptor.kt:25)
+		at io.micronaut.aop.chain.MethodInterceptorChain.proceed(MethodInterceptorChain.java:143)
+		at io.micronaut.validation.ValidatingInterceptor.validateReturnExecutableValidator(ValidatingInterceptor.java:172)
+		at io.micronaut.validation.ValidatingInterceptor.intercept(ValidatingInterceptor.java:115)
+		at io.micronaut.aop.chain.MethodInterceptorChain.proceed(MethodInterceptorChain.java:143)
+		at io.kestra.blueprint.controller.$BlueprintController$Definition$Intercepted.syncOfficialBlueprints(Unknown Source)
+		at io.kestra.blueprint.controller.$BlueprintController$Definition$Exec.dispatch(Unknown Source)
+		at io.micronaut.context.AbstractExecutableMethodsDefinition$DispatchedExecutableMethod.invokeUnsafe(AbstractExecutableMethodsDefinition.java:461)
+		at io.micronaut.context.DefaultBeanContext$BeanContextUnsafeExecutionHandle.invokeUnsafe(DefaultBeanContext.java:4419)
+		at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:231)
+		at io.micronaut.web.router.DefaultUriRouteMatch.execute(DefaultUriRouteMatch.java:38)
+		at io.micronaut.http.server.RouteExecutor.executeRouteAndConvertBody(RouteExecutor.java:493)
+		at io.micronaut.http.server.RouteExecutor.lambda$callRoute$5(RouteExecutor.java:470)
+		at io.micronaut.core.execution.ExecutionFlow.lambda$async$0(ExecutionFlow.java:92)
+		at io.micronaut.core.propagation.PropagatedContext.lambda$wrap$3(PropagatedContext.java:211)
+		at java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)
+		at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+Caused by: io.netty.handler.ssl.SslHandshakeTimeoutException: handshake timed out after 10000ms
+	at io.netty.handler.ssl.SslHandler$8.run(SslHandler.java:2277)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:156)
+	... 8 common frames omitted
+2025-06-06 10:21:10.432 [virtual-executor4] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - POST /api/v1/blueprints/sync/official
+2025-06-06 10:21:20.467 [default-nioEventLoopGroup-1-5] ERROR io.micronaut.http.client.netty.DefaultHttpClient - Failed to connect to remote
+io.netty.handler.ssl.SslHandshakeTimeoutException: handshake timed out after 10000ms
+	at io.netty.handler.ssl.SslHandler$8.run(SslHandler.java:2277)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:156)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-06 10:21:20.599 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 10:21:42.941 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 10:21:42.959 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 10:21:42.960 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
