@@ -118,8 +118,16 @@ open class BlueprintService(
     @Cacheable("blueprint")
     open fun getBlueprintById(id: String): BlueprintDto {
         val namespaceId = getCurrentNamespaceId()
-        val blueprint = blueprintRepository.findByIdAndNamespaceId(id, namespaceId)
-            .orElseThrow { HttpStatusException(HttpStatus.NOT_FOUND, "蓝图不存在") }
+
+        // 首先尝试在当前命名空间中查找
+        var blueprint = blueprintRepository.findByIdAndNamespaceId(id, namespaceId).orElse(null)
+
+        // 如果在当前命名空间中找不到，尝试查找公开蓝图
+        if (blueprint == null) {
+            blueprint = blueprintRepository.findById(id)
+                .filter { it.isPublic }
+                .orElseThrow { HttpStatusException(HttpStatus.NOT_FOUND, "蓝图不存在") }
+        }
 
         // 获取标签和任务
         val blueprintTags = blueprintTagRepository.findByBlueprintId(id).map { it.tag }

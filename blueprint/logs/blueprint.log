@@ -3860,3 +3860,171 @@ CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,
 2025-06-06 13:10:46.650 [default-nioEventLoopGroup-1-12] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints/community?size=10
 2025-06-06 13:10:56.851 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
 2025-06-06 13:11:56.859 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:12:50.347 [default-nioEventLoopGroup-1-13] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source
+2025-06-06 13:12:50.347 [default-nioEventLoopGroup-1-13] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 13:12:50.348 [default-nioEventLoopGroup-1-13] DEBUG io.micronaut.http.server.RequestLifecycle - No matching route: GET /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source
+2025-06-06 13:12:50.348 [default-nioEventLoopGroup-1-13] DEBUG io.micronaut.http.server.RequestLifecycle - Content type not allowed for URI /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source, method GET, and content type null
+2025-06-06 13:12:50.358 [default-nioEventLoopGroup-1-13] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 406 - GET /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source
+2025-06-06 13:12:56.850 [scheduled-executor-thread-3] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:13:45.266 [default-nioEventLoopGroup-1-14] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source
+2025-06-06 13:13:45.267 [default-nioEventLoopGroup-1-14] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 13:13:45.268 [default-nioEventLoopGroup-1-14] DEBUG i.k.blueprint.controller.ApiBlueprintController - 获取蓝图源码 - id: 30b816f9-3b9f-4b9f-b8ed-d865a20823e9
+2025-06-06 13:13:45.273 [default-nioEventLoopGroup-1-14] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`id` = ? AND blueprint_.`namespace_id` = ?)
+2025-06-06 13:13:45.275 [default-nioEventLoopGroup-1-14] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 404 - GET /api/v1/blueprints/community/30b816f9-3b9f-4b9f-b8ed-d865a20823e9/source
+2025-06-06 13:13:56.554 [default-nioEventLoopGroup-1-15] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints/community?size=1
+2025-06-06 13:13:56.554 [default-nioEventLoopGroup-1-15] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 13:13:56.555 [default-nioEventLoopGroup-1-15] DEBUG i.k.blueprint.controller.ApiBlueprintController - 获取蓝图列表 - q: null, tags: null, page: 1, size: 1
+2025-06-06 13:13:56.555 [default-nioEventLoopGroup-1-15] DEBUG io.kestra.blueprint.service.BlueprintService - 查询公开蓝图 - kind: null, isTemplate: null, createdBy: null
+2025-06-06 13:13:56.555 [default-nioEventLoopGroup-1-15] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?) LIMIT 1
+2025-06-06 13:13:56.556 [default-nioEventLoopGroup-1-15] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?)
+2025-06-06 13:13:56.556 [default-nioEventLoopGroup-1-15] DEBUG io.kestra.blueprint.service.BlueprintService - 查询到 202 个公开蓝图
+2025-06-06 13:13:56.556 [default-nioEventLoopGroup-1-15] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 13:13:56.556 [default-nioEventLoopGroup-1-15] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 13:13:56.556 [default-nioEventLoopGroup-1-15] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints/community?size=1
+2025-06-06 13:13:56.849 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:14:07.884 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.NettyRequestLifecycle - Request GET /api/v1/blueprints/community?size=1
+2025-06-06 13:14:07.884 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.security.TenantFilter - 设置租户上下文 - tenantId: default-tenant, namespaceId: test, userId: user123
+2025-06-06 13:14:07.884 [default-nioEventLoopGroup-1-2] DEBUG i.k.blueprint.controller.ApiBlueprintController - 获取蓝图列表 - q: null, tags: null, page: 1, size: 1
+2025-06-06 13:14:07.884 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.service.BlueprintService - 查询公开蓝图 - kind: null, isTemplate: null, createdBy: null
+2025-06-06 13:14:07.884 [default-nioEventLoopGroup-1-2] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_.`id`,blueprint_.`version`,blueprint_.`namespace_id`,blueprint_.`title`,blueprint_.`description`,blueprint_.`content`,blueprint_.`kind`,blueprint_.`is_public`,blueprint_.`is_template`,blueprint_.`created_by`,blueprint_.`created_at`,blueprint_.`updated_at` FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?) LIMIT 1
+2025-06-06 13:14:07.885 [default-nioEventLoopGroup-1-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_ WHERE (blueprint_.`is_public` = ?)
+2025-06-06 13:14:07.885 [default-nioEventLoopGroup-1-2] DEBUG io.kestra.blueprint.service.BlueprintService - 查询到 202 个公开蓝图
+2025-06-06 13:14:07.885 [default-nioEventLoopGroup-1-2] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_tag_.`id`,blueprint_tag_.`blueprint_id`,blueprint_tag_.`tag` FROM `blueprint_tags` blueprint_tag_ WHERE (blueprint_tag_.`blueprint_id` = ?)
+2025-06-06 13:14:07.885 [default-nioEventLoopGroup-1-2] DEBUG io.micronaut.data.query - Executing Query: SELECT blueprint_task_.`id`,blueprint_task_.`blueprint_id`,blueprint_task_.`task` FROM `blueprint_included_tasks` blueprint_task_ WHERE (blueprint_task_.`blueprint_id` = ?)
+2025-06-06 13:14:07.885 [default-nioEventLoopGroup-1-2] DEBUG i.m.http.server.netty.RoutingInBoundHandler - Response 200 - GET /api/v1/blueprints/community?size=1
+2025-06-06 13:14:56.855 [scheduled-executor-thread-4] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:15:18.522 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 13:15:18.538 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 13:15:18.540 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 13:15:41.172 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 13:15:41.249 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 13:15:41.250 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 13:15:41.375 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 13:15:41.393 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 13:15:41.403 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 13:15:41.404 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 13:15:41.407 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 13:15:41.420 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 13:15:41.424 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 13:15:41.434 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.005s)
+2025-06-06 13:15:41.447 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 13:15:41.456 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 13:15:41.456 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 13:15:41.574 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 13:15:41.767 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:15:41.768 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 13:15:41.770 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 861ms. Server Running: http://localhost:8084
+2025-06-06 13:16:41.492 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:17:41.500 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:17:59.189 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 13:17:59.267 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 13:17:59.267 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 13:17:59.379 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 13:17:59.396 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 13:17:59.405 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 13:17:59.406 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.003s)
+2025-06-06 13:17:59.408 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 13:17:59.421 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 13:17:59.425 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 13:17:59.435 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 13:17:59.447 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 13:17:59.455 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 13:17:59.455 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 13:17:59.560 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 13:17:59.711 [main] ERROR io.micronaut.http.server.netty.NettyHttpServer - Unable to start server. Port *:8084 already in use.
+2025-06-06 13:17:59.719 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 13:17:59.720 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 13:17:59.723 [main] ERROR io.micronaut.runtime.Micronaut - Error starting Micronaut server: Unable to start Micronaut server on *:8084
+io.micronaut.http.server.exceptions.ServerStartupException: Unable to start Micronaut server on *:8084
+	at io.micronaut.http.server.netty.NettyHttpServer.bind(NettyHttpServer.java:661)
+	at io.micronaut.http.server.netty.NettyHttpServer.start(NettyHttpServer.java:303)
+	at io.micronaut.http.server.netty.NettyHttpServer.start(NettyHttpServer.java:114)
+	at io.micronaut.runtime.Micronaut.start(Micronaut.java:81)
+	at io.micronaut.runtime.Micronaut.run(Micronaut.java:334)
+	at io.micronaut.runtime.Micronaut.run(Micronaut.java:320)
+	at io.kestra.blueprint.Application$Companion.main(Application.kt:83)
+	at io.kestra.blueprint.Application.main(Application.kt)
+Caused by: java.net.BindException: Address already in use
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:565)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:344)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:301)
+	at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:141)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:561)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1281)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:600)
+	at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:579)
+	at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:922)
+	at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:259)
+	at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:380)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-06 13:18:41.506 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:19:41.510 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:20:41.520 [scheduled-executor-thread-3] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:21:41.529 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:22:41.538 [scheduled-executor-thread-4] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:23:41.545 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:24:41.552 [scheduled-executor-thread-5] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:25:41.556 [scheduled-executor-thread-3] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:26:41.563 [scheduled-executor-thread-6] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:27:41.569 [scheduled-executor-thread-2] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:28:41.575 [scheduled-executor-thread-7] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:29:41.580 [scheduled-executor-thread-4] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:30:41.590 [scheduled-executor-thread-8] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:31:41.597 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:33:33.543 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 13:33:33.626 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 13:33:33.627 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 13:33:33.754 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 13:33:33.775 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 13:33:33.786 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 13:33:33.787 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.004s)
+2025-06-06 13:33:33.790 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 13:33:33.804 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 13:33:33.809 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 13:33:33.820 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.007s)
+2025-06-06 13:33:33.835 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 13:33:33.844 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 13:33:33.844 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 13:33:33.971 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 13:33:34.163 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:33:34.164 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 13:33:34.166 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 876ms. Server Running: http://localhost:8084
+2025-06-06 13:34:33.897 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:35:24.181 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 13:35:24.197 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 13:35:24.198 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 13:35:45.258 [main] INFO  i.m.c.DefaultApplicationContext$RuntimeConfiguredEnvironment - Established active environments: [dev]
+2025-06-06 13:35:45.375 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 13:35:45.463 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testDb user=SA
+2025-06-06 13:35:45.464 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 13:35:45.583 [main] INFO  io.micronaut.flyway.AbstractFlywayMigration - Running migrations for database with qualifier [default]
+2025-06-06 13:35:45.599 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testDb (H2 2.3)
+2025-06-06 13:35:45.608 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-06-06 13:35:45.609 [main] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.003s)
+2025-06-06 13:35:45.612 [main] INFO  o.f.c.i.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-06-06 13:35:45.624 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2025-06-06 13:35:45.628 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create blueprint tables"
+2025-06-06 13:35:45.638 [main] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.006s)
+2025-06-06 13:35:45.651 [main] WARN  io.micronaut.data.query - CREATE Statement Unsuccessful: Table "BLUEPRINTS" already exists; SQL statement:
+CREATE TABLE `blueprints` (`id` VARCHAR(255) NOT NULL,`version` BIGINT NOT NULL,`namespace_id` VARCHAR(255) NOT NULL,`title` VARCHAR(255) NOT NULL,`description` VARCHAR(255),`content` VARCHAR(255) NOT NULL,`kind` VARCHAR(255),`is_public` BOOLEAN NOT NULL,`is_template` BOOLEAN NOT NULL,`created_by` VARCHAR(255) NOT NULL,`created_at` TIMESTAMP NOT NULL,`updated_at` TIMESTAMP NOT NULL, PRIMARY KEY(`id`)) [42101-232]
+2025-06-06 13:35:45.660 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.kestra.blueprint'
+2025-06-06 13:35:45.660 [main] INFO  i.m.logging.PropertiesLoggingLevelsConfigurer - Setting log level 'DEBUG' for logger: 'io.micronaut.data.query'
+2025-06-06 13:35:45.764 [main] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 13:35:45.952 [main] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:35:45.954 [main] INFO  io.kestra.blueprint.metrics.BlueprintMetrics - Blueprint metrics initialized
+2025-06-06 13:35:45.955 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 842ms. Server Running: http://localhost:8084
+2025-06-06 13:36:45.702 [scheduled-executor-thread-1] DEBUG io.micronaut.data.query - Executing Query: SELECT COUNT(*) FROM `blueprints` blueprint_
+2025-06-06 13:37:15.762 [Thread-0] INFO  io.micronaut.runtime.Micronaut - Embedded Application shutting down
+2025-06-06 13:37:15.774 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 13:37:15.775 [Thread-0] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
