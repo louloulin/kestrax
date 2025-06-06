@@ -8,9 +8,12 @@ import io.kestra.blueprint.models.BlueprintTask
 import io.kestra.blueprint.repository.BlueprintRepository
 import io.kestra.blueprint.repository.BlueprintTagRepository
 import io.kestra.blueprint.repository.BlueprintTaskRepository
+import io.kestra.blueprint.config.GitHubConfig
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.client.exceptions.HttpClientResponseException
+import jakarta.inject.Named
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
@@ -26,8 +29,9 @@ class OfficialBlueprintSyncService(
     private val blueprintRepository: BlueprintRepository,
     private val blueprintTagRepository: BlueprintTagRepository,
     private val blueprintTaskRepository: BlueprintTaskRepository,
-    @Client("https://api.github.com") private val githubClient: HttpClient,
-    @Client("https://raw.githubusercontent.com") private val rawClient: HttpClient
+    @Named("github-api") private val githubClient: HttpClient,
+    @Named("github-raw") private val rawClient: HttpClient,
+    private val gitHubConfig: GitHubConfig
 ) {
     
     private val logger = LoggerFactory.getLogger(OfficialBlueprintSyncService::class.java)
@@ -37,6 +41,39 @@ class OfficialBlueprintSyncService(
         private const val GITHUB_REPO = "kestra-io/blueprints"
         private const val FLOWS_PATH = "flows"
         private const val OFFICIAL_NAMESPACE = "official"
+    }
+
+    /**
+     * 执行带重试的操作
+     */
+    private fun <T> executeWithRetry(operation: String, block: () -> T): T {
+        var lastException: Exception? = null
+
+        repeat(gitHubConfig.retryAttempts) { attempt ->
+            try {
+                return block()
+            } catch (e: HttpClientResponseException) {
+                lastException = e
+                if (e.status.code == 403 && e.message?.contains("rate limit") == true) {
+                    logger.warn("{} 失败 (尝试 ${attempt + 1}/${gitHubConfig.retryAttempts}): GitHub API速率限制", operation)
+                    if (attempt < gitHubConfig.retryAttempts - 1) {
+                        val delay = gitHubConfig.retryDelay.toMillis() * (attempt + 1) // 指数退避
+                        logger.info("等待 {}ms 后重试...", delay)
+                        Thread.sleep(delay)
+                    }
+                } else {
+                    throw e // 其他HTTP错误直接抛出
+                }
+            } catch (e: Exception) {
+                lastException = e
+                logger.warn("{} 失败 (尝试 ${attempt + 1}/${gitHubConfig.retryAttempts}): {}", operation, e.message)
+                if (attempt < gitHubConfig.retryAttempts - 1) {
+                    Thread.sleep(gitHubConfig.retryDelay.toMillis())
+                }
+            }
+        }
+
+        throw lastException ?: Exception("$operation 失败")
     }
     
     /**
@@ -104,19 +141,21 @@ class OfficialBlueprintSyncService(
      * 获取flows目录下的所有文件
      */
     private fun getFlowFiles(): List<GitHubFile> {
-        return try {
+        return executeWithRetry("获取GitHub文件列表") {
             logger.debug("获取GitHub仓库文件列表: {}/{}", GITHUB_REPO, FLOWS_PATH)
             val request = HttpRequest.GET<Any>("/repos/$GITHUB_REPO/contents/$FLOWS_PATH")
                 .header("User-Agent", "Kestra-Blueprint-Sync/1.0")
                 .header("Accept", "application/vnd.github.v3+json")
+                .apply {
+                    gitHubConfig.getAuthHeader()?.let { token ->
+                        header("Authorization", token)
+                    }
+                }
 
             val response = githubClient.toBlocking().exchange(request, Array<GitHubFile>::class.java)
             val files = response.body()?.filter { it.type == "file" && it.name.endsWith(".yaml") } ?: emptyList()
             logger.info("发现 {} 个YAML文件", files.size)
             files
-        } catch (e: Exception) {
-            logger.error("获取GitHub文件列表失败: {}", e.message)
-            throw e
         }
     }
     
@@ -124,35 +163,23 @@ class OfficialBlueprintSyncService(
      * 下载文件内容
      */
     private fun downloadFileContent(downloadUrl: String): String {
-        return try {
-            // 使用Micronaut HTTP客户端下载文件内容，支持代理
-            var lastException: Exception? = null
-            repeat(3) { attempt ->
-                try {
-                    logger.debug("下载文件内容 (尝试 ${attempt + 1}/3): {}", downloadUrl)
+        return executeWithRetry("下载文件内容") {
+            logger.debug("下载文件内容: {}", downloadUrl)
 
-                    // 解析URL，提取路径部分
-                    val url = java.net.URL(downloadUrl)
-                    val path = url.path
+            // 解析URL，提取路径部分
+            val url = java.net.URL(downloadUrl)
+            val path = url.path
 
-                    val request = HttpRequest.GET<String>(path)
-                        .header("User-Agent", "Kestra-Blueprint-Sync/1.0")
-
-                    val response = rawClient.toBlocking().exchange(request, String::class.java)
-                    return response.body() ?: throw Exception("响应体为空")
-
-                } catch (e: Exception) {
-                    lastException = e
-                    logger.warn("下载失败 (尝试 ${attempt + 1}/3): {} - {}", downloadUrl, e.message)
-                    if (attempt < 2) {
-                        Thread.sleep(2000) // 等待2秒后重试
+            val request = HttpRequest.GET<String>(path)
+                .header("User-Agent", "Kestra-Blueprint-Sync/1.0")
+                .apply {
+                    gitHubConfig.getAuthHeader()?.let { token ->
+                        header("Authorization", token)
                     }
                 }
-            }
-            throw lastException ?: Exception("下载失败")
-        } catch (e: Exception) {
-            logger.error("下载文件内容失败: {} - {}", downloadUrl, e.message)
-            throw e
+
+            val response = rawClient.toBlocking().exchange(request, String::class.java)
+            response.body() ?: throw Exception("响应体为空")
         }
     }
     
@@ -271,12 +298,16 @@ class OfficialBlueprintSyncService(
 /**
  * GitHub文件信息
  */
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 data class GitHubFile(
-    val name: String,
-    val path: String,
-    val type: String,
+    @com.fasterxml.jackson.annotation.JsonProperty("name")
+    val name: String = "",
+    @com.fasterxml.jackson.annotation.JsonProperty("path")
+    val path: String = "",
+    @com.fasterxml.jackson.annotation.JsonProperty("type")
+    val type: String = "",
     @com.fasterxml.jackson.annotation.JsonProperty("download_url")
-    val downloadUrl: String
+    val downloadUrl: String = ""
 )
 
 /**

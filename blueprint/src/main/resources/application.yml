@@ -36,10 +36,8 @@ micronaut:
       pool:
         enabled: true
         max-connections: 50
-      proxy:
-        type: HTTP
-        host: 127.0.0.1
-        port: 4780
+      proxy-type: http
+      proxy-address: 127.0.0.1:4780
 
 # 数据源配置
 datasources:
@@ -67,6 +65,15 @@ caches:
   blueprint:
     maximum-size: 500
     expire-after-write: 5m
+
+# GitHub API配置
+github:
+  api:
+    token: ${GITHUB_TOKEN:}
+    base-url: https://api.github.com
+    timeout: 30s
+    retry-attempts: 3
+    retry-delay: 2s
 
 # 日志配置
 logger:
