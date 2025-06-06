@@ -24,7 +24,7 @@ import java.util.*
  * API蓝图控制器
  * 提供与现有前端兼容的API端点
  */
-@Controller("/api/v1/blueprints")
+@Controller("/api/v1/blueprints/community")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Validated
 @Tag(name = "API Blueprint", description = "兼容现有前端的蓝图API")

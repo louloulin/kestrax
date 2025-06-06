@@ -39,17 +39,7 @@ kestra:
       username: sa
       password: ''
       
-  # JPA配置
-  jpa:
-    default:
-      packages-to-scan:
-        - "io.kestra.blueprint.models"
-      properties:
-        hibernate:
-          hbm2ddl:
-            auto: update
-          dialect: org.hibernate.dialect.H2Dialect
-          show_sql: false
+  # 使用Micronaut Data JDBC，不需要JPA配置
           
   # Micronaut配置
   micronaut:

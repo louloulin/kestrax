@@ -4,6 +4,7 @@ import io.kestra.blueprint.dto.*
 import io.kestra.blueprint.security.RequirePermission
 import io.kestra.blueprint.service.BlueprintService
 import io.kestra.blueprint.service.SimpleBlueprintSyncService
+import io.kestra.blueprint.service.OfficialBlueprintSyncService
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
@@ -34,7 +35,8 @@ import org.slf4j.LoggerFactory
 @Tag(name = "Blueprint", description = "蓝图管理API")
 open class BlueprintController(
     private val blueprintService: BlueprintService,
-    private val simpleBlueprintSyncService: SimpleBlueprintSyncService
+    private val simpleBlueprintSyncService: SimpleBlueprintSyncService,
+    private val officialBlueprintSyncService: OfficialBlueprintSyncService
 ) {
 
     private val logger = LoggerFactory.getLogger(BlueprintController::class.java)
@@ -234,9 +236,11 @@ open class BlueprintController(
     )
     open fun syncOfficialBlueprints(): HttpResponse<SyncBlueprintResponse> {
         return try {
-            val response = simpleBlueprintSyncService.syncOfficialBlueprints()
+            logger.info("开始同步Kestra官方蓝图...")
+            val response = officialBlueprintSyncService.syncOfficialBlueprints()
             HttpResponse.ok(response)
         } catch (e: Exception) {
+            logger.error("同步官方蓝图失败", e)
             val response = SyncBlueprintResponse(
                 success = false,
                 message = "同步失败: ${e.message}",

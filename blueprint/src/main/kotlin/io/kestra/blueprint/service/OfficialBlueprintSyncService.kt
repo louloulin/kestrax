@@ -1,0 +1,258 @@
+package io.kestra.blueprint.service
+
+import io.kestra.blueprint.dto.SyncBlueprintResponse
+import io.kestra.blueprint.dto.FailedBlueprintInfo
+import io.kestra.blueprint.models.Blueprint
+import io.kestra.blueprint.models.BlueprintTag
+import io.kestra.blueprint.models.BlueprintTask
+import io.kestra.blueprint.repository.BlueprintRepository
+import io.kestra.blueprint.repository.BlueprintTagRepository
+import io.kestra.blueprint.repository.BlueprintTaskRepository
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.client.HttpClient
+import io.micronaut.http.client.annotation.Client
+import jakarta.inject.Singleton
+import org.slf4j.LoggerFactory
+import org.yaml.snakeyaml.Yaml
+import java.time.Instant
+import java.util.*
+import java.util.regex.Pattern
+
+/**
+ * 官方蓝图同步服务
+ * 从Kestra官方GitHub仓库同步真实的蓝图数据
+ */
+@Singleton
+class OfficialBlueprintSyncService(
+    private val blueprintRepository: BlueprintRepository,
+    private val blueprintTagRepository: BlueprintTagRepository,
+    private val blueprintTaskRepository: BlueprintTaskRepository,
+    @Client("https://api.github.com") private val githubClient: HttpClient
+) {
+    
+    private val logger = LoggerFactory.getLogger(OfficialBlueprintSyncService::class.java)
+    private val yaml = Yaml()
+    
+    companion object {
+        private const val GITHUB_REPO = "kestra-io/blueprints"
+        private const val FLOWS_PATH = "flows"
+        private const val OFFICIAL_NAMESPACE = "official"
+    }
+    
+    /**
+     * 同步官方蓝图
+     */
+    fun syncOfficialBlueprints(): SyncBlueprintResponse {
+        logger.info("开始同步Kestra官方蓝图...")
+        
+        val startTime = System.currentTimeMillis()
+        var successCount = 0
+        var failedCount = 0
+        val failedItems = mutableListOf<FailedBlueprintInfo>()
+        
+        try {
+            // 获取flows目录下的所有文件
+            val flowFiles = getFlowFiles()
+            logger.info("发现 {} 个蓝图文件", flowFiles.size)
+            
+            // 同步每个蓝图文件
+            for (file in flowFiles) {
+                try {
+                    val content = downloadFileContent(file.downloadUrl)
+                    val blueprint = parseBlueprint(file.name, content)
+                    
+                    if (blueprint != null) {
+                        syncBlueprint(blueprint)
+                        successCount++
+                        logger.debug("成功同步蓝图: {}", blueprint.title)
+                    } else {
+                        failedCount++
+                        failedItems.add(FailedBlueprintInfo(file.name, "无法解析蓝图内容"))
+                        logger.warn("跳过无效蓝图文件: {}", file.name)
+                    }
+                } catch (e: Exception) {
+                    failedCount++
+                    failedItems.add(FailedBlueprintInfo(file.name, e.message ?: "未知错误"))
+                    logger.error("同步蓝图失败: {} - {}", file.name, e.message, e)
+                }
+            }
+            
+            val duration = System.currentTimeMillis() - startTime
+            logger.info("官方蓝图同步完成 - 成功: {}, 失败: {}, 耗时: {}ms", successCount, failedCount, duration)
+            
+            return SyncBlueprintResponse(
+                success = true,
+                message = "官方蓝图同步完成",
+                syncedCount = successCount,
+                failedCount = failedCount,
+                failedBlueprints = failedItems
+            )
+            
+        } catch (e: Exception) {
+            logger.error("同步官方蓝图失败", e)
+            return SyncBlueprintResponse(
+                success = false,
+                message = "同步失败: ${e.message}",
+                syncedCount = 0,
+                failedCount = 0,
+                failedBlueprints = listOf(FailedBlueprintInfo("unknown", e.message ?: "未知错误"))
+            )
+        }
+    }
+    
+    /**
+     * 获取flows目录下的所有文件
+     */
+    private fun getFlowFiles(): List<GitHubFile> {
+        val request = HttpRequest.GET<Any>("/repos/$GITHUB_REPO/contents/$FLOWS_PATH")
+        val response = githubClient.toBlocking().exchange(request, Array<GitHubFile>::class.java)
+        
+        return response.body()?.filter { it.type == "file" && it.name.endsWith(".yaml") } ?: emptyList()
+    }
+    
+    /**
+     * 下载文件内容
+     */
+    private fun downloadFileContent(downloadUrl: String): String {
+        val request = HttpRequest.GET<Any>(downloadUrl)
+        val response = githubClient.toBlocking().exchange(request, String::class.java)
+        return response.body() ?: throw RuntimeException("无法下载文件内容")
+    }
+    
+    /**
+     * 解析蓝图YAML内容
+     */
+    private fun parseBlueprint(fileName: String, content: String): ParsedBlueprint? {
+        try {
+            val yamlData = yaml.load<Map<String, Any>>(content)
+            
+            val id = yamlData["id"] as? String ?: fileName.removeSuffix(".yaml")
+            val namespace = yamlData["namespace"] as? String ?: "demo"
+            val extend = yamlData["extend"] as? Map<String, Any>
+            
+            val title = extend?.get("title") as? String ?: id.replace("-", " ").replaceFirstChar { it.uppercase() }
+            val description = extend?.get("description") as? String ?: "从官方蓝图仓库同步的工作流"
+            val tags = (extend?.get("tags") as? List<*>)?.mapNotNull { it as? String } ?: emptyList()
+            val isDemo = extend?.get("demo") as? Boolean ?: false
+            val isEE = extend?.get("ee") as? Boolean ?: false
+            
+            // 提取任务类型
+            val tasks = yamlData["tasks"] as? List<*> ?: emptyList()
+            val includedTasks = extractTaskTypes(tasks)
+            
+            return ParsedBlueprint(
+                id = id,
+                title = title,
+                description = description,
+                content = content,
+                tags = tags,
+                includedTasks = includedTasks,
+                kind = "FLOW",
+                isTemplate = !isDemo,
+                isDemo = isDemo,
+                isEE = isEE
+            )
+            
+        } catch (e: Exception) {
+            logger.error("解析蓝图失败: {} - {}", fileName, e.message)
+            return null
+        }
+    }
+    
+    /**
+     * 提取任务类型
+     */
+    private fun extractTaskTypes(tasks: List<*>): List<String> {
+        val taskTypes = mutableSetOf<String>()
+        
+        for (task in tasks) {
+            if (task is Map<*, *>) {
+                val type = task["type"] as? String
+                if (type != null) {
+                    taskTypes.add(type)
+                }
+            }
+        }
+        
+        return taskTypes.toList()
+    }
+    
+    /**
+     * 同步单个蓝图
+     */
+    private fun syncBlueprint(parsedBlueprint: ParsedBlueprint) {
+        // 检查蓝图是否已存在
+        val existingBlueprint = blueprintRepository.findByTitleAndNamespaceId(parsedBlueprint.title, OFFICIAL_NAMESPACE)
+
+        if (existingBlueprint.isPresent) {
+            logger.debug("蓝图已存在，跳过: {}", parsedBlueprint.title)
+            return
+        }
+
+        // 创建新蓝图
+        val blueprintId = UUID.randomUUID().toString()
+        val blueprint = Blueprint(
+            id = blueprintId,
+            namespaceId = OFFICIAL_NAMESPACE,
+            title = parsedBlueprint.title,
+            description = parsedBlueprint.description,
+            content = parsedBlueprint.content,
+            kind = parsedBlueprint.kind,
+            isPublic = true,
+            isTemplate = parsedBlueprint.isTemplate,
+            createdBy = "system",
+            createdAt = Instant.now(),
+            updatedAt = Instant.now(),
+            version = 0L
+        )
+
+        // 保存蓝图
+        blueprintRepository.save(blueprint)
+
+        // 保存标签
+        parsedBlueprint.tags.forEach { tag ->
+            val blueprintTag = BlueprintTag(
+                blueprintId = blueprintId,
+                tag = tag
+            )
+            blueprintTagRepository.save(blueprintTag)
+        }
+
+        // 保存任务
+        parsedBlueprint.includedTasks.forEach { task ->
+            val blueprintTask = BlueprintTask(
+                blueprintId = blueprintId,
+                task = task
+            )
+            blueprintTaskRepository.save(blueprintTask)
+        }
+
+        logger.debug("创建新蓝图: {}", parsedBlueprint.title)
+    }
+}
+
+/**
+ * GitHub文件信息
+ */
+data class GitHubFile(
+    val name: String,
+    val path: String,
+    val type: String,
+    val downloadUrl: String
+)
+
+/**
+ * 解析后的蓝图数据
+ */
+data class ParsedBlueprint(
+    val id: String,
+    val title: String,
+    val description: String,
+    val content: String,
+    val tags: List<String>,
+    val includedTasks: List<String>,
+    val kind: String,
+    val isTemplate: Boolean,
+    val isDemo: Boolean,
+    val isEE: Boolean
+)

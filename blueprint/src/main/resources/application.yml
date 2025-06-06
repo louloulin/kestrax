@@ -61,8 +61,7 @@ caches:
 logger:
   levels:
     io.kestra.blueprint: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    io.micronaut.data.query: DEBUG
 
 # 管理端点配置
 endpoints:
@@ -97,23 +96,13 @@ datasources:
     schema-generate: NONE
     dialect: POSTGRES
 
-# 生产JPA配置
-jpa:
-  default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: validate
-        show_sql: false
-        format_sql: false
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+# 生产环境不需要JPA配置，使用Micronaut Data JDBC
 
 # 生产日志配置
 logger:
   levels:
     io.kestra.blueprint: INFO
-    org.hibernate.SQL: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    io.micronaut.data.query: WARN
 
 # 生产管理端点配置
 endpoints:
@@ -145,19 +134,10 @@ datasources:
     schema-generate: CREATE_DROP
     dialect: H2
 
-# 测试JPA配置
-jpa:
-  default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: create-drop
-        show_sql: true
-        format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+# 测试环境不需要JPA配置，使用Micronaut Data JDBC
 
 # 测试日志配置
 logger:
   levels:
     io.kestra.blueprint: DEBUG
-    org.hibernate.SQL: DEBUG
+    io.micronaut.data.query: DEBUG

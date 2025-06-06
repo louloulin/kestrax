@@ -26,9 +26,17 @@ tasks.register('copyGradleProperties', Copy) {
 processResources.dependsOn copyGradleProperties
 
 dependencies {
-    // Kestra
-    api project(':model')
-    api project(':core')
+    // Kestra - 排除Hibernate依赖
+    api(project(':model')) {
+        exclude group: 'org.hibernate', module: 'hibernate-core'
+        exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
+        exclude group: 'jakarta.persistence', module: 'jakarta.persistence-api'
+    }
+    api(project(':core')) {
+        exclude group: 'org.hibernate', module: 'hibernate-core'
+        exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
+        exclude group: 'jakarta.persistence', module: 'jakarta.persistence-api'
+    }
     annotationProcessor project(':processor')
     
     // Micronaut Core

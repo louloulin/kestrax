@@ -105,12 +105,12 @@ public class BlueprintController {
 
     private String getApiBasePath(final Kind kind) {
         // 重定向到本地蓝图服务API，忽略kind参数
-        return "/api/v1/blueprints";
+        return "/api/v1/blueprints/community";
     }
 
     private String getApiBasePath(final String id, final Kind kind) {
         // 重定向到本地蓝图服务API，忽略kind参数
-        return "/api/v1/blueprints/" + id;
+        return "/api/v1/blueprints/community/" + id;
     }
 
 
