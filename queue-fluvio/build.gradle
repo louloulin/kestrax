@@ -25,10 +25,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-java:3.25.1")
     implementation("com.google.protobuf:protobuf-java-util:3.25.1")
 
-    // Micronaut
-    implementation("io.micronaut:micronaut-context")
-    implementation("io.micronaut:micronaut-inject")
-    implementation("io.micronaut.validation:micronaut-validation")
+    // Micronaut dependencies are inherited from global configuration
 
     // Logging
     implementation("ch.qos.logback:logback-classic")

@@ -111,10 +111,22 @@ class FluvioClientManager(
     }
     
     private fun initializeFluvio() {
-        // Initialize Fluvio client - connect() doesn't take parameters in 0.12.15
-        fluvio = Fluvio.connect()
+        // Initialize Fluvio client with configured endpoint
+        logger.info("Connecting to Fluvio cluster at: {}", config.clusterEndpoint)
 
-        logger.info("Connected to Fluvio cluster")
+        try {
+            // Set Fluvio cluster endpoint via system property
+            // This is how Fluvio Java client typically discovers the cluster
+            System.setProperty("FLUVIO_CLUSTER_ENDPOINT", config.clusterEndpoint)
+
+            // Try to connect to the configured endpoint
+            fluvio = Fluvio.connect()
+
+            logger.info("Successfully connected to Fluvio cluster at: {}", config.clusterEndpoint)
+        } catch (e: Exception) {
+            logger.error("Failed to connect to Fluvio cluster at: {}", config.clusterEndpoint, e)
+            throw RuntimeException("Unable to connect to Fluvio cluster", e)
+        }
     }
     
     private fun createTopics() {

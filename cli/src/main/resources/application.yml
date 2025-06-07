@@ -135,6 +135,53 @@ kestra:
     delay: 1s
     maxDelay: ""
 
+  # 队列配置 - 使用Fluvio高性能队列
+  queue:
+    type: fluvio
+
+    # Fluvio队列配置
+    fluvio:
+      # Fluvio集群端点
+      clusterEndpoint: "localhost:9003"
+
+      # 主题前缀
+      topicPrefix: "kestra"
+
+      # 默认副本因子
+      replicationFactor: 1  # 单节点开发环境
+
+      # 默认分区数
+      partitions: 3
+
+      # 主题保留配置
+      retention:
+        time: "P7D"      # 7天保留期
+        size: 1073741824 # 1GB大小限制
+
+      # 生产者配置
+      producer:
+        batchSize: 100
+        lingerMs: 10
+        compression: "lz4"
+        requestTimeout: "PT30S"
+        retryAttempts: 3
+
+      # 消费者配置
+      consumer:
+        fetchMinBytes: 1024
+        fetchMaxWait: "PT0.5S"
+        maxPollRecords: 100
+        sessionTimeout: "PT30S"
+        autoOffsetReset: "latest"
+
+      # 健康检查配置
+      healthCheck:
+        enabled: true
+        interval: "PT30S"
+        failureThreshold: 3
+        autoFallback: true  # 自动回退到JDBC队列
+
+  # 保留JDBC配置作为备用
   jdbc:
     queues:
       min-poll-interval: 25ms

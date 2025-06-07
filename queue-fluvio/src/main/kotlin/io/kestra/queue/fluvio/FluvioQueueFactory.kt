@@ -17,8 +17,11 @@ import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.context.annotation.Requires
+import io.micronaut.context.annotation.Value
 import jakarta.inject.Named
 import jakarta.inject.Singleton
+import org.slf4j.LoggerFactory
+import java.util.*
 
 /**
  * Fluvio implementation of QueueFactoryInterface
@@ -39,6 +42,14 @@ class FluvioQueueFactory(
     private val config: FluvioQueueConfiguration,
     private val executorsUtils: io.kestra.core.utils.ExecutorsUtils
 ) : QueueFactoryInterface {
+
+    private val logger = LoggerFactory.getLogger(FluvioQueueFactory::class.java)
+
+    init {
+        logger.info("🚀 FluvioQueueFactory created successfully!")
+        logger.info("📊 Configuration: cluster-endpoint={}, topic-prefix={}",
+            config.clusterEndpoint, config.topicPrefix)
+    }
 
     private fun <T> createFluvioQueue(messageType: Class<T>, queueTypeName: String): FluvioQueue<T> {
         return FluvioQueue(
