@@ -1,5 +1,0 @@
-io.kestra.queue.fluvio.$FluvioQueueFactory$Definition$Reference
-io.kestra.queue.fluvio.$FluvioClientManager$Definition$Reference
-io.kestra.queue.fluvio.$FluvioQueueConfiguration$Definition$Reference
-io.kestra.queue.fluvio.$FluvioConfigurationDebug$Definition$Reference
-io.kestra.queue.fluvio.$FluvioConfigurationForcer$Definition$Reference

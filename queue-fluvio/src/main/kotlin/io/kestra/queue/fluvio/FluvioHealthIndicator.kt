@@ -1,5 +1,6 @@
 package io.kestra.queue.fluvio
 
+import io.micronaut.context.annotation.Requires
 import io.micronaut.health.HealthStatus
 import io.micronaut.management.health.indicator.HealthIndicator
 import io.micronaut.management.health.indicator.HealthResult
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono
  * 集成到Micronaut健康检查系统中
  */
 @Singleton
+@Requires(property = "kestra.queue.type", value = "fluvio")
 class FluvioHealthIndicator(
     private val metricsCollector: FluvioMetricsCollector,
     private val config: FluvioQueueConfiguration
@@ -248,6 +250,7 @@ class FluvioHealthIndicator(
  * 扩展的健康检查工具
  */
 @Singleton
+@Requires(property = "kestra.queue.type", value = "fluvio")
 class FluvioHealthChecker(
     private val metricsCollector: FluvioMetricsCollector,
     private val config: FluvioQueueConfiguration
