@@ -17,7 +17,7 @@ prettierrc.js
 .attach*
 **/*.class
 **/bin/*
-
+.kotlin
 ### Configurations
 docker-compose.override.yml
 cli/src/main/resources/application-*.yml
@@ -63,6 +63,7 @@ core/src/main/resources/gradle.properties
 # H2 Database
 /data
 blueprint/data/
+blueprint/logs/
 *.db
 *.mv.db
 *.trace.db
