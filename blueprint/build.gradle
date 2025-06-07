@@ -56,6 +56,7 @@ dependencies {
     implementation "io.micronaut.data:micronaut-data-jdbc"
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
     implementation "io.micronaut.flyway:micronaut-flyway"
+    implementation "io.micronaut.data:micronaut-data-tx"
 
     // Database drivers
     runtimeOnly "com.h2database:h2"
