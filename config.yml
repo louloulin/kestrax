@@ -6,7 +6,7 @@ kestra:
     local:
       base-path: /tmp/kestra/storage
   queue:
-    type: h2
+    type: fluvio
   server:
     access-log:
       enabled: false

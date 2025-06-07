@@ -142,13 +142,13 @@ kestra:
     # Fluvio队列配置
     fluvio:
       # Fluvio集群端点
-      clusterEndpoint: "localhost:9003"
+      cluster-endpoint: "localhost:9003"
 
       # 主题前缀
-      topicPrefix: "kestra"
+      topic-prefix: "kestra"
 
       # 默认副本因子
-      replicationFactor: 1  # 单节点开发环境
+      replication-factor: 1  # 单节点开发环境
 
       # 默认分区数
       partitions: 3
@@ -160,26 +160,26 @@ kestra:
 
       # 生产者配置
       producer:
-        batchSize: 100
-        lingerMs: 10
+        batch-size: 100
+        linger-ms: 10
         compression: "lz4"
-        requestTimeout: "PT30S"
-        retryAttempts: 3
+        request-timeout: "PT30S"
+        retry-attempts: 3
 
       # 消费者配置
       consumer:
-        fetchMinBytes: 1024
-        fetchMaxWait: "PT0.5S"
-        maxPollRecords: 100
-        sessionTimeout: "PT30S"
-        autoOffsetReset: "latest"
+        fetch-min-bytes: 1024
+        fetch-max-wait: "PT0.5S"
+        max-poll-records: 100
+        session-timeout: "PT30S"
+        auto-offset-reset: "latest"
 
       # 健康检查配置
-      healthCheck:
+      health-check:
         enabled: true
         interval: "PT30S"
-        failureThreshold: 3
-        autoFallback: true  # 自动回退到JDBC队列
+        failure-threshold: 3
+        auto-fallback: true  # 自动回退到JDBC队列
 
   # 保留JDBC配置作为备用
   jdbc:
