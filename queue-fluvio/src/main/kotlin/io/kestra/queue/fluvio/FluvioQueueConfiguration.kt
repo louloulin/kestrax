@@ -6,52 +6,51 @@ import java.time.Duration
 
 @ConfigurationProperties("kestra.queue.fluvio")
 @Requires(property = "kestra.queue.type", value = "fluvio")
-data class FluvioQueueConfiguration(
+class FluvioQueueConfiguration {
     /**
      * Fluvio cluster endpoint
      */
-    var clusterEndpoint: String = "fluvio-sc:9003",
-    
+    var clusterEndpoint: String = "fluvio-sc:9003"
+
     /**
      * Topic prefix for all Kestra topics
      */
-    var topicPrefix: String = "kestra",
-    
+    var topicPrefix: String = "kestra"
+
     /**
      * Default replication factor for topics
      */
-    var replicationFactor: Int = 2,
-    
+    var replicationFactor: Int = 2
+
     /**
      * Default number of partitions for topics
      */
-    var partitions: Int = 3,
-    
+    var partitions: Int = 3
+
     /**
      * Topic retention configuration
      */
-    var retention: RetentionConfig = RetentionConfig(),
-    
+    var retention: RetentionConfig = RetentionConfig()
+
     /**
      * Producer configuration
      */
-    var producer: ProducerConfig = ProducerConfig(),
-    
+    var producer: ProducerConfig = ProducerConfig()
+
     /**
      * Consumer configuration
      */
-    var consumer: ConsumerConfig = ConsumerConfig(),
-    
+    var consumer: ConsumerConfig = ConsumerConfig()
+
     /**
      * Health check configuration
      */
-    var healthCheck: HealthCheckConfig = HealthCheckConfig(),
-    
+    var healthCheck: HealthCheckConfig = HealthCheckConfig()
+
     /**
      * Topic-specific configurations
      */
     var topics: Map<String, TopicConfig> = emptyMap()
-) {
     
     data class RetentionConfig(
         /**
