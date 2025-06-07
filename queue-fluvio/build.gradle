@@ -9,6 +9,10 @@ configurations {
 }
 
 dependencies {
+    // Platform for version management
+    kapt enforcedPlatform(project(":platform"))
+    implementation enforcedPlatform(project(":platform"))
+
     // Kestra dependencies
     implementation project(":core")
 
@@ -24,6 +28,10 @@ dependencies {
     // Protocol Buffers
     implementation("com.google.protobuf:protobuf-java:3.25.1")
     implementation("com.google.protobuf:protobuf-java-util:3.25.1")
+
+    // Micronaut annotation processors for KAPT
+    kapt("io.micronaut:micronaut-inject-java")
+    kapt("io.micronaut.validation:micronaut-validation-processor")
 
     // Micronaut dependencies are inherited from global configuration
 
