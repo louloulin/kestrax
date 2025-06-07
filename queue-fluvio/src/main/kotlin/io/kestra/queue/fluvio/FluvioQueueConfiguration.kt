@@ -1,9 +1,11 @@
 package io.kestra.queue.fluvio
 
 import io.micronaut.context.annotation.ConfigurationProperties
+import io.micronaut.context.annotation.Requires
 import java.time.Duration
 
 @ConfigurationProperties("kestra.queue.fluvio")
+@Requires(property = "kestra.queue.type", value = "fluvio")
 data class FluvioQueueConfiguration(
     /**
      * Fluvio cluster endpoint

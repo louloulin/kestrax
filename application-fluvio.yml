@@ -1,0 +1,31 @@
+kestra:
+  queue:
+    type: fluvio
+    fluvio:
+      cluster-endpoint: "localhost:9003"
+      topic-prefix: "kestra"
+      replication-factor: 1
+      partitions: 1
+      retention:
+        time: "P7D"  # 7 days
+        size: 1073741824  # 1GB
+      producer:
+        batch-size: 100
+        linger-ms: 10
+        compression: "lz4"
+        request-timeout: "PT30S"
+        retry-attempts: 3
+        retry-backoff: "PT0.1S"
+      consumer:
+        fetch-min-bytes: 1024
+        fetch-max-wait: "PT0.5S"
+        max-poll-records: 100
+        session-timeout: "PT30S"
+        heartbeat-interval: "PT3S"
+        auto-offset-reset: "latest"
+      health-check:
+        enabled: true
+        interval: "PT30S"
+        failure-threshold: 3
+        auto-fallback: true
+        connection-timeout: "PT5S"

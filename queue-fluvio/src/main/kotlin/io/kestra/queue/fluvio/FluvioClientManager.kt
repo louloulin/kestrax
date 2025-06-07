@@ -1,6 +1,7 @@
 package io.kestra.queue.fluvio
 
 import com.infinyon.fluvio.*
+import io.micronaut.context.annotation.Requires
 import io.micronaut.context.event.ApplicationEventListener
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.context.event.ShutdownEvent
@@ -15,6 +16,7 @@ private val logger = LoggerFactory.getLogger(FluvioClientManager::class.java)
  * Manages Fluvio client connections and topic creation
  */
 @Singleton
+@Requires(property = "kestra.queue.type", value = "fluvio")
 class FluvioClientManager(
     private val config: FluvioQueueConfiguration
 ) : ApplicationEventListener<StartupEvent> {
