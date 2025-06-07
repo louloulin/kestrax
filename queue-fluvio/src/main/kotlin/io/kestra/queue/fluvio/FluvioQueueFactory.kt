@@ -18,6 +18,8 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.context.annotation.Requires
 import io.micronaut.context.annotation.Value
+import io.micronaut.context.condition.Condition
+import io.micronaut.context.condition.ConditionContext
 import jakarta.inject.Named
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -32,7 +34,7 @@ import java.util.*
  * Uses @Replaces to replace JdbcQueueFactory when Fluvio is configured.
  */
 @Factory
-@Requires(property = "kestra.queue.type", value = "fluvio")
+@Requires(condition = FluvioEnabledCondition::class)
 @Replaces(bean = QueueFactoryInterface::class)
 class FluvioQueueFactory(
     private val clientManager: FluvioClientManager,
@@ -192,4 +194,5 @@ class FluvioQueueFactory(
         val fluvioQueue = createFluvioQueue(WorkerTriggerResult::class.java, "worker-trigger-results")
         return FluvioWorkerTriggerResultQueue(fluvioQueue)
     }
+
 }

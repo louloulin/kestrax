@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference
  * 用于验证从JDBC队列到Fluvio队列的迁移是否成功
  */
 @Singleton
-@Requires(property = "kestra.queue.type", value = "fluvio")
+@Requires(condition = FluvioEnabledCondition::class)
 class FluvioMigrationValidator @Inject constructor(
     private val queueFactory: QueueFactoryInterface,
     @Named(QueueFactoryInterface.EXECUTION_NAMED)

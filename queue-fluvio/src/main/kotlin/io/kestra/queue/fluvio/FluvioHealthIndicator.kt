@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono
  * 集成到Micronaut健康检查系统中
  */
 @Singleton
-@Requires(property = "kestra.queue.type", value = "fluvio")
+@Requires(condition = FluvioEnabledCondition::class)
 class FluvioHealthIndicator(
     private val metricsCollector: FluvioMetricsCollector,
     private val config: FluvioQueueConfiguration
@@ -250,7 +250,7 @@ class FluvioHealthIndicator(
  * 扩展的健康检查工具
  */
 @Singleton
-@Requires(property = "kestra.queue.type", value = "fluvio")
+@Requires(condition = FluvioEnabledCondition::class)
 class FluvioHealthChecker(
     private val metricsCollector: FluvioMetricsCollector,
     private val config: FluvioQueueConfiguration

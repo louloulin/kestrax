@@ -16,7 +16,7 @@ private val logger = LoggerFactory.getLogger(FluvioClientManager::class.java)
  * Manages Fluvio client connections and topic creation
  */
 @Singleton
-@Requires(property = "kestra.queue.type", value = "fluvio")
+@Requires(condition = FluvioEnabledCondition::class)
 class FluvioClientManager(
     private val config: FluvioQueueConfiguration
 ) : ApplicationEventListener<StartupEvent> {
