@@ -18,12 +18,12 @@ class FluvioConfigurationForcer : ApplicationEventListener<StartupEvent> {
 
     init {
         // 在类初始化时就强制设置系统属性
-        logger.error("🔧 FluvioConfigurationForcer: Initializing with forced queue type")
+        logger.info("🔧 FluvioConfigurationForcer: Initializing with forced queue type")
         System.setProperty("kestra.queue.type", "fluvio")
     }
 
     override fun onApplicationEvent(event: StartupEvent) {
-        logger.error("🔧 FluvioConfigurationForcer: Application startup event received")
+        logger.info("🔧 FluvioConfigurationForcer: Application startup event received")
 
         // 最后一次强制设置
         System.setProperty("kestra.queue.type", "fluvio")
@@ -32,27 +32,27 @@ class FluvioConfigurationForcer : ApplicationEventListener<StartupEvent> {
         val applicationContext = event.source as ApplicationContext
         val environment = applicationContext.getBean(Environment::class.java)
         val queueType = environment.getProperty("kestra.queue.type", String::class.java).orElse("unknown")
-        logger.error("🔧 Final queue type at startup: {}", queueType)
+        logger.info("🔧 Final queue type at startup: {}", queueType)
 
         if (queueType != "fluvio") {
-            logger.error("🚨 WARNING: Queue type is not 'fluvio'! Current: {}", queueType)
+            logger.info("🚨 WARNING: Queue type is not 'fluvio'! Current: {}", queueType)
 
             // 记录所有相关配置以便调试
             val allProps = environment.getProperties("kestra.queue")
-            logger.error("🔧 All queue properties:")
+            logger.info("🔧 All queue properties:")
             allProps.forEach { (key, value) ->
-                logger.error("  - {} = {}", key, value)
+                logger.info("  - {} = {}", key, value)
             }
 
             // 检查系统属性
             val systemProp = System.getProperty("kestra.queue.type")
-            logger.error("🔧 System property kestra.queue.type = {}", systemProp)
+            logger.info("🔧 System property kestra.queue.type = {}", systemProp)
 
             // 检查环境变量
             val envVar = System.getenv("KESTRA_QUEUE_TYPE")
-            logger.error("🔧 Environment variable KESTRA_QUEUE_TYPE = {}", envVar)
+            logger.info("🔧 Environment variable KESTRA_QUEUE_TYPE = {}", envVar)
         } else {
-            logger.error("✅ SUCCESS: Queue type is correctly set to 'fluvio'")
+            logger.info("✅ SUCCESS: Queue type is correctly set to 'fluvio'")
         }
     }
 }
