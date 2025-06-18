@@ -157,7 +157,7 @@ importers:
         version: 1.5.0(vue@3.5.15(typescript@5.8.3))
       vue3-tour:
         specifier: github:kestra-io/vue3-tour
-        version: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
+        version: git+git@github.com:kestra-io/vue3-tour.git#6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.15(typescript@5.8.3))
@@ -187,8 +187,8 @@ importers:
         specifier: ^4.41.0
         version: 4.41.1
       '@swc/core-darwin-arm64':
-        specifier: ^1.11.24
-        version: 1.11.29
+        specifier: ^1.12.1
+        version: 1.12.1
       '@swc/core-darwin-x64':
         specifier: ^1.11.24
         version: 1.11.29
@@ -1768,6 +1768,12 @@ packages:
 
   '@swc/core-darwin-arm64@1.11.29':
     resolution: {integrity: sha512-whsCX7URzbuS5aET58c75Dloby3Gtj/ITk2vc4WW6pSDQKSPDuONsIcZ7B2ng8oz0K6ttbi4p3H/PNPQLJ4maQ==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@swc/core-darwin-arm64@1.12.1':
+    resolution: {integrity: sha512-nUjWVcJ3YS2N40ZbKwYO2RJ4+o2tWYRzNOcIQp05FqW0+aoUCVMdAUUzQinPDynfgwVshDAXCKemY8X7nN5MaA==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
@@ -4407,9 +4413,6 @@ packages:
   jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
 
-  jump.js@1.0.2:
-    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
-
   katex@0.16.22:
     resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
     hasBin: true
@@ -6324,10 +6327,6 @@ packages:
     peerDependencies:
       vue: ^3.2.20
 
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff:
-    resolution: {tarball: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff}
-    version: 0.3.4
-
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
     deprecated: Vue 2 has reached EOL and is no longer actively maintained. See https://v2.vuejs.org/eol/ for more details.
@@ -7338,7 +7337,7 @@ snapshots:
       '@rollup/rollup-darwin-arm64': 4.41.1
       '@rollup/rollup-darwin-x64': 4.41.1
       '@rollup/rollup-linux-x64-gnu': 4.41.1
-      '@swc/core-darwin-arm64': 1.11.29
+      '@swc/core-darwin-arm64': 1.12.1
       '@swc/core-darwin-x64': 1.11.29
       '@swc/core-linux-x64-gnu': 1.11.29
     transitivePeerDependencies:
@@ -8397,6 +8396,9 @@ snapshots:
       apg-lite: 1.0.4
 
   '@swc/core-darwin-arm64@1.11.29':
+    optional: true
+
+  '@swc/core-darwin-arm64@1.12.1':
     optional: true
 
   '@swc/core-darwin-x64@1.11.29':
@@ -11563,8 +11565,6 @@ snapshots:
       is-promise: 2.2.2
       promise: 7.3.1
 
-  jump.js@1.0.2: {}
-
   katex@0.16.22:
     dependencies:
       commander: 8.3.0
@@ -13855,15 +13855,6 @@ snapshots:
       '@popperjs/core': 2.11.8
       debounce: 1.2.1
       vue: 3.5.15(typescript@5.8.3)
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3):
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hash-sum: 2.0.0
-      jump.js: 1.0.2
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@2.7.16:
     dependencies:
