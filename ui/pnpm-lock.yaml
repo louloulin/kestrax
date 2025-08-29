@@ -12,8 +12,8 @@ importers:
         specifier: ^5.6.5
         version: 5.6.5
       '@kestra-io/ui-libs':
-        specifier: ^0.0.194
-        version: 0.0.194(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)
+        specifier: ^0.0.205
+        version: 0.0.205(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)
       '@vue-flow/background':
         specifier: ^1.3.2
         version: 1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))
@@ -157,7 +157,7 @@ importers:
         version: 1.5.0(vue@3.5.15(typescript@5.8.3))
       vue3-tour:
         specifier: github:kestra-io/vue3-tour
-        version: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
+        version: git+git@github.com:kestra-io/vue3-tour.git#6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.15(typescript@5.8.3))
@@ -460,6 +460,11 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
+  '@babel/parser@7.27.5':
+    resolution: {integrity: sha512-OsQd175SxWkGlzbny8J3K8TnnDD0N3lrIUtB92xwyRpzaenGZhxDvxN/JgU00U3CDZNj9tPuDJ5H0WS4Nt3vKg==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
   '@babel/plugin-syntax-async-generators@7.8.4':
     resolution: {integrity: sha512-tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==}
     peerDependencies:
@@ -575,6 +580,10 @@ packages:
 
   '@babel/types@7.27.1':
     resolution: {integrity: sha512-+EzkxvLNfiUeKMgy/3luqfsCWFRXLb7U6wNQTk60tovuckwB15B191tJWvpp4HjiQWdJkCxO3Wbvc6jlk3Xb2Q==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/types@7.27.6':
+    resolution: {integrity: sha512-ETyHEk2VHHvl9b9jZP5IHPavHYk57EhanlRRuae9XCpb/j5bDCbPPMOBfCWhnl/7EDJz0jEMCi/RhccCE8r1+Q==}
     engines: {node: '>=6.9.0'}
 
   '@bcoe/v8-coverage@0.2.3':
@@ -1026,8 +1035,8 @@ packages:
   '@js-joda/core@5.6.5':
     resolution: {integrity: sha512-3zwefSMwHpu8iVUW8YYz227sIv6UFqO31p1Bf1ZH/Vom7CmNyUsXjDBlnNzcuhmOL1XfxZ3nvND42kR23XlbcQ==}
 
-  '@kestra-io/ui-libs@0.0.194':
-    resolution: {integrity: sha512-sh57BdCNrzVrBtb1/RIqdXR8qrqWXRtR85KtkHyfbG1xzP+Z90r+gaQhTorn/VlY4epAUwS8AV/jwP0LoVhPxw==}
+  '@kestra-io/ui-libs@0.0.205':
+    resolution: {integrity: sha512-ne6WFd7pq5Jhvt3wOHPjBCDQIaO+lum8FiLnPRyl0dK6ZZHwuCkrhqt04/NhCUV/cOvUOSgVJurlH9ld+1Uklw==}
     peerDependencies:
       '@vue-flow/background': ^1.3.0
       '@vue-flow/controls': ^1.1.1
@@ -1144,8 +1153,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nuxt/kit@3.17.4':
-    resolution: {integrity: sha512-l+hY8sy2XFfg3PigZj+PTu6+KIJzmbACTRimn1ew/gtCz+F38f6KTF4sMRTN5CUxiB8TRENgEonASmkAWfpO9Q==}
+  '@nuxt/kit@3.17.5':
+    resolution: {integrity: sha512-NdCepmA+S/SzgcaL3oYUeSlXGYO6BXGr9K/m1D0t0O9rApF8CSq/QQ+ja5KYaYMO1kZAEWH4s2XVcE3uPrrAVg==}
     engines: {node: '>=18.12.0'}
 
   '@nuxtjs/mdc@0.16.1':
@@ -1430,6 +1439,9 @@ packages:
   '@shikijs/core@3.4.2':
     resolution: {integrity: sha512-AG8vnSi1W2pbgR2B911EfGqtLE9c4hQBYkv/x7Z+Kt0VxhgQKcW7UNDVYsu9YxwV6u+OJrvdJrMq6DNWoBjihQ==}
 
+  '@shikijs/core@3.6.0':
+    resolution: {integrity: sha512-9By7Xb3olEX0o6UeJyPLI1PE1scC4d3wcVepvtv2xbuN9/IThYN4Wcwh24rcFeASzPam11MCq8yQpwwzCgSBRw==}
+
   '@shikijs/engine-javascript@1.29.2':
     resolution: {integrity: sha512-iNEZv4IrLYPv64Q6k7EPpOCE/nuvGiKl7zxdq0WFuRPF5PAE9PRo2JGq/d8crLusM59BRemJ4eOqrFrC4wiQ+A==}
 
@@ -1462,14 +1474,17 @@ packages:
   '@shikijs/themes@3.4.2':
     resolution: {integrity: sha512-qAEuAQh+brd8Jyej2UDDf+b4V2g1Rm8aBIdvt32XhDPrHvDkEnpb7Kzc9hSuHUxz0Iuflmq7elaDuQAP9bHIhg==}
 
-  '@shikijs/transformers@3.4.2':
-    resolution: {integrity: sha512-I5baLVi/ynLEOZoWSAMlACHNnG+yw5HDmse0oe+GW6U1u+ULdEB3UHiVWaHoJSSONV7tlcVxuaMy74sREDkSvg==}
+  '@shikijs/transformers@3.6.0':
+    resolution: {integrity: sha512-PYkU54lYV0RCaUG8n2FNTF+YWiU3uPhcjLGq2x/C8lIrUX9GVnRb3bK+R5xtdFHbuctntATKm7ondp/H/dux9Q==}
 
   '@shikijs/types@1.29.2':
     resolution: {integrity: sha512-VJjK0eIijTZf0QSTODEXCqinjBn0joAHQ+aPSBzrv4O2d/QSbsMw+ZeSRx03kV34Hy7NzUvV/7NqfYGRLrASmw==}
 
   '@shikijs/types@3.4.2':
     resolution: {integrity: sha512-zHC1l7L+eQlDXLnxvM9R91Efh2V4+rN3oMVS2swCBssbj2U/FBwybD1eeLaq8yl/iwT+zih8iUbTBCgGZOYlVg==}
+
+  '@shikijs/types@3.6.0':
+    resolution: {integrity: sha512-cLWFiToxYu0aAzJqhXTQsFiJRTFDAGl93IrMSBNaGSzs7ixkLfdG6pH11HipuWFGW5vyx4X47W8HDQ7eSrmBUg==}
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
@@ -2284,6 +2299,9 @@ packages:
   '@vue/compiler-core@3.5.15':
     resolution: {integrity: sha512-nGRc6YJg/kxNqbv/7Tg4juirPnjHvuVdhcmDvQWVZXlLHjouq7VsKmV1hIxM/8yKM0VUfwT/Uzc0lO510ltZqw==}
 
+  '@vue/compiler-core@3.5.16':
+    resolution: {integrity: sha512-AOQS2eaQOaaZQoL1u+2rCJIKDruNXVBZSiUD3chnUrsoX5ZTQMaCvXlWNIfxBJuU15r1o7+mpo5223KVtIhAgQ==}
+
   '@vue/compiler-dom@3.5.15':
     resolution: {integrity: sha512-ZelQd9n+O/UCBdL00rlwCrsArSak+YLZpBVuNDio1hN3+wrCshYZEDUO3khSLAzPbF1oQS2duEoMDUHScUlYjA==}
 
@@ -2332,6 +2350,9 @@ packages:
 
   '@vue/shared@3.5.15':
     resolution: {integrity: sha512-bKvgFJJL1ZX9KxMCTQY6xD9Dhe3nusd1OhyOb1cJYGqvAr0Vg8FIjHPMOEVbJ9GDT9HG+Bjdn4oS8ohKP8EvoA==}
+
+  '@vue/shared@3.5.16':
+    resolution: {integrity: sha512-c/0fWy3Jw6Z8L9FmTyYfkpM5zklnqqa9+a6dz3DvONRKW2NEbh46BP0FHuLFSWi2TnQEtp91Z6zOWNrU6QiyPg==}
 
   '@vue/test-utils@2.4.6':
     resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
@@ -2392,6 +2413,11 @@ packages:
 
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.15.0:
+    resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -3113,8 +3139,8 @@ packages:
   decimal.js@10.5.0:
     resolution: {integrity: sha512-8vDa8Qxvr/+d94hSh5P3IJwI5t8/c0KsMp+g8bNw9cY2icONa5aPfvKeieW1WlG0WQYwwhJ7mjui2xtiePQSXw==}
 
-  decode-named-character-reference@1.1.0:
-    resolution: {integrity: sha512-Wy+JTSbFThEOXQIR2L6mxJvEs+veIzpmqD7ynWxMXGpnk3smkHQOp6forLdHsKpAMW9iJpaBBIxz285t1n1C3w==}
+  decode-named-character-reference@1.2.0:
+    resolution: {integrity: sha512-c6fcElNV6ShtZXmsgNgFFV5tVX2PaV4g+MOAkb8eXHvn6sryJBrZa9r0zV6+dtTyoCKxtDy5tyQ5ZwQuidtd+Q==}
 
   decompress-tar@4.1.1:
     resolution: {integrity: sha512-JdJMaCrGpB5fESVyxwpCx4Jdj2AagLmv3y58Qy4GE6HMVjWz1FeVQk1Ct4Kye7PftcdOo/7U7UKzYBJgqnGeUQ==}
@@ -3952,6 +3978,10 @@ packages:
     resolution: {integrity: sha512-gJzzk+PQNznz8ysRrC0aOkBNVRBDtE1n53IqyqEf3PXrYwomFs5q4pGMizBMJF+ykh03insJ27hB8gSrD2Hn8A==}
     engines: {node: '>= 4'}
 
+  ignore@7.0.5:
+    resolution: {integrity: sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==}
+    engines: {node: '>= 4'}
+
   immutable@5.1.2:
     resolution: {integrity: sha512-qHKXW1q6liAk1Oys6umoaZbDRqjcjgSrbnrifHsfsttza7zcvRAsL7mMV6xWcyhwQy7Xj5v4hhbr6b+iDYwlmQ==}
 
@@ -4406,9 +4436,6 @@ packages:
 
   jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
-
-  jump.js@1.0.2:
-    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
 
   katex@0.16.22:
     resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
@@ -6077,8 +6104,8 @@ packages:
     resolution: {integrity: sha512-4/u/j4FrCKdi17jaxuJA0jClGxB1AvU2hw/IuayPc4ay1XGaJs/rbb4v5WKwAjNifjmXK9PIFyuPiaK8azyR9w==}
     engines: {node: '>=14.0.0'}
 
-  unplugin@2.3.4:
-    resolution: {integrity: sha512-m4PjxTurwpWfpMomp8AptjD5yj8qEZN5uQjjGM3TAs9MWWD2tXSSNNj6jGR2FoVGod4293ytyV6SwBbertfyJg==}
+  unplugin@2.3.5:
+    resolution: {integrity: sha512-RyWSb5AHmGtjjNQ6gIlA67sHOsWpsbWpwDokLwTcejVdOjEkJZh7QKu14J00gDDVSh8kGH4KYC/TNBceXFZhtw==}
     engines: {node: '>=18.12.0'}
 
   unraw@3.0.0:
@@ -6323,10 +6350,6 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       vue: ^3.2.20
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff:
-    resolution: {tarball: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff}
-    version: 0.3.4
 
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
@@ -6708,6 +6731,10 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.1
 
+  '@babel/parser@7.27.5':
+    dependencies:
+      '@babel/types': 7.27.6
+
   '@babel/plugin-syntax-async-generators@7.8.4(@babel/core@7.27.1)':
     dependencies:
       '@babel/core': 7.27.1
@@ -6829,6 +6856,11 @@ snapshots:
       - supports-color
 
   '@babel/types@7.27.1':
+    dependencies:
+      '@babel/helper-string-parser': 7.27.1
+      '@babel/helper-validator-identifier': 7.27.1
+
+  '@babel/types@7.27.6':
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
@@ -7307,7 +7339,7 @@ snapshots:
 
   '@js-joda/core@5.6.5': {}
 
-  '@kestra-io/ui-libs@0.0.194(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)':
+  '@kestra-io/ui-libs@0.0.205(@vue-flow/background@1.3.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/controls@1.1.2(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3)))(@vue-flow/core@1.44.0(vue@3.5.15(typescript@5.8.3)))(bootstrap@5.3.6(@popperjs/core@2.11.8))(dagre@0.8.5)(humanize-duration@3.32.2)(js-yaml@4.1.0)(lodash@4.17.21)(magicast@0.3.5)(moment-timezone@0.5.48)(moment@2.30.1)(vue-material-design-icons@5.3.1)(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))(vuex@4.1.0(vue@3.5.15(typescript@5.8.3)))(yaml@2.8.0)':
     dependencies:
       '@nuxtjs/mdc': 0.16.1(magicast@0.3.5)
       '@popperjs/core': 2.11.8
@@ -7419,7 +7451,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nuxt/kit@3.17.4(magicast@0.3.5)':
+  '@nuxt/kit@3.17.5(magicast@0.3.5)':
     dependencies:
       c12: 3.0.4(magicast@0.3.5)
       consola: 3.4.2
@@ -7427,7 +7459,7 @@ snapshots:
       destr: 2.0.5
       errx: 0.1.0
       exsolve: 1.0.5
-      ignore: 7.0.4
+      ignore: 7.0.5
       jiti: 2.4.2
       klona: 2.0.6
       knitwork: 1.2.0
@@ -7448,11 +7480,11 @@ snapshots:
 
   '@nuxtjs/mdc@0.16.1(magicast@0.3.5)':
     dependencies:
-      '@nuxt/kit': 3.17.4(magicast@0.3.5)
-      '@shikijs/transformers': 3.4.2
+      '@nuxt/kit': 3.17.5(magicast@0.3.5)
+      '@shikijs/transformers': 3.6.0
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
-      '@vue/compiler-core': 3.5.15
+      '@vue/compiler-core': 3.5.16
       consola: 3.4.2
       debug: 4.4.0
       defu: 6.1.4
@@ -7704,6 +7736,13 @@ snapshots:
       '@types/hast': 3.0.4
       hast-util-to-html: 9.0.5
 
+  '@shikijs/core@3.6.0':
+    dependencies:
+      '@shikijs/types': 3.6.0
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
+      hast-util-to-html: 9.0.5
+
   '@shikijs/engine-javascript@1.29.2':
     dependencies:
       '@shikijs/types': 1.29.2
@@ -7747,10 +7786,10 @@ snapshots:
     dependencies:
       '@shikijs/types': 3.4.2
 
-  '@shikijs/transformers@3.4.2':
+  '@shikijs/transformers@3.6.0':
     dependencies:
-      '@shikijs/core': 3.4.2
-      '@shikijs/types': 3.4.2
+      '@shikijs/core': 3.6.0
+      '@shikijs/types': 3.6.0
 
   '@shikijs/types@1.29.2':
     dependencies:
@@ -7758,6 +7797,11 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/types@3.4.2':
+    dependencies:
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
+
+  '@shikijs/types@3.6.0':
     dependencies:
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
@@ -8498,24 +8542,24 @@ snapshots:
 
   '@types/babel__core@7.20.5':
     dependencies:
-      '@babel/parser': 7.27.2
-      '@babel/types': 7.27.1
+      '@babel/parser': 7.27.5
+      '@babel/types': 7.27.6
       '@types/babel__generator': 7.27.0
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.20.7
 
   '@types/babel__generator@7.27.0':
     dependencies:
-      '@babel/types': 7.27.1
+      '@babel/types': 7.27.6
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.27.2
-      '@babel/types': 7.27.1
+      '@babel/parser': 7.27.5
+      '@babel/types': 7.27.6
 
   '@types/babel__traverse@7.20.7':
     dependencies:
-      '@babel/types': 7.27.1
+      '@babel/types': 7.27.6
 
   '@types/d3-array@3.2.1': {}
 
@@ -9020,6 +9064,14 @@ snapshots:
       estree-walker: 2.0.2
       source-map-js: 1.2.1
 
+  '@vue/compiler-core@3.5.16':
+    dependencies:
+      '@babel/parser': 7.27.5
+      '@vue/shared': 3.5.16
+      entities: 4.5.0
+      estree-walker: 2.0.2
+      source-map-js: 1.2.1
+
   '@vue/compiler-dom@3.5.15':
     dependencies:
       '@vue/compiler-core': 3.5.15
@@ -9103,6 +9155,8 @@ snapshots:
 
   '@vue/shared@3.5.15': {}
 
+  '@vue/shared@3.5.16': {}
+
   '@vue/test-utils@2.4.6':
     dependencies:
       js-beautify: 1.15.4
@@ -9176,6 +9230,8 @@ snapshots:
   acorn@7.4.1: {}
 
   acorn@8.14.1: {}
+
+  acorn@8.15.0: {}
 
   agent-base@7.1.3: {}
 
@@ -9304,7 +9360,7 @@ snapshots:
   babel-plugin-jest-hoist@29.6.3:
     dependencies:
       '@babel/template': 7.27.2
-      '@babel/types': 7.27.1
+      '@babel/types': 7.27.6
       '@types/babel__core': 7.20.5
       '@types/babel__traverse': 7.20.7
 
@@ -9335,7 +9391,7 @@ snapshots:
 
   babel-walk@3.0.0-canary-5:
     dependencies:
-      '@babel/types': 7.27.1
+      '@babel/types': 7.27.6
 
   bail@2.0.2: {}
 
@@ -9622,7 +9678,7 @@ snapshots:
 
   constantinople@4.0.1:
     dependencies:
-      '@babel/parser': 7.27.2
+      '@babel/parser': 7.27.5
       '@babel/types': 7.27.1
 
   convert-source-map@1.9.0: {}
@@ -9907,7 +9963,7 @@ snapshots:
 
   decimal.js@10.5.0: {}
 
-  decode-named-character-reference@1.1.0:
+  decode-named-character-reference@1.2.0:
     dependencies:
       character-entities: 2.0.2
 
@@ -10889,6 +10945,8 @@ snapshots:
 
   ignore@7.0.4: {}
 
+  ignore@7.0.5: {}
+
   immutable@5.1.2: {}
 
   import-fresh@3.3.1:
@@ -11039,7 +11097,7 @@ snapshots:
   istanbul-lib-instrument@5.2.1:
     dependencies:
       '@babel/core': 7.27.1
-      '@babel/parser': 7.27.2
+      '@babel/parser': 7.27.5
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 6.3.1
@@ -11049,7 +11107,7 @@ snapshots:
   istanbul-lib-instrument@6.0.3:
     dependencies:
       '@babel/core': 7.27.1
-      '@babel/parser': 7.27.2
+      '@babel/parser': 7.27.5
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 7.7.2
@@ -11563,8 +11621,6 @@ snapshots:
       is-promise: 2.2.2
       promise: 7.3.1
 
-  jump.js@1.0.2: {}
-
   katex@0.16.22:
     dependencies:
       commander: 8.3.0
@@ -11789,7 +11845,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       mdast-util-to-string: 4.0.0
       micromark: 4.0.2
@@ -11931,7 +11987,7 @@ snapshots:
 
   micromark-core-commonmark@2.0.3:
     dependencies:
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       micromark-factory-destination: 2.0.1
       micromark-factory-label: 2.0.1
@@ -12064,7 +12120,7 @@ snapshots:
 
   micromark-util-decode-string@2.0.1:
     dependencies:
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       micromark-util-character: 2.1.1
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-symbol: 2.0.1
@@ -12101,8 +12157,8 @@ snapshots:
   micromark@4.0.2:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.0
-      decode-named-character-reference: 1.1.0
+      debug: 4.4.1
+      decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
       micromark-factory-space: 2.0.1
@@ -12169,7 +12225,7 @@ snapshots:
 
   mlly@1.7.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.6.1
@@ -12441,7 +12497,7 @@ snapshots:
       '@types/unist': 2.0.11
       character-entities-legacy: 3.0.0
       character-reference-invalid: 2.0.1
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       is-alphanumerical: 2.0.1
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
@@ -13498,10 +13554,10 @@ snapshots:
 
   unctx@2.4.1:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       estree-walker: 3.0.3
       magic-string: 0.30.17
-      unplugin: 2.3.4
+      unplugin: 2.3.5
 
   undici-types@6.21.0: {}
 
@@ -13523,7 +13579,7 @@ snapshots:
 
   unimport@5.0.1:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       escape-string-regexp: 5.0.0
       estree-walker: 3.0.3
       local-pkg: 1.1.1
@@ -13535,7 +13591,7 @@ snapshots:
       scule: 1.3.0
       strip-literal: 3.0.0
       tinyglobby: 0.2.14
-      unplugin: 2.3.4
+      unplugin: 2.3.5
       unplugin-utils: 0.2.4
 
   unist-builder@4.0.0:
@@ -13586,9 +13642,9 @@ snapshots:
       acorn: 8.14.1
       webpack-virtual-modules: 0.6.2
 
-  unplugin@2.3.4:
+  unplugin@2.3.5:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       picomatch: 4.0.2
       webpack-virtual-modules: 0.6.2
 
@@ -13856,15 +13912,6 @@ snapshots:
       debounce: 1.2.1
       vue: 3.5.15(typescript@5.8.3)
 
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3):
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hash-sum: 2.0.0
-      jump.js: 1.0.2
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
-
   vue@2.7.16:
     dependencies:
       '@vue/compiler-sfc': 2.7.16
@@ -13962,7 +14009,7 @@ snapshots:
 
   with@7.0.2:
     dependencies:
-      '@babel/parser': 7.27.2
+      '@babel/parser': 7.27.5
       '@babel/types': 7.27.1
       assert-never: 1.4.0
       babel-walk: 3.0.0-canary-5
