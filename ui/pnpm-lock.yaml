@@ -51,8 +51,8 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5
       el-table-infinite-scroll:
-        specifier: ^3.0.6
-        version: 3.0.6(typescript@5.8.3)
+        specifier: ^3.0.7
+        version: 3.0.7(typescript@5.8.3)
       element-plus:
         specifier: ^2.9.10
         version: 2.9.11(vue@3.5.15(typescript@5.8.3))
@@ -157,7 +157,7 @@ importers:
         version: 1.5.0(vue@3.5.15(typescript@5.8.3))
       vue3-tour:
         specifier: github:kestra-io/vue3-tour
-        version: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
+        version: git+git@github.com:kestra-io/vue3-tour.git#6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3)
       vuex:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.15(typescript@5.8.3))
@@ -3260,8 +3260,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  el-table-infinite-scroll@3.0.6:
-    resolution: {integrity: sha512-rdrEBcSMYpkD0s0jl28KcGZpiIbWzVR2OAf7hBB+c+c08G89jb9d6rOn+y2DuhE1iI1C0pEOlC5/lrP3QceOXg==}
+  el-table-infinite-scroll@3.0.7:
+    resolution: {integrity: sha512-at7f8GjNzvkf16i5kCBb1MOq6wI65k+TuaSt5wgiOLAKvdTr36+wAvnOnPYVIPhEpGeM8mRgLZQr2b5YV0lQaw==}
 
   electron-to-chromium@1.5.158:
     resolution: {integrity: sha512-9vcp2xHhkvraY6AHw2WMi+GDSLPX42qe2xjYaVoZqFRJiOcilVQFq9mZmpuHEQpzlgGDelKlV7ZiGcmMsc8WxQ==}
@@ -4406,9 +4406,6 @@ packages:
 
   jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
-
-  jump.js@1.0.2:
-    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
 
   katex@0.16.22:
     resolution: {integrity: sha512-XCHRdUw4lf3SKBaJe4EvgqIuWwkPSo9XoeO8GjQW94Bp7TWv9hNhzZjZ+OH9yf1UmLygb7DIT5GSFQiyt16zYg==}
@@ -6323,10 +6320,6 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       vue: ^3.2.20
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff:
-    resolution: {tarball: https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff}
-    version: 0.3.4
 
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
@@ -10051,7 +10044,7 @@ snapshots:
       minimatch: 9.0.1
       semver: 7.7.2
 
-  el-table-infinite-scroll@3.0.6(typescript@5.8.3):
+  el-table-infinite-scroll@3.0.7(typescript@5.8.3):
     dependencies:
       core-js: 3.42.0
       element-plus: 2.9.11(vue@3.5.15(typescript@5.8.3))
@@ -11562,8 +11555,6 @@ snapshots:
     dependencies:
       is-promise: 2.2.2
       promise: 7.3.1
-
-  jump.js@1.0.2: {}
 
   katex@0.16.22:
     dependencies:
@@ -13855,15 +13846,6 @@ snapshots:
       '@popperjs/core': 2.11.8
       debounce: 1.2.1
       vue: 3.5.15(typescript@5.8.3)
-
-  vue3-tour@https://codeload.github.com/kestra-io/vue3-tour/tar.gz/6017f4c41f8c857e3a2fc7026363e855ad8d36ff(typescript@5.8.3):
-    dependencies:
-      '@popperjs/core': 2.11.8
-      hash-sum: 2.0.0
-      jump.js: 1.0.2
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@2.7.16:
     dependencies:
